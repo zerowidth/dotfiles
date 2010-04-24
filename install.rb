@@ -5,7 +5,7 @@
 home = File.expand_path(ENV['HOME'])
 
 Dir['*'].each do |file|
-  next if file =~ /install|tags/
+  next if file =~ /install|tags|README/
   target = File.join(home, ".#{file}")
   if File.exist?(target)
     puts "skipping #{file}, already installed"
