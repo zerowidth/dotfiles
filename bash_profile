@@ -1,12 +1,10 @@
 export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/mysql/bin:$PATH:/Users/nathan/scripts
-# export PATH=/Users/nathan/code/merb/bin:$PATH
 export PATH=/Users/nathan/bin:/Users/nathan/bin/gitflow:/opt/local/lib/postgresql84/bin:$PATH
+
 export LD_LIBRARY_PATH=/opt/local/lib
 
-# export EDITOR="/Users/nathan/bin/mate_wait"
-# export EDITOR="/Users/nathan/bin/mvim -f" # -f means don't fork, wait for changes
 export EDITOR="/opt/local/bin/vim -f"
-# export EDITOR="/opt/local/bin/mvim -f"
+# export EDITOR="/opt/local/bin/mvim -f" # forking doesn't work on MacVim?
 
 # for textmate svn
 export LC_ALL=
@@ -20,14 +18,10 @@ export JAVA_HOME=/Library/Java/Home
 
 export GEMS=/opt/local/lib/ruby/gems/1.8/gems/
 export RUBYOPT="-rubygems"
-complete -C "/opt/local/bin/gemedit --complete" gemedit
-# export SVKMERGE=FileMerge
 
 export PGDATA=/opt/local/var/db/postgresql84/defaultdb
 PG_BIN=/opt/local/lib/postgresql84/bin
 export PATH=${PATH}:${PG_BIN}
-
-#export CDPATH=.:~
 
 . ~/.secrets # api keys etc
 
@@ -35,17 +29,12 @@ if [ -f /opt/local/etc/bash_completion ]; then
   . /opt/local/etc/bash_completion
 fi
 
-# alias updatedb="sudo /usr/libexec/locate.updatedb"
 alias ls='ls -FG'
 alias ll='ls -lah'
 alias mv='mv -nv'
 alias vi='vim'
-# alias rup='svn up ~/code/rails-trunk/ && svn st ~/code/rails-trunk/'
 
-# alias f='ssh -t f3h screen -x i'
-alias i="echo -n \$'\e]0;irc\a'; ssh -t zerowidth-tunnel TERM=screen screen -U -x i"
-# alias easy='ssh easy'
-# alias t='todo.sh'
+alias irc="echo -n \$'\e]0;irc\a'; ssh -t zerowidth-tunnel TERM=screen screen -U -x i"
 
 alias g='grep -in'
 
@@ -81,13 +70,6 @@ alias e='mvim'
 alias sp='spec -cfs -Du'
 alias spb='spec -bcfs -Du'
 
-# alias med='osascript ~/scripts/med.scpt'
-# alias m='osascript ~/scripts/med.scpt'
-# alias lg='osascript ~/scripts/lg.scpt'
-# alias sm='osascript ~/scripts/sm.scpt'
-# alias tall='osascript ~/scripts/tall.scpt'
-
-# alias git-doc="heel -r /opt/local/share/doc/git-core"
 alias gx="gitx --all"
 
 # alias mateup="
@@ -98,14 +80,11 @@ alias gx="gitx --all"
 #   osascript -e 'tell app \"TextMate\" to reload bundles'
 # "
 
-# alias kgl='c; svn log svn+ssh://lafolie/var/svn/repos/projects/kindergarten -v --limit 10'
-
 # export MYSQL_PS1="\u@\h \d> "
 
 # ----- load up work script / bash functions ----- #
 . ~/work/ci_environment.sh
 # -------------------------------------------------#
-
 
 # zero() {
 #   if [ -n "$1" ]; then
@@ -115,15 +94,6 @@ alias gx="gitx --all"
 #     done
 #   else
 #     echo "specify some log files to zero, yo"
-#   fi
-# }
-
-# recursive code grep, ignores tags and subversion
-# rcg() {
-#   if [ -n "$1" ]; then
-#     grep -R "$1" . | grep -v svn | grep -v tags | grep "$1" # final grep for highlighting
-#   else
-#     echo "recursive code grep sez: specify an argument, yo"
 #   fi
 # }
 
@@ -150,10 +120,10 @@ pkill() {
     echo "Usage: pkill [process name]"
     return 1
   fi
-  
+
   local pid
   pid=$(p $1 | awk '{ print $1 }')
-  
+
   if [ -n "$pid" ]; then
     echo -n "Killing \"$1\" (process $pid)..."
     kill -9 $pid
@@ -162,8 +132,6 @@ pkill() {
     echo "Process \"$1\" not found."
   fi
 }
-
-
 
 # fancy prompt stuff
 
@@ -379,24 +347,4 @@ export LSCOLORS="gxfxcxdxbxegedabagacad"
  bind -m emacs '"\ev": vi-editing-mode'i
 
 set -o vi
-
-# ----- old stuff ----- #
-
-
-# alias gl='ssh glazed -t screen -x i'
-# alias etlstatus='for s in etl01p etl02p wrk01p wrk02p; do 
-#   echo "----- $s -----"
-#   ssh $s petlmcp proc status | grep "not running"
-#   ssh $s petlmcp queue status | egrep "\w+[[:space:]\*]+[[:digit:]]+[[:space:]]+[[:digit:]]"
-# done'
-
-
-
-##
-# Your previous /Users/nathan/.profile file was backed up as /Users/nathan/.profile.macports-saved_2009-08-29_at_10:11:45
-##
-
-# MacPorts Installer addition on 2009-08-29_at_10:11:45: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
 
