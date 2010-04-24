@@ -1,0 +1,32 @@
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = auto
+[user]
+  name = Nathan Witmer
+  email = nwitmer@gmail.com
+[svn]
+[apply]
+	whitespace = fix
+[alias]
+	ci = commit
+	st = status
+	co = checkout
+	dh = diff -w HEAD
+	ds = diff HEAD --stat
+	unstage = reset HEAD --
+	di = diff --cached
+	pr = pull --rebase --stat
+[core]
+	excludesfile = /Users/nathan/.gitignore
+[branch]
+	autosetupmerge = true
+[push]
+	default = matching
+[diff "ruby"]
+	funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+[diff]
+	tool = opendiff
+[merge]
+	tool = opendiff
