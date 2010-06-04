@@ -91,6 +91,9 @@ colorscheme desert " make it look nice in terminal.app
 
 set number
 
+" from evilchelu
+nnoremap gb '[V']
+
 " command W w !sudo tee % > /dev/null
 
 set winheight=10   " current window always has a nice size
