@@ -22,8 +22,6 @@
 	excludesfile = /Users/nathan/.gitignore
 [branch]
 	autosetupmerge = true
-[push]
-	default = matching
 [diff "ruby"]
 	funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
 [diff]
