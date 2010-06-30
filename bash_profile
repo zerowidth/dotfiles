@@ -1,9 +1,12 @@
-export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/mysql/bin:$PATH:/Users/nathan/scripts
-export PATH=/Users/nathan/bin:/Users/nathan/bin/gitflow:/opt/local/lib/postgresql84/bin:$PATH
+# export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH #/Users/nathan/bin/gitflow:$PATH
+# export PATH=/opt/local/lib/postgresql84/bin:$PATH
 
-export LD_LIBRARY_PATH=/opt/local/lib
+# export LD_LIBRARY_PATH=/opt/local/lib
+export LD_LIBRARY_PATH=/usr/local/lib
 
-export EDITOR="/opt/local/bin/vim -f"
+export EDITOR="/usr/local/bin/vim -f"
 # export EDITOR="/opt/local/bin/mvim -f" # forking doesn't work on MacVim?
 
 # for textmate svn
@@ -19,15 +22,18 @@ export JAVA_HOME=/Library/Java/Home
 export GEMS=/opt/local/lib/ruby/gems/1.8/gems/
 export RUBYOPT="-rubygems"
 
-export PGDATA=/opt/local/var/db/postgresql84/defaultdb
-PG_BIN=/opt/local/lib/postgresql84/bin
-export PATH=${PATH}:${PG_BIN}
+# export PGDATA=/opt/local/var/db/postgresql84/defaultdb
+export PGDATA=/usr/local/var/postgres
+# PG_BIN=/opt/local/lib/postgresql84/bin
 
 . ~/.secrets # api keys etc
 
-if [ -f /opt/local/etc/bash_completion ]; then
-  . /opt/local/etc/bash_completion
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+    . `brew --prefix`/etc/bash_completion
 fi
+# if [ -f /opt/local/etc/bash_completion ]; then
+#   . /opt/local/etc/bash_completion
+# fi
 
 alias ls='ls -FG'
 alias ll='ls -lah'
@@ -38,19 +44,23 @@ alias irc="echo -n \$'\e]0;irc\a'; ssh -t zerowidth-tunnel TERM=screen screen -U
 
 alias g='grep -in'
 
+alias desktop="cd ~/Desktop"
+
 function d() {
   if [ -n "$1" ]; then
     if [ -d "$1" ]; then
       pushd $1 >/dev/null
       ctags -R
-      mvim --servername $(basename $(pwd)) --remote-silent .
+      # mvim --servername $(basename $(pwd)) --remote-silent .
+      mvim .
       popd >/dev/null
     else
       echo "$1 is not a directory"
     fi
   else
     ctags -R
-    mvim --servername $(basename $(pwd)) --remote-silent .
+    # mvim --servername $(basename $(pwd)) --remote-silent .
+    mvim .
     # echo "specify a directory to edit"
   fi
 }
@@ -71,6 +81,10 @@ alias sp='spec -cfs -Du'
 alias spb='spec -bcfs -Du'
 
 alias gx="gitx --all"
+
+function gemdir() {
+  cd `rvm gempath | cut -d: -f 1`"/gems"
+}
 
 # alias mateup="
 #   pushd ~/Library/Application\ Support/TextMate/Bundles; svn up; svn st; popd;
@@ -265,7 +279,7 @@ WINDOW_NAME='' # commented out for Terminal.app tabs
 
 set_prompt(){
   previous=$?;
-  PS1="${TAB_NAME}${WINDOW_NAME}${TEXT_GREEN}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
+  PS1="${TAB_NAME}${WINDOW_NAME}$(rvm-prompt u s g) ${TEXT_GREEN}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
 }
 
 PROMPT_COMMAND=set_prompt
@@ -347,4 +361,7 @@ export LSCOLORS="gxfxcxdxbxegedabagacad"
  bind -m emacs '"\ev": vi-editing-mode'i
 
 set -o vi
+
+if [[ -s "$HOME/.rvm/scripts/rvm" ]]  ; then source "$HOME/.rvm/scripts/rvm" ; fi
+alias rl="rvm list"
 
