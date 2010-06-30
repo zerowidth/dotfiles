@@ -23,7 +23,11 @@ let g:NERDSpaceDelims = 1 " include space in comments
 
 let g:fuzzy_ignore = "gems*;pkg/*"
 
-command Rescan :ruby finder.rescan!
+" command Rescan :ruby finder.rescan!
+let mapleader=','
+map <silent> <Leader>r :echo 'refreshing tags and files...'<CR>:silent !ctags -R<CR>:silent CommandTFlush<CR>:echo 'refreshed tags and files'<CR>
+
+let g:CommandTMatchWindowAtTop=1
 
 " tab movement setup
 " all this tab mojo is from ara.t.howard
@@ -105,7 +109,9 @@ set splitright
 " strip leading tabs and trailing whitespace
 command Tr %s/\s\+$//ge | %s/\t/  /ge | nohlsearch
 
-set directory=~/.vimswap
+" set directory=~/.vimswap
+" livin' on the edge!
+set noswapfile
 
 " settings from jeremy hinegardner:
 
