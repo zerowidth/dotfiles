@@ -4,6 +4,7 @@ require 'rubygems'
 require 'wirble'
 require 'looksee/shortcuts'
 require "ap" # awesome print
+require "interactive_editor"
 
 IRB.conf[:AUTO_INDENT]=true
 
@@ -31,12 +32,3 @@ module Enumerable
     # h
   end
 end
-
-%w(foo bar baz mumble thing what damn).histogram
-# => {"mumble"=>1, "baz"=>1, "foo"=>1, "thing"=>1, "what"=>1, "bar"=>1, "damn"=>1}
-%w(foo bar baz mumble thing what damn).histogram { |word| word.size }
-# => {5=>1, 6=>1, 3=>3, 4=>2}
-{:foo => 1, :bar => 1, :baz => 2, :mumble => 1}.histogram
-# => {[:bar, 1]=>1, [:mumble, 1]=>1, [:baz, 2]=>1, [:foo, 1]=>1}
-{:foo => 1, :bar => 1, :baz => 2, :mumble => 1}.histogram { |k,v| v }
-# => {1=>3, 2=>1}
