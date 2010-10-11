@@ -17,9 +17,11 @@
 	ds = diff HEAD --stat
 	unstage = reset HEAD --
 	di = diff --cached
+  p = pull --stat
 	pr = pull --rebase --stat
 [core]
 	excludesfile = /Users/nathan/.gitignore
+	autocrlf = input
 [branch]
 	autosetupmerge = true
 [diff "ruby"]
