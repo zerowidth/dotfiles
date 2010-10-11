@@ -5,6 +5,5 @@ gem: --no-ri --no-rdoc --no-user-install
 :backtrace: false
 :sources:
 - http://gems.rubyforge.org
-- http://gems.github.com
 :bulk_threshold: 1000
 :verbose: true
