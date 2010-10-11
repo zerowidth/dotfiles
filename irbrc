@@ -8,6 +8,9 @@ require "interactive_editor"
 
 IRB.conf[:AUTO_INDENT]=true
 
+# make overridden methods purple instead of black
+Looksee.styles[:overridden] = "\e[1;35m%s\e[0m"
+
 Wirble.init
 # Wirble.colorize
 
