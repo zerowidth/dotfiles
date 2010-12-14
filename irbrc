@@ -1,10 +1,39 @@
-require 'irb/completion'
+require "irb/completion"
+require "rubygems"
 
-require 'rubygems'
-require 'wirble'
-require 'looksee/shortcuts'
-require "ap" # awesome print
-require "interactive_editor"
+# Assume a bundler-managed environment, so find and require the irb-specific
+# enhancement gems directly. This does not do dependency tracking, so
+# dependent gems must be explicitly specified!
+def irb_require(gemname, lib=nil)
+  # allow bundler or rubygems a fair shake at loading the library first
+  require lib ? lib : gemname
+rescue LoadError
+  # didn't work? we'll do it ourself
+  candidates = []
+
+  ENV["GEM_PATH"].split(":").map {|p| p + "/gems" }.each do |path|
+    Dir.glob(path + "/*").each do |entry|
+      if File.directory?(entry) && File.basename(entry).start_with?(gemname)
+        candidates << entry
+      end
+    end
+  end
+
+  if candidates.empty?
+    raise LoadError, "could not load #{lib || gemname} via irb_require"
+  else
+    puts "manipulating load path for #{gemname}"
+    $:.push(candidates.sort.reverse.first + "/lib")
+    require lib ? lib : gemname
+  end
+end
+
+irb_require "wirble"
+irb_require "looksee", "looksee/shortcuts"
+irb_require "awesome_print", "ap"
+irb_require "ffi" # unmentioned dependency of spoon
+irb_require "spoon" # dependency of interactive_editor
+irb_require "interactive_editor"
 
 IRB.conf[:AUTO_INDENT]=true
 
