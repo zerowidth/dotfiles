@@ -59,17 +59,6 @@ function d() {
     # echo "specify a directory to edit"
   fi
 }
-function sd() {
-  if [ -d "$1" ]; then
-    pushd $1 >/dev/null
-    sudo ctags -R
-    sudo mvim -c :NT
-    popd >/dev/null
-  else
-    sudo ctags -R
-    sudo mvim -c :NT
-  fi
-}
 alias e='mvim'
 
 alias sp='spec -cfs -Du'
