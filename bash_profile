@@ -41,6 +41,9 @@ alias desktop="cd ~/Desktop"
 
 alias pgskip="psql skipme"
 
+alias 8='rvm use 1.8.7'
+alias 9='rvm use 1.9.2'
+
 function d() {
   if [ -n "$1" ]; then
     if [ -d "$1" ]; then
