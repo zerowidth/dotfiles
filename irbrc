@@ -19,19 +19,10 @@ def t; b = Time.now; yield; Time.now-b; end
 module Enumerable
   def histogram
     h = Hash.new(0)
-    # each do |entry|
     self.each do |entry|
-      key = nil
-      if block_given?
-        key = yield entry
-      else
-        key = entry
-      end
-      # key = block_given? ? yield(entry) : entry
-      h[key] = h[key] + 1
-      # h[key] += 1
+      key = block_given? ? yield(entry) : entry
+      h[key] += 1
     end
     return h
-    # h
   end
 end
