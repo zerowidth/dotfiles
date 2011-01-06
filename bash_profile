@@ -257,10 +257,18 @@ git_dirty_flag() {
   fi
 }
 
-TAB_NAME='\[\e\]]1;\w\[\a\]'
-TAB_NAME=''
-WINDOW_NAME='\[\e\]]2;\u@\h:\w\[\a\]'
-WINDOW_NAME='' # commented out for Terminal.app tabs
+if [[ $TERM_PROGRAM == 'iTerm.app' ]]; then
+  # 0 means both tab and window, 1 is tab, 2 is window
+  # see:
+  #   http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss4.3
+  #   http://www.mit.edu/afs/athena/system/x11r4/src/mit/clients/xterm/ctlseq2.txt via
+  #   http://ubuntuforums.org/archive/index.php/t-448614.html
+  TAB_NAME='\[\e]1;\w\a\]'
+  WINDOW_NAME='\[\e]2;\u@\h:\w\a\]'
+else
+  TAB_NAME=''
+  WINDOW_NAME=''
+fi
 
 set_prompt(){
   previous=$?;
