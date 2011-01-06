@@ -40,6 +40,18 @@ alias g='grep -in'
 alias desktop="cd ~/Desktop"
 
 alias pgskip="psql skipme"
+function sshr() {
+  if [ -n "$1" ]; then
+    if [ -n "$2" ]; then
+      ssh -t $1 sudo $2
+    else
+      ssh -t $1 sudo su -
+    fi
+  else
+    echo "... specify a host, n00b"
+  fi
+}
+complete -F _ssh sshr
 
 alias 8='rvm use 1.8.7'
 alias 9='rvm use 1.9.2'
