@@ -88,7 +88,27 @@ endif
 nnoremap <C-L> :nohls<CR><C-L>
 inoremap <C-L> <C-O>:nohls<CR>
 
-map <silent> <Leader>r :echo 'refreshing tags and files...'<CR>:silent !ctags -R<CR>:silent CommandTFlush<CR>:echo 'refreshed tags and files'<CR>
+map <silent> <Leader>r :call Refresh()<CR>
+
+function Refresh()
+  echo "refreshing tags and files..."
+
+  silent !ctags -R
+
+  if exists(":CommandTFlush") == 2
+    CommandTFlush
+  endif
+
+  if exists("t:NERDTreeBufName")
+    let nr = bufwinnr(t:NERDTreeBufName)
+    if nr != -1
+      exe nr . "wincmd w"
+      exe substitute(mapcheck("R"), "<CR>", "", "")
+      wincmd p
+    endif
+  endif
+
+endfunction
 
 colorscheme molokai
 
@@ -124,6 +144,10 @@ set autoread
 " fix crontab editing
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
+" post gists privately by default
+" let g:gist_private = 1
+" show private gists by default
+let g:gist_show_privates = 1
 
 " ----- tab movement setup -----
 " all this tab mojo is from ara.t.howard
