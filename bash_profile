@@ -1,9 +1,10 @@
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+# set -x
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/share/python:$PATH
 export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH #/Users/nathan/bin/gitflow:$PATH
 
 export LD_LIBRARY_PATH=/usr/local/lib
 
-export EDITOR="/usr/local/bin/vim -f"
+export EDITOR="/usr/local/bin/vim"
 
 # for textmate svn
 export LC_ALL=
@@ -36,10 +37,32 @@ alias js='NODE_NO_READLINE=1 rlwrap node'
 alias irc="echo -n \$'\e]0;irc\a'; ssh -t zerowidth-tunnel TERM=screen screen -U -x i"
 
 alias g='grep -in'
+alias gs='growlnotify -s -m'
+
 
 alias desktop="cd ~/Desktop"
 
-alias pgskip="psql skipme"
+function wait-for-host() {
+  if [ -n "$1" ]; then
+    while ! ping -c 1 $1;
+    do
+      sleep 5
+    done
+    growlnotify -s -w -m "$1 is up"
+  else
+    echo "... specify a host, n00b"
+  fi
+}
+
+
+function wait-for-service() {
+  while ! nc -z $1 $2;
+  do
+    sleep 5
+  done
+  growlnotify -s -w -m "$1:$2 is up"
+}
+
 function sshr() {
   if [ -n "$1" ]; then
     if [ -n "$2" ]; then
@@ -82,7 +105,7 @@ alias spb='spec -bcfs -Du'
 alias gx="gitx --all"
 
 function gemdir() {
-  cd `rvm gempath | cut -d: -f 1`"/gems"
+  cd `rvm gemdir`/gems
 }
 
 # alias mateup="
@@ -321,6 +344,8 @@ PROMPT_COMMAND=set_prompt
 export LSCOLORS="gxfxcxdxbxegedabagacad"
 # default:      "exfxcxdxbxegedabagacad"
 
+set -o vi
+
 # from http://limestone.truman.edu/~dbindner/mirror/bash_bindings.txt
 # For those who want to use Vi bindings in bash, this corrects a
 # few annoyances:
@@ -363,9 +388,7 @@ export LSCOLORS="gxfxcxdxbxegedabagacad"
 
 ## Emacs bindings
 # Meta-V: go back to vi editing
- bind -m emacs '"\ev": vi-editing-mode'i
-
-set -o vi
+ # bind -m emacs '"\ev": vi-editing-mode'i
 
 if [[ -s "$HOME/.rvm/scripts/rvm" ]]  ; then source "$HOME/.rvm/scripts/rvm" ; fi
 alias rl="rvm list"
