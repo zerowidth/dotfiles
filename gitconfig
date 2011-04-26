@@ -11,14 +11,17 @@
 	whitespace = fix
 [alias]
 	ci = commit
-	st = status
+	st = status -sb
 	co = checkout
 	dh = diff -w HEAD
 	ds = diff HEAD --stat
 	unstage = reset HEAD --
+  untrack = rm --cached
 	di = diff --cached
   p = pull --stat
 	pr = pull --rebase --stat
+	up = pull --rebase --stat
+	recent = whatchanged --since=\"1 day ago\" -p
 [core]
 	excludesfile = /Users/nathan/.gitignore
 	autocrlf = input
