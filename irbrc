@@ -22,14 +22,13 @@ rescue LoadError
   if candidates.empty?
     raise LoadError, "could not load #{lib || gemname} via irb_require"
   else
-    puts "manipulating load path for #{gemname}"
     $:.push(candidates.sort.reverse.first + "/lib")
     require lib ? lib : gemname
   end
 end
 
 irb_require "wirble"
-irb_require "looksee", "looksee/shortcuts"
+irb_require "looksee", "looksee"
 irb_require "awesome_print", "ap"
 irb_require "ffi" # unmentioned dependency of spoon
 irb_require "spoon" # dependency of interactive_editor
