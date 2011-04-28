@@ -2,3 +2,5 @@
 .DS_Store
 tags
 *.rbc
+session.vim
+session.vim.lock

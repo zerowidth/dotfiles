@@ -23,6 +23,7 @@ vim_plugin_task "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 vim_plugin_task "less", "git://gist.github.com/369178.git"
 vim_plugin_task "camelcasemotion", "https://github.com/vim-scripts/camelcasemotion.git"
 vim_plugin_task "zencoding", "https://github.com/mattn/zencoding-vim.git"
+vim_plugin_task "session", "https://github.com/vim-scripts/session.vim--Odding.git"
 
 
 vim_plugin_task "tabmerge" do
@@ -71,6 +72,18 @@ vim_plugin_task "fo_minus_o" do
     File.open("after/ftplugin/#{filetype}.vim", "w+") do |f|
       f.puts "setlocal formatoptions-=o"
     end
+  end
+end
+
+vim_plugin_task "autoload_local_session" do
+  File.open("after/plugin/autoload_local_session.vim", "w") do |f|
+    f.puts <<-vim
+augroup LocalSession
+  " nested is needed to allow for additional syntax, etc.
+  " to work when session is being loaded
+  au VimEnter * nested call LoadLocalSessionIfPresent()
+augroup END
+    vim
   end
 end
 

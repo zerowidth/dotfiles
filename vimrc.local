@@ -149,6 +149,47 @@ au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 " show private gists by default
 let g:gist_show_privates = 1
 
+" customization for session plugin to hack
+" local sessions stored in "session.vim" for individual projects
+" with the assumption that projects are opened, give or take,
+" with 'mvim .'
+"
+" if a "session.vim" file exists in the opened directory, it is
+" loaded automatically.
+
+" autosave active sessions
+let g:session_autosave = 1
+
+map <leader>ss :call CreateLocalSession()<CR>
+map <leader>sd :DeleteSession<CR>
+
+augroup LocalSession
+  au VimEnter * call SetLocalSessionDirectory()
+augroup END
+
+function SetLocalSessionDirectory()
+  " opening up a specific directory
+  if argc() == 1 && isdirectory(argv(0))
+    let g:session_directory = fnamemodify(argv(0), ":p")
+  end
+endfunction
+
+" called from an after plugin, see janus.rake
+function LoadLocalSessionIfPresent()
+  if argc() == 1 && isdirectory(argv(0)) && filereadable("session.vim")
+    let oldminheight = &winminheight
+    set winminheight=1
+    " silent to disable the 'changed directory..' messages, etc.
+    silent OpenSession session
+    let &winminheight=oldminheight
+  endif
+endfunction
+
+function CreateLocalSession()
+  let g:session_directory = getcwd()
+  SaveSession session
+endfunction
+
 " ----- tab movement setup -----
 " all this tab mojo is from ara.t.howard
 

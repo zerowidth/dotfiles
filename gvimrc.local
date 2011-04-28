@@ -9,6 +9,7 @@ cunabbrev e
 cunabbrev mkdir
 
 " undefine the janus gvimrc VimEnter
+" careful, this undefines all other global VimEnters as well!
 autocmd! VimEnter *
 
 colorscheme molokai
