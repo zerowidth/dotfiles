@@ -161,6 +161,7 @@ let g:gist_show_privates = 1
 let g:session_autosave = 1
 
 map <leader>ss :call CreateLocalSession()<CR>
+map <leader>sl :call LoadLocalSession()<CR>
 map <leader>sd :DeleteSession<CR>
 
 augroup LocalSession
@@ -168,21 +169,19 @@ augroup LocalSession
 augroup END
 
 function SetLocalSessionDirectory()
-  " opening up a specific directory
+  " opening up a specific directory, project-style
   if argc() == 1 && isdirectory(argv(0))
     let g:session_directory = fnamemodify(argv(0), ":p")
+  else
+    let g:session_directory = getcwd()
   end
 endfunction
 
-" called from an after plugin, see janus.rake
-function LoadLocalSessionIfPresent()
-  if argc() == 1 && isdirectory(argv(0)) && filereadable("session.vim")
-    let oldminheight = &winminheight
-    set winminheight=1
-    " silent to disable the 'changed directory..' messages, etc.
-    silent OpenSession session
-    let &winminheight=oldminheight
-  endif
+function LoadLocalSession()
+  let oldminheight = &winminheight
+  set winminheight=1
+  OpenSession session
+  let &winminheight=oldminheight
 endfunction
 
 function CreateLocalSession()

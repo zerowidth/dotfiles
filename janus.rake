@@ -49,12 +49,12 @@ vim_plugin_task "nerdtree_command-t" do
 " override after the plugin's autocmds are loaded and defined.
 
 function ReplaceNERDTreeIfDirectory()
-  if argc() == 1 && isdirectory(argv(0))
+  if argc() == 0 || (argc() == 1 && isdirectory(argv(0)))
     " replace the directory browser with an empty buffer
     enew
     " and open a regular NERDTree instead
     NERDTree
-  end
+  endif
 endfunction
 
 augroup NERDTreeHijackNetrw
@@ -74,16 +74,3 @@ vim_plugin_task "fo_minus_o" do
     end
   end
 end
-
-vim_plugin_task "autoload_local_session" do
-  File.open("after/plugin/autoload_local_session.vim", "w") do |f|
-    f.puts <<-vim
-augroup LocalSession
-  " nested is needed to allow for additional syntax, etc.
-  " to work when session is being loaded
-  au VimEnter * nested call LoadLocalSessionIfPresent()
-augroup END
-    vim
-  end
-end
-
