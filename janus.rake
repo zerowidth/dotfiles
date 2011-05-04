@@ -10,6 +10,12 @@ def override_plugin_task(name, repo=nil, &block)
   vim_plugin_task name, repo, &block
 end
 
+def extend_plugin_task(name, &block)
+  task "#{name}:install" do
+    yield block
+  end
+end
+
 # don't want wycats' fork, i want the source
 override_plugin_task "nerdtree", "git://github.com/scrooloose/nerdtree.git"
 
@@ -31,6 +37,13 @@ vim_plugin_task "tabmerge" do
 end
 
 # vim_plugin_task "bufexplorer",      "git://github.com/vim-scripts/bufexplorer.zip.git"
+
+extend_plugin_task "molokai" do
+  File.open("colors/molokai.vim", "a") do |f|
+    f.puts "hi SpecialComment  guifg=#6E858A               gui=bold"
+    f.puts "hi Comment         guifg=#6E858A"
+  end
+end
 
 vim_plugin_task "nerdtree_command-t" do
   File.open("after/plugin/nerdtree_command-t.vim", "w") do |f|
