@@ -1,7 +1,7 @@
 " ---- janus overrides -----
 
-" undefine all the custom NERDTree-aware commands, i'd rather do it
-" myself
+" undefine all the custom NERDTree-aware commands,
+" i'd rather do it myself
 cunabbrev cd
 cunabbrev touch
 cunabbrev rm

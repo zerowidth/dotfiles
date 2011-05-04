@@ -26,7 +26,7 @@ set linebreak
 " reasonable textwidth (imo)
 set textwidth=120
 
-"store lots of :cmdline history
+" store lots of :cmdline history
 set history=1000
 
 " enable ctrl-n, ctrl-p in tab completion
@@ -154,9 +154,6 @@ let g:gist_show_privates = 1
 " with the assumption that projects are opened, give or take,
 " with 'mvim .'
 "
-" if a "session.vim" file exists in the opened directory, it is
-" loaded automatically.
-
 " autosave active sessions
 let g:session_autosave = 1
 
