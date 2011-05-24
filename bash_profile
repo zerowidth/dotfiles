@@ -31,7 +31,11 @@ which brew >/dev/null 2>&1 && test -f `brew --prefix`/etc/bash_completion && {
   . `brew --prefix`/etc/bash_completion
 }
 
-alias ls='ls -FG'
+if [ `uname` = 'Darwin' ]; then
+  alias ls='ls -FG'
+else
+  alias ls='ls -p --color'
+fi
 alias ll='ls -lah'
 alias mv='mv -nv'
 alias vi='vim'
