@@ -22,11 +22,14 @@ export NODE_PATH=/usr/local/lib/node
 
 export PGDATA=/usr/local/var/postgres
 
-. ~/.secrets # api keys etc
+test -f ~/.secrets && {
+  . ~/.secrets # api keys etc
+}
 
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-    . `brew --prefix`/etc/bash_completion
-fi
+# osx has which -s, but centos doesn't
+which brew >/dev/null 2>&1 && test -f `brew --prefix`/etc/bash_completion && {
+  . `brew --prefix`/etc/bash_completion
+}
 
 alias ls='ls -FG'
 alias ll='ls -lah'
@@ -39,8 +42,7 @@ alias irc="echo -n \$'\e]0;irc\a'; ssh -t zerowidth-tunnel TERM=screen screen -U
 alias g='grep -in'
 alias gs='growlnotify -s -m'
 
-
-alias desktop="cd ~/Desktop"
+alias desktop="pushd ~/Desktop"
 
 function wait-for-host() {
   if [ -n "$1" ]; then
@@ -395,5 +397,7 @@ alias rl="rvm list"
 
 
 # ----- load up work script / bash functions ----- #
-. ~/work/ci_environment.sh
+test -f ~/work/ci_environment.sh && {
+  . ~/work/ci_environment.sh
+}
 
