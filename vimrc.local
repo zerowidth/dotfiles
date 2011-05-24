@@ -134,6 +134,9 @@ command FixHashes %s/\(\S\)=>\(\S\)/\1 => \2/ge | %s/\t/  /ge | nohlsearch
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 vnoremap <C-a> "hy:Ack <C-r>h
 
+map <leader>tn :tabnew<CR>
+map <leader>ta :tabnew<CR>:Ack<space>
+
 " http://vim.wikia.com/wiki/Disable_F1_built-in_help_key
 " nmap <F1> :echo<CR>
 " imap <F1> <C-o>:echo<CR>
