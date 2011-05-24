@@ -401,3 +401,4 @@ test -f ~/work/ci_environment.sh && {
   . ~/work/ci_environment.sh
 }
 
+true # last command should have a zero exit code!
