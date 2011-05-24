@@ -30,10 +30,25 @@ vim_plugin_task "less", "git://gist.github.com/369178.git"
 vim_plugin_task "camelcasemotion", "https://github.com/vim-scripts/camelcasemotion.git"
 vim_plugin_task "zencoding", "https://github.com/mattn/zencoding-vim.git"
 vim_plugin_task "session", "https://github.com/vim-scripts/session.vim--Odding.git"
-
+vim_plugin_task "css-color", "https://github.com/ap/vim-css-color.git" do
+  sh "cp after/syntax/{css,less}.vim"
+  sh "cp after/syntax/{css,scss}.vim"
+end
 
 vim_plugin_task "tabmerge" do
   sh "curl 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
+end
+
+vim_plugin_task "html5-syntax",     "git://github.com/othree/html5-syntax.vim.git"
+
+vim_plugin_task "lesscss",          "git://gist.github.com/161047.git" do
+  FileUtils.cp "tmp/lesscss/less.vim", "syntax"
+end
+
+vim_plugin_task "html5",            "git://github.com/othree/html5.vim.git" do
+  Dir.chdir "tmp/html5" do
+    sh "make install"
+  end
 end
 
 # vim_plugin_task "bufexplorer",      "git://github.com/vim-scripts/bufexplorer.zip.git"
