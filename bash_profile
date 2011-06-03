@@ -55,7 +55,8 @@ function wait-for-host() {
     do
       sleep 5
     done
-    growlnotify -s -w -m "$1 is up"
+    echo "$1 is up: `date`"
+    growlnotify -s -w -m "$1 is up: `date`"
   else
     echo "... specify a host, n00b"
   fi
@@ -67,7 +68,8 @@ function wait-for-service() {
   do
     sleep 5
   done
-  growlnotify -s -w -m "$1:$2 is up"
+  echo "$1:$2 is up: `date`"
+  growlnotify -s -w -m "$1:$2 is up: `date`"
 }
 
 function sshr() {
