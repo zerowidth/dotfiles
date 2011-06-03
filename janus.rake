@@ -19,6 +19,9 @@ end
 # don't want wycats' fork, i want the source
 override_plugin_task "nerdtree", "git://github.com/scrooloose/nerdtree.git"
 
+remove_plugin_task "jslint"
+vim_plugin_task "jshint", "https://github.com/wookiehangover/jshint.vim.git"
+
 vim_plugin_task "ruby", "https://github.com/vim-ruby/vim-ruby.git"
 vim_plugin_task "ragtag", "git://github.com/tpope/vim-ragtag.git"
 vim_plugin_task "repeat", "git://github.com/tpope/vim-repeat.git"
@@ -30,6 +33,7 @@ vim_plugin_task "less", "git://gist.github.com/369178.git"
 vim_plugin_task "camelcasemotion", "https://github.com/vim-scripts/camelcasemotion.git"
 vim_plugin_task "zencoding", "https://github.com/mattn/zencoding-vim.git"
 vim_plugin_task "session", "https://github.com/vim-scripts/session.vim--Odding.git"
+vim_plugin_task "delimitMate", "https://github.com/Raimondi/delimitMate.git"
 vim_plugin_task "css-color", "https://github.com/ap/vim-css-color.git" do
   sh "cp after/syntax/{css,less}.vim"
   sh "cp after/syntax/{css,scss}.vim"
