@@ -33,11 +33,12 @@ which brew >/dev/null 2>&1 && test -f `brew --prefix`/etc/bash_completion && {
 
 if [ `uname` = 'Darwin' ]; then
   alias ls='ls -FG'
+  alias mv='mv -nv'
 else
   alias ls='ls -p --color'
+  alias mv='mv -v'
 fi
 alias ll='ls -lah'
-alias mv='mv -nv'
 alias vi='vim'
 alias js='NODE_NO_READLINE=1 rlwrap node'
 
