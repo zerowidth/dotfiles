@@ -314,9 +314,15 @@ else
   WINDOW_NAME=''
 fi
 
+if [ `uname` = 'Darwin' ]; then
+  PROMPT_HOST='';
+else
+  PROMPT_HOST="${TEXT_CYAN}\h${TEXT_RESET} ";
+fi
+
 set_prompt(){
   previous=$?;
-  PS1="${TAB_NAME}${WINDOW_NAME}$(rvm-prompt v s g) ${TEXT_GREEN}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
+  PS1="${PROMPT_HOST}${TAB_NAME}${WINDOW_NAME}$(rvm-prompt v s g) ${TEXT_GREEN}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
 }
 
 PROMPT_COMMAND=set_prompt
