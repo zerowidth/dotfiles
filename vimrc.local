@@ -41,6 +41,14 @@ set formatoptions-=o
 " disable two-space joins
 set nojoinspaces
 
+" folding
+set foldenable
+" set foldcolumn=4 " show fold column
+set foldmethod=syntax " syntax / markers
+set foldlevel=3 " start with no folding, but ready to go
+set foldminlines=0 " Allow folding single lines
+set foldnestmax=3 " Set max fold nesting level
+
 " show at least 3 lines above/below cursor
 set scrolloff=3
 " and at least 7 columns next to cursor
@@ -52,7 +60,7 @@ set sidescroll=1
 " set ttymouse=xterm2
 
 " hide buffers when not displayed (vs. unloading them)
-" set hidden
+set hidden
 
 " the terminal has 256 color support
 set t_Co=256
@@ -73,6 +81,9 @@ command -n=? -complete=dir NT NERDTreeToggle <args>
 
 " put commandT window at the top of the screen
 let g:CommandTMatchWindowAtTop=1
+
+" disable hammer warning messages (bleh)
+let g:HammerQuiet=1
 
 " easy escape
 imap jj <Esc>
@@ -119,7 +130,7 @@ nnoremap gb '[V']
 " current window always has a nice size
 set winheight=10
 " but the other windows aren't *too* small
-set winminheight=3
+" set winminheight=3
 
 " new splits go below the current buffer
 set splitbelow
@@ -135,7 +146,12 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 vnoremap <C-a> "hy:Ack <C-r>h
 
 map <leader>tn :tabnew<CR>
-map <leader>ta :tabnew<CR>:Ack<space>
+map <leader>ta :tabnew<CR>:Ack
+map <leader>a :Ack
+map <leader>x :x<CR>
+
+" auto-save everything when vim loses focus
+au FocusLost * silent! wa
 
 " http://vim.wikia.com/wiki/Disable_F1_built-in_help_key
 " nmap <F1> :echo<CR>
@@ -190,7 +206,7 @@ function CreateLocalSession()
 endfunction
 
 " ----- tab movement setup -----
-" all this tab mojo is from ara.t.howard
+" tab mojo from ara.t.howard
 
 " this lets 'tt' toggle between tabs
 let g:tabno=tabpagenr()
