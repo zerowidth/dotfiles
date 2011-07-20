@@ -123,6 +123,8 @@ endfunction
 
 colorscheme molokai
 
+set colorcolumn=80,120
+
 " from evilchelu:
 " get the last pasted text
 nnoremap gb '[V']

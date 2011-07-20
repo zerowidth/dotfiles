@@ -64,6 +64,9 @@ override_plugin_task "molokai" do
   File.open("colors/molokai.vim", "a") do |f|
     f.puts "hi SpecialComment  guifg=#6E858A               gui=bold"
     f.puts "hi Comment         guifg=#6E858A"
+    # Normal bg color is #1B1D1E
+    f.puts "hi ColorColumn     guibg=#17191A" # slightly darker
+    # f.puts "hi ColorColumn     guibg=#121414"
   end
 end
 
