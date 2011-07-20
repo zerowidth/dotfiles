@@ -57,11 +57,16 @@ end
 
 # vim_plugin_task "bufexplorer",      "git://github.com/vim-scripts/bufexplorer.zip.git"
 
-extend_plugin_task "molokai" do
+override_plugin_task "molokai" do
+  sh "curl https://raw.github.com/mrtazz/molokai.vim/master/colors/molokai.vim > colors/molokai.vim"
   File.open("colors/molokai.vim", "a") do |f|
     f.puts "hi SpecialComment  guifg=#6E858A               gui=bold"
     f.puts "hi Comment         guifg=#6E858A"
   end
+end
+
+vim_plugin_task "tomorrow-night" do
+  sh "curl https://raw.github.com/ChrisKempson/Tomorrow-Theme/master/Vim/Tomorrow-Night.vim > colors/tomorrow-night.vim"
 end
 
 vim_plugin_task "nerdtree_command-t" do
