@@ -39,6 +39,8 @@ vim_plugin_task "css-color", "https://github.com/ap/vim-css-color.git" do
   sh "cp after/syntax/{css,scss}.vim"
 end
 
+vim_plugin_task "autotag", "https://github.com/vim-scripts/AutoTag.git"
+
 vim_plugin_task "tabmerge" do
   sh "curl 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
 end
