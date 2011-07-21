@@ -266,6 +266,36 @@ map <C-_> <C-w>_
 map <C-Left> :call TabMove(1)<CR>
 map <C-Right> :call TabMove(0)<CR>
 
+" ----- syntax copying for presentations -----
+
+" tell TOhtml to disable line numbering when generating HTML
+let g:html_number_lines=0
+" and to use a reasonable font
+let g:html_font="Andale Mono"
+
+" copy the entire buffer or selected text as RTF
+" inspired by https://github.com/dharanasoft/rtf-highlight
+" but only uses commands available by default on OS X.
+"
+" To set html conversion options, :help TOhtml
+" And, undocumented, to set the font used,
+" let g:html_font="Your Preferred Font"
+"
+function! CopyRTF(line1,line2)
+  if !executable('textutil')
+    echoerr "crap! textutil not found"
+    return
+  endif
+
+  call tohtml#Convert2HTML(a:line1, a:line2)
+  silent exe "%!textutil -convert rtf -stdin -stdout | pbcopy"
+  silent bd!
+
+  echomsg "RTF copied to clipboard"
+endfunction
+
+command! -range=% CopyRTF :call CopyRTF(<line1>,<line2>)
+
 " ----- statusline from scrooloose/vimfiles -----
 
 "statusline setup
