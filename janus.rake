@@ -62,11 +62,16 @@ end
 override_plugin_task "molokai" do
   sh "curl https://raw.github.com/mrtazz/molokai.vim/master/colors/molokai.vim > colors/molokai.vim"
   File.open("colors/molokai.vim", "a") do |f|
-    f.puts "hi SpecialComment  guifg=#6E858A               gui=bold"
-    f.puts "hi Comment         guifg=#6E858A"
-    # Normal bg color is #1B1D1E
-    f.puts "hi ColorColumn     guibg=#17191A" # slightly darker
-    # f.puts "hi ColorColumn     guibg=#121414"
+    f.puts <<-overrides
+    hi SpecialComment  guifg=#6E858A               gui=bold
+    hi Comment         guifg=#6E858A
+    " Normal bg color is #1B1D1E, or in 256color, 233
+    hi ColorColumn     guibg=#17191A " slightly darker
+    " hi ColorColumn     guibg=#121414
+    if &t_Co > 255
+      hi ColorColumn ctermbg=232
+    end
+    overrides
   end
 end
 
