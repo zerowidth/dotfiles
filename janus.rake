@@ -57,6 +57,8 @@ vim_plugin_task "html5",            "git://github.com/othree/html5.vim.git" do
   end
 end
 
+vim_plugin_task "copy-as-rtf", "git://github.com/aniero/vim-copy-as-rtf.git"
+
 # vim_plugin_task "bufexplorer",      "git://github.com/vim-scripts/bufexplorer.zip.git"
 
 override_plugin_task "molokai" do
