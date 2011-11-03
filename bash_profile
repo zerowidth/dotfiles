@@ -6,6 +6,10 @@ export LD_LIBRARY_PATH=/usr/local/lib
 
 export EDITOR="/usr/local/bin/vim"
 
+export HISTCONTROL=ignoredups;
+export HISTSIZE=10000;
+shopt -s histappend; # append not rewrite history
+
 # for textmate svn
 export LC_ALL=
 export LC_CTYPE=en_US.UTF-8
@@ -322,6 +326,7 @@ fi
 
 set_prompt(){
   previous=$?;
+  history -a # append history after each command
   PS1="${PROMPT_HOST}${TAB_NAME}${WINDOW_NAME}$(rvm-prompt v s g) ${TEXT_BLUE}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
 }
 
