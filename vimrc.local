@@ -127,7 +127,10 @@ colorscheme solarized
 
 set colorcolumn=80,120
 " disable colorcolumn in quickfix window
-au FileType qf set cc=''
+au FileType qf set cc=
+
+" enable cursorline across the board
+set cursorline
 
 " from evilchelu:
 " get the last pasted text
