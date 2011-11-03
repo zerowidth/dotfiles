@@ -87,6 +87,7 @@ let g:HammerQuiet=1
 
 " easy escape
 imap jj <Esc>
+imap jk <Esc>
 
 if !has("gui")
   " set custom cursor -- vertical bar in insert mode (iTerm2)
