@@ -118,7 +118,7 @@ alias spb='spec -bcfs -Du'
 alias gx="gitx --all"
 
 function gemdir() {
-  cd `rvm gemdir`/gems
+  cd `rvm gemdir | tail -1`/gems
 }
 
 # alias mateup="
