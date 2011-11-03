@@ -1,0 +1,5 @@
+bind -v
+bind \\t rl_complete
+bind "^R" em-inc-search-prev
+bind "^Y" em-yank
+# from http://blog.segment7.net/articles/2009/08/11/vi-bindings-for-irb-on-os-x

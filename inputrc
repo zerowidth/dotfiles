@@ -1,0 +1,12 @@
+# set editing-mode vi
+# set keymap vi
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+$if Bash
+  Space: magic-space
+$endif
+"\M-o": "\C-p\C-a\M-f "
+set completion-ignore-case on
+set visible-stats on
+set show-all-if-ambiguous on
+"\M-s": menu-complete
