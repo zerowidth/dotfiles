@@ -22,7 +22,7 @@ export JAVA_HOME=/Library/Java/Home
 
 export RUBYOPT="-rubygems"
 
-export NODE_PATH=/usr/local/lib/node
+export NODE_PATH=/usr/local/lib/node_modules
 
 export PGDATA=/usr/local/var/postgres
 
