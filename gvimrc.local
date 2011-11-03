@@ -12,7 +12,8 @@ cunabbrev mkdir
 " careful, this undefines all other global VimEnters as well!
 autocmd! VimEnter *
 
-colorscheme molokai
+set bg=dark
+colorscheme solarized
 
 if has("gui_macvim")
 
@@ -27,11 +28,11 @@ endif
 
 if has("gui_macvim")
 
-  " size the window so it fills the screen (13" mbp)
-  set columns=181
-  set lines=53
+  " size the window so it's reasonable on a 11" mba
+  set columns=120
+  set lines=47
 
-  set guifont=Andale_Mono:h12
+  set guifont=Menlo:h13
 
   set guioptions-=T " disable the toolbars in macvim
   set guioptions-=r " disable right-hand scrollbar

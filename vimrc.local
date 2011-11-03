@@ -122,7 +122,8 @@ function Refresh()
 
 endfunction
 
-colorscheme molokai
+set bg=dark
+colorscheme solarized
 
 set colorcolumn=80,120
 " disable colorcolumn in quickfix window
@@ -274,8 +275,7 @@ map <C-Right> :call TabMove(0)<CR>
 " tell TOhtml to disable line numbering when generating HTML
 let g:html_number_lines=0
 " and to use a reasonable font
-let g:html_font="Andale Mono"
-
+let g:html_font="Menlo"
 
 " ----- statusline from scrooloose/vimfiles -----
 
