@@ -322,42 +322,10 @@ fi
 
 set_prompt(){
   previous=$?;
-  PS1="${PROMPT_HOST}${TAB_NAME}${WINDOW_NAME}$(rvm-prompt v s g) ${TEXT_GREEN}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
+  PS1="${PROMPT_HOST}${TAB_NAME}${WINDOW_NAME}$(rvm-prompt v s g) ${TEXT_BLUE}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
 }
 
 PROMPT_COMMAND=set_prompt
-
-# a     black
-# b     red
-# c     green
-# d     brown
-# e     blue
-# f     magenta
-# g     cyan
-# h     light grey
-# A     bold black, usually shows up as dark grey
-# B     bold red
-# C     bold green
-# D     bold brown, usually shows up as yellow
-# E     bold blue
-# F     bold magenta
-# G     bold cyan
-# H     bold light grey; looks like bright white
-# x     default foreground or background
-# directory -----\
-# symlink        +-\
-# socket         +-+-\
-# pipe           +-+-+-\
-# executable     +-+-+-+-\
-# block special  +-+-+-+-+-\
-# char special   +-+-+-+-+-+-\
-# suid           +-+-+-+-+-+-+-\
-# setguid        +-+-+-+-+-+-+-+-\
-# write+sticky/  +-+-+-+-+-+-+-+-+-\
-# write-sticky/  +-+-+-+-+-+-+-+-+-+-\
-#                v v v v v v v v v v v
-export LSCOLORS="gxfxcxdxbxegedabagacad"
-# default:      "exfxcxdxbxegedabagacad"
 
 set -o vi
 
