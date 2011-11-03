@@ -22,7 +22,7 @@ override_plugin_task "nerdtree", "git://github.com/scrooloose/nerdtree.git"
 remove_plugin_task "jslint"
 vim_plugin_task "jshint", "https://github.com/wookiehangover/jshint.vim.git"
 
-vim_plugin_task "ruby", "https://github.com/vim-ruby/vim-ruby.git"
+vim_plugin_task "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
 vim_plugin_task "ragtag", "git://github.com/tpope/vim-ragtag.git"
 vim_plugin_task "repeat", "git://github.com/tpope/vim-repeat.git"
 vim_plugin_task "liquid", "git://github.com/vim-ruby/vim-ruby.git"
@@ -38,6 +38,7 @@ vim_plugin_task "css-color", "https://github.com/ap/vim-css-color.git" do
   sh "cp after/syntax/{css,less}.vim"
   sh "cp after/syntax/{css,scss}.vim"
 end
+vim_plugin_task "jasmine", "https://github.com/claco/jasmine.vim.git"
 
 vim_plugin_task "autotag", "https://github.com/vim-scripts/AutoTag.git"
 
@@ -58,6 +59,8 @@ vim_plugin_task "html5",            "git://github.com/othree/html5.vim.git" do
 end
 
 vim_plugin_task "copy-as-rtf", "git://github.com/aniero/vim-copy-as-rtf.git"
+
+vim_plugin_task "tagbar", "https://github.com/majutsushi/tagbar.git"
 
 # vim_plugin_task "bufexplorer",      "git://github.com/vim-scripts/bufexplorer.zip.git"
 
@@ -119,7 +122,13 @@ vim_plugin_task "fo_minus_o" do
   Dir.mkdir "after/ftplugin" unless File.directory?("after/ftplugin")
   %w(ruby vim coffee gitconfig).each do |filetype|
     File.open("after/ftplugin/#{filetype}.vim", "w+") do |f|
-      f.puts "setlocal formatoptions-=o"
+      f.puts <<-vim
+        setlocal formatoptions-=o
+        if has('gui')
+          " disable ri for ruby
+          setlocal noballooneval
+        endif
+      vim
     end
   end
 end
