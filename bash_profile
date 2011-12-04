@@ -386,8 +386,11 @@ alias rl="rvm list"
 
 
 # ----- load up work script / bash functions ----- #
-test -f ~/work/ci_environment.sh && {
-  . ~/work/ci_environment.sh
+
+# use this for setting EMAIL, for host-specific git email addresses
+# as well as any work-specific load paths, commands, helpers, etc.
+test -f ~/work/environment.sh && {
+  . ~/work/environment.sh
 }
 
 true # last command should have a zero exit code!
