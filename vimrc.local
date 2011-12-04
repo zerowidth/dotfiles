@@ -155,8 +155,8 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 vnoremap <C-a> "hy:Ack <C-r>h
 
 map <leader>tn :tabnew<CR>
-map <leader>ta :tabnew<CR>:Ack
-map <leader>a :Ack
+map <leader>ta :tabnew<CR>:Ack<space>
+map <leader>a :Ack<space>
 map <leader>x :x<CR>
 
 " auto-save everything when vim loses focus
