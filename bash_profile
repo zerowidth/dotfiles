@@ -4,7 +4,7 @@ export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH #/Users/nathan/bin/git
 
 export LD_LIBRARY_PATH=/usr/local/lib
 
-export EDITOR="/usr/local/bin/vim"
+export EDITOR="/usr/bin/vim"
 
 export HISTCONTROL=ignoredups;
 export HISTSIZE=10000;
