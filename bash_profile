@@ -117,6 +117,9 @@ alias spb='spec -bcfs -Du'
 
 alias gx="gitx --all"
 
+alias gr="growlnotify -m"
+alias grs="growlnotify -s -m"
+
 function gemdir() {
   cd `rvm gemdir | tail -1`/gems
 }
