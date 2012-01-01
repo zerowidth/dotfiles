@@ -1,3 +1,5 @@
+load "plugins.rake"
+
 # link the .vimrc and .gvimrc files
 task :link_configs do
   dotvim = File.expand_path("~/.vim")
@@ -15,8 +17,14 @@ task :link_configs do
   end
 end
 
-desc "install vimfiles"
+desc "install the vimfiles and plugins"
 task :install => :link_configs do
+  # meta-task that depends on plugin tasks
+end
+
+desc "update the plugins"
+task :update => :install do
+  # meta-task that depends on plugin tasks
 end
 
 task :default => :install
