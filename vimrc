@@ -6,3 +6,5 @@ call pathogen#infect()
 
 """ and now, my own settings and mappings:
 colorscheme solarized
+
+source $HOME/.vim/settings/editing.vim      " movement and editing
