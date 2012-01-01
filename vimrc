@@ -9,3 +9,4 @@ colorscheme solarized
 
 source $HOME/.vim/settings/editing.vim      " movement and editing
 source $HOME/.vim/settings/statusline.vim   " custom statusline
+source $HOME/.vim/settings/plugins.vim      " plugin settings
