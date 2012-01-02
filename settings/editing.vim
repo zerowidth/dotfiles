@@ -29,6 +29,10 @@ command Tr %s/\s\+$//ge | %s/\t/  /ge | nohlsearch
 " from http://stackoverflow.com/questions/676600/vim-replace-selected-text
 vnoremap <C-r> "hy:%s/\V<C-r>=escape(@h,'/')<CR>//gc<left><left><left>
 
+" search for the selected text in the current file
+" this is useful for more complex strings than #/* can search
+vnoremap <C-f> "hy:/\V<C-r>=escape(@h,'/')<CR>/
+
 " easy tabs
 map <leader>tn :tabnew<CR>
 
