@@ -42,13 +42,6 @@ map <leader>x :x<CR>
 " easy command mode
 map ; :
 
-" move quickly between splits
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-l> <C-w>l
-map <C-_> <C-w>_
-
 " via janus, indent and tab switching
 if has("gui_macvim")
   " Map command-[ and command-] to indenting or outdenting
