@@ -96,7 +96,11 @@ function d() {
   if [ -n "$1" ]; then
     if [ -d "$1" ]; then
       pushd $1 >/dev/null
-      ctags -R
+      if [ -d .git ]; then
+        git ls-files -c -o --exclude-standard | ctags -L -
+      else
+        ctags -R
+      fi
       # mvim --servername $(basename $(pwd)) --remote-silent .
       mvim .
       popd >/dev/null
