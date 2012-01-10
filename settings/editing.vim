@@ -33,6 +33,12 @@ vnoremap <C-r> "hy:%s/\V<C-r>=escape(@h,'/')<CR>//gc<left><left><left>
 " this is useful for more complex strings than #/* can search
 vnoremap <C-f> "hy:/\V<C-r>=escape(@h,'/')<CR>/<CR>
 
+if has("gui_macvim")
+  " cmd-l for clearing search highlights
+  nnoremap <D-l> :nohlsearch<CR>
+  inoremap <D-l> <C-O>:nohlsearch<CR>
+endif
+
 " easy tabs
 map <leader>tn :tabnew<CR>
 
@@ -47,8 +53,15 @@ map <leader>x :x<CR>
 " easy quit
 map <leader>qa :qa<CR>
 
-" via janus, indent and tab switching
+" indent and tab switching
 if has("gui_macvim")
+  " map fullscreen toggle to be same as iterm2
+  map <D-CR> :set fullscreen!<CR>
+
+  " fast tab switching
+  map <D-j> gt
+  map <D-k> gT
+
   " Map command-[ and command-] to indenting or outdenting
   " while keeping the original selection in visual mode
   vmap <D-]> >gv
@@ -84,6 +97,7 @@ if has("gui_macvim")
   imap <D-8> <Esc>8gt
   map  <D-9> 9gt
   imap <D-9> <Esc>9gt
+
 else
   " Map command-[ and command-] to indenting or outdenting
   " while keeping the original selection in visual mode
