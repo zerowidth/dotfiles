@@ -24,10 +24,26 @@ end
 
 desc "update the plugins"
 task :update => :install do
+  sh "git pull"
   # meta-task that depends on plugin tasks
 end
 
-task :default => :install
+desc "clean up unknown plugins"
+task :clean do
+  unused = Dir.glob("./bundle/*").select do |file|
+    File.directory?(file)
+  end.reject do |dir|
+    PLUGINS.include? File.basename(dir)
+  end
+  if unused.size > 0
+    puts "cleaning unused plugins..."
+    unused.each do |dir|
+      rm_rf dir
+    end
+  end
+end
+
+task :default => [:install, :clean]
 
 
 

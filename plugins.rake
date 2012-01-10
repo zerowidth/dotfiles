@@ -1,3 +1,8 @@
+# Global plugin registry
+#
+# Used for tracking known plugins so cleanup can be done
+PLUGINS=[]
+
 # Define a vim plugin
 #
 # name   - plugin name
@@ -8,6 +13,7 @@
 #
 # Defines install and update rake tasks for the plugin, returns nothing
 def plugin(name, repo=nil)
+  PLUGINS << name
   namespace "plugin" do
     namespace name do
       plugin_dir = "bundle/#{name}"
