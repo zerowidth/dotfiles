@@ -1,51 +1,5 @@
 load "plugins.rake"
 
-# link the .vimrc and .gvimrc files
-task :link_configs do
-  dotvim = File.expand_path("~/.vim")
-  unless File.exist?(dotvim)
-    puts "linking .vim"
-    ln_s(Dir.pwd, dotvim)
-  end
-
-  %w[ vimrc gvimrc ].each do |file|
-    dest = File.expand_path("~/.#{file}")
-    unless File.exist?(dest)
-      puts "linking #{file}"
-      ln_s(File.expand_path(file), dest)
-    end
-  end
-end
-
-desc "install the vimfiles and plugins"
-task :install => :link_configs do
-  # meta-task that depends on plugin tasks
-end
-
-desc "update the plugins"
-task :update => :install do
-  sh "git pull"
-  # meta-task that depends on plugin tasks
-end
-
-desc "clean up unknown plugins"
-task :clean do
-  unused = Dir.glob("./bundle/*").select do |file|
-    File.directory?(file)
-  end.reject do |dir|
-    PLUGINS.include? File.basename(dir)
-  end
-  if unused.size > 0
-    puts "cleaning unused plugins..."
-    unused.each do |dir|
-      rm_rf dir
-    end
-  end
-end
-
-task :default => [:install, :clean]
-
-
 
 ### CORE
 
@@ -62,7 +16,6 @@ plugin "ack", "https://github.com/mileszs/ack.vim.git"
 
 # ctags file management
 plugin "autotag", "https://github.com/vim-scripts/AutoTag.git"
-
 
 
 ### EDITING AND MOVING
@@ -108,7 +61,6 @@ plugin "tabmerge" do
 end
 
 
-
 ### LANGUAGE AND SYNTAX
 
 # ruby language support
@@ -139,7 +91,6 @@ plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
 plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 plugin "vimclojure", "https://github.com/vim-scripts/VimClojure.git"
-
 
 
 ### MISC

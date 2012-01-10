@@ -3,6 +3,53 @@
 # Used for tracking known plugins so cleanup can be done
 PLUGINS=[]
 
+# link the .vimrc and .gvimrc files
+task :link_configs do
+  dotvim = File.expand_path("~/.vim")
+  unless File.exist?(dotvim)
+    puts "linking .vim"
+    ln_s(Dir.pwd, dotvim)
+  end
+
+  %w[ vimrc gvimrc ].each do |file|
+    dest = File.expand_path("~/.#{file}")
+    unless File.exist?(dest)
+      puts "linking #{file}"
+      ln_s(File.expand_path(file), dest)
+    end
+  end
+end
+
+desc "install the vimfiles and plugins (default)"
+task :install => :link_configs do
+  # meta-task that depends on plugin tasks
+end
+
+desc "update the plugins"
+task :update => :install do
+  sh "git pull"
+  # meta-task that depends on plugin tasks
+end
+
+desc "clean up unknown plugins"
+task :clean do
+  unused = Dir.glob("./bundle/*").select do |file|
+    File.directory?(file)
+  end.reject do |dir|
+    PLUGINS.include? File.basename(dir)
+  end
+  if unused.size > 0
+    puts "cleaning unused plugins..."
+    unused.each do |dir|
+      rm_rf dir
+    end
+  end
+end
+
+task :default => [:install, :clean]
+
+
+
 # Define a vim plugin
 #
 # name   - plugin name
