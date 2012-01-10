@@ -26,12 +26,12 @@ endif
 " strip leading tabs and trailing whitespace
 command Tr %s/\s\+$//ge | %s/\t/  /ge | nohlsearch
 
-" from http://stackoverflow.com/questions/676600/vim-replace-selected-text
+" replace the selected text
 vnoremap <C-r> "hy:%s/\V<C-r>=escape(@h,'/')<CR>//gc<left><left><left>
 
 " search for the selected text in the current file
 " this is useful for more complex strings than #/* can search
-vnoremap <C-f> "hy:/\V<C-r>=escape(@h,'/')<CR>/
+vnoremap <C-f> "hy:/\V<C-r>=escape(@h,'/')<CR>/<CR>
 
 " easy tabs
 map <leader>tn :tabnew<CR>
@@ -39,12 +39,13 @@ map <leader>tn :tabnew<CR>
 " easy escape
 imap jj <Esc>
 imap jk <Esc>
+imap kk <Esc>
 
 " easy close
 map <leader>x :x<CR>
 
-" easy command mode
-map ; :
+" easy quit
+map <leader>qa :qa<CR>
 
 " via janus, indent and tab switching
 if has("gui_macvim")

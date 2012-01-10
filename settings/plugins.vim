@@ -31,13 +31,13 @@ vmap <C-Down> ]egv
 
 
 """ Ack
-vnoremap <C-a> "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"
+vnoremap <C-a> "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 map <leader>a :Ack<space>
-vmap <leader>a "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"
+vmap <leader>a "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 map <leader>ta :tabnew<CR>:Ack<space>
-vmap <leader>ta "hy:tabnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"
+vmap <leader>ta "hy:tabnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 map <leader>va :vnew<CR>:Ack<space>
-vmap <leader>va "hy:vnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"
+vmap <leader>va "hy:vnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 
 
 """ surround
@@ -67,6 +67,8 @@ if has("gui_macvim")
   map <D-t> :CommandT<CR>
   imap <D-t> <Esc>:CommandT<CR>
 endif
+
+map <Leader>f :CommandT<CR>
 
 """ tagbar
 " map <silent> <Leader>tb :TagbarOpen<CR>
