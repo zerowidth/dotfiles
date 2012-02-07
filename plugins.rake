@@ -1,7 +1,13 @@
-# Global plugin registry
-#
-# Used for tracking known plugins so cleanup can be done
+# Global plugin registry, used for tracking known plugins for cleanup
 PLUGINS=[]
+
+task :install_plugins do
+  # hook task for the plugins to use
+end
+
+task :update_plugins do
+  # hook task for the plugins to use
+end
 
 # link the .vimrc and .gvimrc files
 task :link_configs do
@@ -20,15 +26,15 @@ task :link_configs do
   end
 end
 
-desc "install the vimfiles and plugins (default)"
-task :install => :link_configs do
-  # meta-task that depends on plugin tasks
+task :update_repo do
+  sh "git pull"
 end
 
-desc "update the plugins"
-task :update => :install do
-  sh "git pull"
-  # meta-task that depends on plugin tasks
+# reload the helptags using the pathogen Helptags command
+desc "update the help tags from the installed plugins"
+task :helptags do
+  puts "updating help tags..."
+  sh "vim -c Helptags -c qa"
 end
 
 desc "clean up unknown plugins"
@@ -46,8 +52,16 @@ task :clean do
   end
 end
 
-task :default => [:install, :clean]
+# install: link, install, clean, helptags
+desc "install the vimfiles and plugins (default)"
+task :install => [:link_configs, :install_plugins, :clean, :helptags] do
+end
 
+desc "update the vim distribution and plugins"
+task :update => [:update_repo, :install_plugins, :clean, :update_plugins, :helptags] do
+end
+
+task :default => :install
 
 
 # Define a vim plugin
@@ -65,7 +79,7 @@ def plugin(name, repo=nil)
     namespace name do
       plugin_dir = "bundle/#{name}"
 
-      desc "install the #{name} plugin"
+      # desc "install the #{name} plugin"
 
       if File.directory?(plugin_dir)
         task :install do
@@ -101,7 +115,7 @@ def plugin(name, repo=nil)
 
       end
 
-      desc "update the #{name} plugin"
+      # desc "update the #{name} plugin"
       task :update do
         puts
         puts "*" * 80
@@ -120,7 +134,7 @@ def plugin(name, repo=nil)
   end
 
   # hook up the plugin tasks
-  task :install => "plugin:#{name}:install"
-  task :update => "plugin:#{name}:update"
+  task :install_plugins => ["plugin:#{name}:install"]
+  task :update_plugins => ["plugin:#{name}:update"]
 
 end
