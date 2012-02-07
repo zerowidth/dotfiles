@@ -1,5 +1,6 @@
 " basic editing
 let mapleader = ','
+let maplocalleader = ','
 
 " enable plugin filetypes and indentation
 filetype plugin indent on
