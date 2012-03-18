@@ -2,3 +2,5 @@
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
 . ~/.secrets # api keys etc
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

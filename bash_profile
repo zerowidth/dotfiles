@@ -272,7 +272,7 @@ TEXT_RESET='\[\e[0m\]'    # Text Reset
 previous_exit_status() {
   if [ $1 -eq 0 ]; then
     # HEAVY ROUND-TIPPED RIGHTWARDS ARROW
-    echo -n "▸"
+    echo -n "${TEXT_GREEN}▸${TEXT_RESET}"
     # echo -n "➜"
     #echo -n "•"
     # echo -n "⧫"
