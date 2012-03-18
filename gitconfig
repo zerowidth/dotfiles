@@ -3,9 +3,6 @@
 	status = auto
 	branch = auto
 	ui = auto
-[user]
-  name = Nathan Witmer
-  email = nwitmer@gmail.com
 [svn]
 [apply]
 	whitespace = fix
@@ -25,15 +22,27 @@
 	lg = log --graph --decorate
 	graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format: %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
 	au = add -u
-	fa = fetch --all
+	fa = fetch --all --prune
+	ribbon = tag --force _ribbon origin/master
+	catchup = log --patch --reverse --topo-order _ribbon..origin/master
 [core]
 	excludesfile = /Users/nathan/.gitignore
 	autocrlf = input
+	pager = less -r
 [branch]
 	autosetupmerge = true
+	autosetuprebase = remote
 [diff "ruby"]
 	funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
 [diff]
 	tool = opendiff
 [merge]
 	tool = opendiff
+[pull]
+	rebase = true
+[push]
+	default = tracking
+[include]
+	path = code/gitconfig
+	path = work/gitconfig
+	path = .gitsecrets

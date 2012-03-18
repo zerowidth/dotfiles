@@ -120,6 +120,7 @@ alias sp='spec -cfs -Du'
 alias spb='spec -bcfs -Du'
 
 alias gx="gitx --all"
+alias gp="git pull --stat"
 
 alias gr="growlnotify -m"
 alias grs="growlnotify -s -m"
