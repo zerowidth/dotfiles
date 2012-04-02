@@ -40,6 +40,9 @@ if has("gui_macvim")
   inoremap <D-l> <C-O>:nohlsearch<CR>
 endif
 
+" easy command
+map <Space> :
+
 " easy tabs
 map <leader>tn :tabnew<CR>
 
