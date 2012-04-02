@@ -34,7 +34,6 @@ plugin "surround", "https://github.com/tpope/vim-surround.git"
 plugin "endwise", "https://github.com/tpope/vim-endwise.git"
 
 # show colors in css files, including hsl and rgb
-plugin "vim-css-color", "https://github.com/ap/vim-css-color.git"
 
 # highlight matching html tags
 plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
