@@ -160,6 +160,8 @@ function TabMove(n)
     exec 'tabm'.nr
 endfunction
 
+map <Leader>m gT
+map <Leader>. gt
 map <C-Left> :call TabMove(1)<CR>
 map <C-Right> :call TabMove(0)<CR>
 
