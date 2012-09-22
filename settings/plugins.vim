@@ -80,7 +80,10 @@ if has("gui_macvim")
   imap <D-t> <Esc>:CommandT<CR>
 endif
 
+let g:CommandTTagIncludeFilenames=1
+
 map <Leader>f :CommandT<CR>
+map <Leader>tt :CommandTTag<CR>
 
 """ tagbar
 " map <silent> <Leader>tb :TagbarOpen<CR>
