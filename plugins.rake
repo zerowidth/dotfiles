@@ -66,20 +66,19 @@ task :default => :install
 
 # Define a vim plugin
 #
-# name   - plugin name
-# repo   - optional path to the repo
+# name - plugin name
+# repo - optional path to the repo
+# type - optional, defaults to :git. :hg for mercurial repos.
 #
 # If a block is provided, it is yielded with the current working directory set
 # to the plugin's directory.
 #
 # Defines install and update rake tasks for the plugin, returns nothing
-def plugin(name, repo=nil)
+def plugin(name, repo=nil, type=:git)
   PLUGINS << name
   namespace "plugin" do
     namespace name do
       plugin_dir = "bundle/#{name}"
-
-      # desc "install the #{name} plugin"
 
       if File.directory?(plugin_dir)
         task :install do
@@ -95,7 +94,7 @@ def plugin(name, repo=nil)
             puts "*" * 80
             puts
             if repo
-              sh "git clone #{repo} #{plugin_dir}"
+              clone type, repo, plugin_dir
             else
               directory plugin_dir
             end
@@ -124,7 +123,7 @@ def plugin(name, repo=nil)
         puts
         Dir.chdir(plugin_dir) do
           if File.directory?(".git")
-            sh "git pull --stat"
+            pull type
           end
           yield if block_given?
         end
@@ -137,4 +136,24 @@ def plugin(name, repo=nil)
   task :install_plugins => ["plugin:#{name}:install"]
   task :update_plugins => ["plugin:#{name}:update"]
 
+end
+
+def clone(type, repo, dir)
+  case type
+  when :git
+    sh "git clone #{repo} #{dir}"
+  when :hg
+    sh "hg clone #{repo} #{dir}"
+  else
+    raise "unknown repo type #{type}"
+  end
+end
+
+def pull(type)
+  case type
+  when :git
+    sh "git pull --stat"
+  when :hg
+    sh "hg incoming && hg pull -u"
+  end
 end
