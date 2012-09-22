@@ -89,8 +89,8 @@ plugin "scss", "https://github.com/cakebaker/scss-syntax.vim.git"
 plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
 plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
-plugin "vimclojure", "https://github.com/vim-scripts/VimClojure.git"
 
+plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", :hg
 
 ### MISC
 
