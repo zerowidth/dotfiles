@@ -48,7 +48,6 @@ map <leader>tn :tabnew<CR>
 
 " easy escape
 imap jj <Esc>
-imap jk <Esc>
 imap kk <Esc>
 
 " easy close
@@ -103,6 +102,7 @@ if has("gui_macvim")
   imap <D-9> <Esc>9gt
 
 else
+
   " Map command-[ and command-] to indenting or outdenting
   " while keeping the original selection in visual mode
   vmap <A-]> >gv
