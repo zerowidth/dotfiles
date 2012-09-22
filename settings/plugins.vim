@@ -121,3 +121,6 @@ let g:gist_detect_filetype = 1
 let g:user_zen_settings = {
 \  'indentation' : '  '
 \}
+
+""" switch.vim
+nnoremap - :Switch<cr>
