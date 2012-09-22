@@ -117,3 +117,7 @@ end
 " detect filetype if vim failed auto-detection.
 let g:gist_detect_filetype = 1
 
+""" zencoding
+let g:user_zen_settings = {
+\  'indentation' : '  '
+\}
