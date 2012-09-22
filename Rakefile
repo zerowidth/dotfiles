@@ -110,5 +110,6 @@ plugin "snipmate-snippets", "https://github.com/honza/snipmate-snippets.git"
 # snipmate dependencies
 plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
 plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
+plugin "align", "https://github.com/tsaleh/vim-align.git"
 plugin "zencoding", "https://github.com/mattn/zencoding-vim.git"
 plugin "switch", "git://github.com/AndrewRadev/switch.vim.git"

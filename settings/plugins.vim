@@ -124,3 +124,6 @@ let g:user_zen_settings = {
 
 """ switch.vim
 nnoremap - :Switch<cr>
+
+""" align: disable alignmaps
+let g:loaded_AlignMapsPlugin=1
