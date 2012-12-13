@@ -72,6 +72,15 @@ plugin "snipmate-snippets", "https://github.com/honza/snipmate-snippets.git"
 plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
 plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
 
+# fast autocomplete
+plugin "neocomplcache", "https://github.com/Shougo/neocomplcache.git"
+
+# async execution, builds neocomplcache in the background
+plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
+  sh "make -f make_mac.mak"
+end
+
+
 ### LANGUAGE AND SYNTAX
 
 # ruby language support

@@ -127,3 +127,6 @@ nnoremap - :Switch<cr>
 
 """ align: disable alignmaps
 let g:loaded_AlignMapsPlugin=1
+""" neocomplcache
+let g:neocomplcache_enable_cursor_hold_i=1
+let g:neocomplcache_enable_at_startup = 1
