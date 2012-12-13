@@ -157,3 +157,11 @@ def pull(type)
     sh "hg incoming && hg pull -u"
   end
 end
+
+def try(cmd)
+  sh cmd do |ok, res|
+    if !ok
+      puts "#{cmd} exited with code #{res}"
+    end
+  end
+end

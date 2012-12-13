@@ -104,10 +104,17 @@ plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
 plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 
-plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", :hg
 # auto-expand html
 # plugin "sparkup", "https://github.com/kogakure/vim-sparkup.git"
 plugin "zencoding", "https://github.com/mattn/zencoding-vim.git"
+
+# clojure:
+# plugin "paredit", "git://github.com/vim-scripts/paredit.vim.git"
+plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", :hg do
+  try "ln -s vim/* ."
+end
+plugin "vim-foreplay", "https://github.com/tpope/vim-foreplay.git"
+
 
 ### MISC
 
