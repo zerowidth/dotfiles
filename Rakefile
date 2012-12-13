@@ -126,6 +126,14 @@ plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", :hg do
 end
 plugin "vim-foreplay", "https://github.com/tpope/vim-foreplay.git"
 
+# haskell:
+plugin "haskellmode", "https://github.com/lukerandall/haskellmode-vim.git"
+plugin "haskell-indent", "https://github.com/vim-scripts/indenthaskell.vim.git"
+# haskell tools (show type of expression, etc.)
+plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
+# haskell-aware auto-completion
+plugin "neco-ghc", "https://github.com/ujihisa/neco-ghc.git"
+
 
 ### MISC
 

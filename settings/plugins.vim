@@ -127,6 +127,19 @@ nnoremap - :Switch<cr>
 
 """ align: disable alignmaps
 let g:loaded_AlignMapsPlugin=1
+
+
+""" haskellmode
+" use ghc functionality for haskell files
+" au Bufenter *.hs compiler ghc
+
+let g:haddock_browser = "open"
+let g:haddock_browser_callformat = "%s %s"
+
+""" haskell-indent
+let g:haskell_indent_if = 2
+let g:haskell_indent_case = 4
+
 """ neocomplcache
 let g:neocomplcache_enable_cursor_hold_i=1
 let g:neocomplcache_enable_at_startup = 1
