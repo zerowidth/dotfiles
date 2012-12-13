@@ -37,7 +37,7 @@ set statusline+=%{&paste?'[paste]':''}
 set statusline+=%*
 
 " git status if applicable
-set statusline+=%{fugitive#statusline()}
+" set statusline+=%{fugitive#statusline()}
 
 set statusline+=%=      "left/right separator
 set statusline+=%{StatuslineCurrentHighlight()}    "current highlight
