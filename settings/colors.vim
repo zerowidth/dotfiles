@@ -1,1 +1,1 @@
-colorscheme Tomorrow-Night
+colorscheme base16-tomorrow
