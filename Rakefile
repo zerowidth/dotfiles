@@ -85,6 +85,8 @@ end
 
 # ruby language support
 plugin "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
+# run ruby tests from inside vim
+plugin "vim-vroom", "https://github.com/skalnik/vim-vroom.git"
 # toggle between :symbol "string" 'string', and more
 plugin "switch", "git://github.com/AndrewRadev/switch.vim.git"
 
