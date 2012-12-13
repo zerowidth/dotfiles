@@ -14,8 +14,9 @@ if has("gui_macvim")
   " set transparency=5
   set guifont=Menlo:h13
 
+  " e - graphical tabs
   " c - use console dialogs instead of graphical windows
   " g - set inactive menu items grey
   " everything else disabled
-  set guioptions=cg
+  set guioptions=ecg
 end
