@@ -98,6 +98,11 @@ set wildignore+=*.swp,*~,._*
 
 set wildmenu " command-line completion shows matches
 
+set undofile " use an undo file when editing
+set undodir=~/.vimundo
+set undolevels=1000
+set undoreload=10000
+
 """ multi-byte characters
 
 set encoding=utf-8 " set default encoding (default in macvim)
