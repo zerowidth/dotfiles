@@ -1,6 +1,5 @@
 load "plugins.rake"
 
-
 ### CORE
 
 # fast file navigation
@@ -35,6 +34,7 @@ plugin "surround", "https://github.com/tpope/vim-surround.git"
 plugin "endwise", "https://github.com/tpope/vim-endwise.git"
 
 # show colors in css files, including hsl and rgb
+# plugin "vim-css-color", "https://github.com/ap/vim-css-color.git"
 
 # highlight matching html tags
 plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
@@ -60,11 +60,24 @@ plugin "tabmerge" do
   sh "curl 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
 end
 
+# align vs tabular plugins
+# plugin "tabular", "https://github.com/godlygeek/tabular.git"
+plugin "align", "https://github.com/tsaleh/vim-align.git"
+
+# snippets
+plugin "snipmate", "https://github.com/garbas/vim-snipmate.git"
+plugin "snipmate-snippets", "https://github.com/honza/snipmate-snippets.git"
+
+# snipmate dependencies
+plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
+plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
 
 ### LANGUAGE AND SYNTAX
 
 # ruby language support
 plugin "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
+# toggle between :symbol "string" 'string', and more
+plugin "switch", "git://github.com/AndrewRadev/switch.vim.git"
 
 # html/erb editing support
 plugin "vim-ragtag", "https://github.com/tpope/vim-ragtag.git"
@@ -85,13 +98,16 @@ plugin "nodejs", "https://github.com/mmalecki/vim-node.js.git"
 plugin "puppet", "https://github.com/ajf/puppet-vim.git"
 plugin "rails", "https://github.com/tpope/vim-rails.git"
 plugin "rspec", "https://github.com/taq/vim-rspec.git"
-plugin "scala", "https://github.com/bdd/vim-scala.git"
+# plugin "scala", "https://github.com/bdd/vim-scala.git" # moved? gone?
 plugin "scss", "https://github.com/cakebaker/scss-syntax.vim.git"
 plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
 plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 
 plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", :hg
+# auto-expand html
+# plugin "sparkup", "https://github.com/kogakure/vim-sparkup.git"
+plugin "zencoding", "https://github.com/mattn/zencoding-vim.git"
 
 ### MISC
 
@@ -104,13 +120,4 @@ plugin "copy-as-rtf", "git://github.com/aniero/vim-copy-as-rtf.git"
 # gist integration
 plugin "gist-vim", "https://github.com/mattn/gist-vim.git"
 
-# snippets
-plugin "snipmate", "https://github.com/garbas/vim-snipmate.git"
-plugin "snipmate-snippets", "https://github.com/honza/snipmate-snippets.git"
 
-# snipmate dependencies
-plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
-plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
-plugin "align", "https://github.com/tsaleh/vim-align.git"
-plugin "zencoding", "https://github.com/mattn/zencoding-vim.git"
-plugin "switch", "git://github.com/AndrewRadev/switch.vim.git"
