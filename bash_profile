@@ -144,7 +144,22 @@ alias e='mvim'
 
 
 alias gx="gitx --all"
-alias gp="git pull --stat"
+
+function gp() {
+  local dirty=false
+  git diff --no-ext-diff --quiet --exit-code || dirty=true
+
+  if [ "true" = "$dirty" ]; then
+    git stash
+  fi
+
+  git fetch --all
+  git pull --stat
+
+  if [ "true" = "$dirty" ]; then
+    git stash pop
+  fi
+}
 
 alias gr="growlnotify -m"
 alias grs="growlnotify -s -m"
