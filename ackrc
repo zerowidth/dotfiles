@@ -7,6 +7,7 @@
 --ignore-dir=coverage
 --ignore-dir=doc
 --ignore-dir=pkg
+--ignore-dir=.bundle
 --type-add=ruby=haml,rake,ru
 --type-add=js=coffee
 --type-add=css=less
