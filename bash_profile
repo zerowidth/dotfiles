@@ -53,16 +53,34 @@ else
   alias ls='ls -p --color'
   alias mv='mv -v'
 fi
+
 alias ll='ls -lah'
 alias vi='vim'
 alias js='NODE_NO_READLINE=1 rlwrap node'
-
-alias irc="echo -n \$'\e]0;irc\a'; ssh -t zerowidth-tunnel TERM=screen screen -U -x i"
-
 alias g='grep -in'
-alias gs='growlnotify -s -m'
+alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
 
-alias desktop="pushd ~/Desktop"
+function ss() {
+  if [[ -e script/server ]]; then
+    if [[ -e Gemfile ]]; then
+      bundle exec script/server
+    else
+      script/server
+    fi
+  elif [[ -e bin/rails ]]; then
+    bundle exec rails server
+  fi
+}
+function sc() {
+  if [[ -e script/console ]]; then
+    bundle exec script/console
+  elif [[ -e bin/rails ]]; then
+    bundle exec rails console
+  fi
+}
+alias sb='script/bootstrap'
+
+
 
 function wait-for-host() {
   if [ -n "$1" ]; then
@@ -100,9 +118,6 @@ function sshr() {
 }
 complete -F _ssh sshr
 
-alias 8='rvm use 1.8.7'
-alias 9='rvm use 1.9.2'
-
 function d() {
   if [ -n "$1" ]; then
     if [ -d "$1" ]; then
@@ -127,8 +142,6 @@ function d() {
 }
 alias e='mvim'
 
-alias sp='spec -cfs -Du'
-alias spb='spec -bcfs -Du'
 
 alias gx="gitx --all"
 alias gp="git pull --stat"
@@ -136,9 +149,10 @@ alias gp="git pull --stat"
 alias gr="growlnotify -m"
 alias grs="growlnotify -s -m"
 
-function gemdir() {
-  cd `rvm gemdir | tail -1`/gems
-}
+alias bo="EDITOR=mvim bundle open"
+alias be="bundle exec"
+alias fs="foreman start"
+alias bumpgems="git add -u vendor/cache Gemfile*"
 
 # alias mateup="
 #   pushd ~/Library/Application\ Support/TextMate/Bundles; svn up; svn st; popd;
@@ -163,6 +177,38 @@ function gemdir() {
 #   fi
 # }
 
+# from @glv: no need to prefix bin/rake etc. in a bundle'd project
+BUNDLED_COMMANDS="foreman rackup rails rake rspec ruby shotgun spec cap guard compass jekyll testrb"
+## Functions
+bundler-installed()
+{
+  which bundle > /dev/null 2>&1
+}
+
+within-bundled-project()
+{
+  local dir="$(pwd)"
+  while [ "$(dirname $dir)" != "/" ]; do
+    [ -f "$dir/Gemfile" ] && return
+    dir="$(dirname $dir)"
+  done
+  false
+}
+
+run-with-bundler()
+{
+  local command="$1"
+  shift
+  if bundler-installed && within-bundled-project; then
+    bundle exec $command $*
+  else
+    $command $*
+  fi
+}
+
+for CMD in $BUNDLED_COMMANDS; do
+  alias $CMD="run-with-bundler $CMD"
+done
 # via mojombo http://gist.github.com/180587
 function psg {
   ps wwwaux | egrep "($1|%CPU)" | grep -v grep
@@ -351,9 +397,7 @@ set -o vi
 # Meta-V: go back to vi editing
  # bind -m emacs '"\ev": vi-editing-mode'i
 
-if [[ -s "$HOME/.rvm/scripts/rvm" ]]  ; then source "$HOME/.rvm/scripts/rvm" ; fi
-alias rl="rvm list"
-
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # ----- load up work script / bash functions ----- #
 
