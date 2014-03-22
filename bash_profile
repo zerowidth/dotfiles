@@ -1,38 +1,44 @@
 # set -x
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/share/python:$PATH
-export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH #/Users/nathan/bin/gitflow:$PATH
 
-export LD_LIBRARY_PATH=/usr/local/lib
+USE_BOXEN=true
+test `hostname | cut -d. -f1` = 'bruichladdich' && USE_BOXEN=true
+test `hostname | cut -d. -f1` = 'macallan' && USE_BOXEN=true
 
-export EDITOR="/usr/bin/vim"
+if $USE_BOXEN; then
+  [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
+  unalias git
+else
+  export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+  export PATH=/usr/local/share/python:$PATH
+  export PATH=/Users/nathan/.rbenv/bin:$PATH
+fi
+
+export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH
+export PATH=/Users/nathan/.cabal/bin:$PATH
+
+export EDITOR="vim"
 
 export HISTCONTROL=ignoredups;
 export HISTSIZE=10000;
 shopt -s histappend; # append not rewrite history
 
-# for textmate svn
-export LC_ALL=
-export LC_CTYPE=en_US.UTF-8
+# export LESS='-iMRXFx4' -- says bleything
+# -i case ignore | -M more verbose prompting | -R raw control chars
+# -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
+export LESS='-MRXFx4'
 
 # colorized grep
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;33'
 
-export JAVA_HOME=/Library/Java/Home
+# export JAVA_HOME=`/usr/libexec/java_home`
 
 export RUBYOPT="-rubygems"
-
 export NODE_PATH=/usr/local/lib/node_modules
-
 export PGDATA=/usr/local/var/postgres
 
 test -f ~/.secrets && {
   . ~/.secrets # api keys etc
-}
-
-# osx has which -s, but centos doesn't
-which brew >/dev/null 2>&1 && test -f `brew --prefix`/etc/bash_completion && {
-  . `brew --prefix`/etc/bash_completion
 }
 
 if [ `uname` = 'Darwin' ]; then
@@ -351,5 +357,9 @@ alias rl="rvm list"
 test -f ~/work/environment.sh && {
   . ~/work/environment.sh
 }
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
 
 true # last command should have a zero exit code!
