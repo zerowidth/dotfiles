@@ -37,6 +37,11 @@ export RUBYOPT="-rubygems"
 export NODE_PATH=/usr/local/lib/node_modules
 export PGDATA=/usr/local/var/postgres
 
+mkdir -p ~/go
+export GOPATH=~/go
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:/opt/boxen/homebrew/Cellar/go/1.2/libexec/bin
+
 test -f ~/.secrets && {
   . ~/.secrets # api keys etc
 }
