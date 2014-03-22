@@ -190,48 +190,6 @@ pkill() {
 
 # fancy prompt stuff
 
-# COLOR_BLACK="\[\e[30;40m\]"
-# COLOR_RED="\[\e[31;40m\]"
-# COLOR_GREEN="\[\e[32;40m\]"
-# COLOR_YELLOW="\[\e[33;40m\]"
-# COLOR_BLUE="\[\e[34;40m\]"
-# COLOR_MAGENTA="\[\e[35;40m\]"
-# COLOR_CYAN="\[\e[36;40m\]"
-# COLOR_NONE="\[\e[0m\]"
-
-# COLOR_RED_BOLD="\[\e[31;1m\]"
-# COLOR_GREEN_BOLD="\[\e[32;1m\]"
-# COLOR_YELLOW_BOLD="\[\e[33;1m\]"
-# COLOR_BLUE_BOLD="\[\e[34;1m\]"
-# COLOR_MAGENTA_BOLD="\[\e[35;1m\]"
-# COLOR_CYAN_BOLD="\[\e[36;1m\]"
-
-# http://peepcode.com/system/uploads/2007/setprompt.txt
-# parse_git_branch() {
-#   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-# }
-
-# thanks to http://b.logi.cx/2008/5/5/git-bash-awk-crazy-delicious and comments
-# git_dirty_flag() {
-#   git status 2> /dev/null | grep -c : | awk '{if ($1 > 0) print "⚡"}'
-# }
-
-# set_prompt()
-# {
-#     previous_value=$?;
-#     # PS1="${COLOR_GREEN}\u@\h${COLOR_NONE}:${COLOR_CYAN}\w"
-#     prompt="${COLOR_GREEN}\w${COLOR_NONE}$(__git_ps1)${COLOR_YELLOW}$(git_dirty_flag)${COLOR_NONE} "
-#     if test $previous_value -eq 0
-#     then
-#         PS1="${prompt}➔ "
-#     else
-#         PS1="${prompt}${COLOR_RED}➔${COLOR_NONE} "
-#     fi
-# }
-# PROMPT_COMMAND=set_prompt
-# PS1="${PS1}${COLOR_NONE}\$ "
-# PS1="${PS1}${COLOR_RED}\$${COLOR_NONE} "
-
 TEXT_BLACK='\[\e[0;30m\]' # Black - Regular
 TEXT_RED='\[\e[0;31m\]' # Red
 TEXT_GREEN='\[\e[0;32m\]' # Green
@@ -326,16 +284,12 @@ else
   WINDOW_NAME=''
 fi
 
-if [ `uname` = 'Darwin' ]; then
-  PROMPT_HOST='';
-else
-  PROMPT_HOST="${TEXT_CYAN}\h${TEXT_RESET} ";
-fi
+PROMPT_HOST="${TEXT_PURPLE}\h${TEXT_RESET}";
 
 set_prompt(){
-  previous=$?;
+  status_color=$(previous_exit_color $?)
   history -a # append history after each command
-  PS1="${PROMPT_HOST}${TAB_NAME}${WINDOW_NAME}$(rvm-prompt v s g) ${TEXT_BLUE}\w${TEXT_RESET}$(__git_ps1)$(git_dirty_flag) $(previous_exit_status $previous) "
+  PS1="${status_color}╭─${TEXT_RESET} ${TAB_NAME}${WINDOW_NAME}${PROMPT_HOST}:${TEXT_BLUE}\w${TEXT_RESET} [$(rbenv version-name)]$(__git_ps1) $(git_dirty_flag)\n${status_color}╰▸${TEXT_RESET} "
 }
 
 PROMPT_COMMAND=set_prompt
