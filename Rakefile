@@ -156,7 +156,7 @@ plugin "fugitive", "https://github.com/tpope/vim-fugitive.git"
 plugin "git-gutter", "https://github.com/airblade/vim-gitgutter.git"
 
 # for using syntax-highlighted text in presentations
-plugin "copy-as-rtf", "git://github.com/aniero/vim-copy-as-rtf.git"
+plugin "copy-as-rtf", "git://github.com/zerowidth/vim-copy-as-rtf.git"
 
 # gist integration
 plugin "gist-vim", "https://github.com/mattn/gist-vim.git"
