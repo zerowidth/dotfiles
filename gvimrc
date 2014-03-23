@@ -9,10 +9,11 @@ if has("gui_macvim")
 
   " size the window so it's reasonable on a 11" mba
   " 156 is 120 columns plus 32 for NERDTree plus gutter
-  set columns=156
-  set lines=47
+  " set columns=156
+  " set lines=47
   " set transparency=5
-  set guifont=Menlo:h13
+  " let hostname=split(hostname(),'\.')[0]
+  set guifont=Menlo:h14
 
   " e - graphical tabs
   " c - use console dialogs instead of graphical windows
