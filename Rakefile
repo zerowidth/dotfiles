@@ -22,6 +22,8 @@ plugin "solarized", "https://github.com/altercation/vim-colors-solarized.git"
 plugin "tomorrow-night", "https://github.com/chriskempson/Vim-Tomorrow-Theme.git"
 plugin "base16", "https://github.com/chriskempson/base16-vim.git"
 
+plugin "show-trailing-whitespace", "https://github.com/vim-scripts/ShowTrailingWhitespace"
+
 # code commenting
 plugin "nerdcommenter", "https://github.com/scrooloose/nerdcommenter.git"
 
