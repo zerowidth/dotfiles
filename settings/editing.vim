@@ -5,9 +5,15 @@ let maplocalleader = ','
 " enable plugin filetypes and indentation
 filetype plugin indent on
 
-" toggle line numbers
-map <Leader>n :set nu!<CR>
-map <Leader>, :set nu!<CR>
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunc
+
+nnoremap <Leader>n :silent call NumberToggle()<cr>
 
 " move quickly between splits
 map <C-j> <C-w>j
