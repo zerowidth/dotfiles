@@ -269,37 +269,11 @@ previous_exit_color() {
 }
 
 export GIT_PS1_SHOWUPSTREAM="git verbose"
-export GIT_PS1_DESCRIBE_STYLE="branch"
+export GIT_PS1_DESCRIBE_STYLE="branch" # for (master~4) style
 export GIT_PS1_SHOWDIRTYSTATE=true
-export GIT_PS1_SHOWSTASHSTATE=true
+# export GIT_PS1_SHOWSTASHSTATE=true
 export GIT_PS1_SHOWUNTRACKEDFILES=true
 export GIT_PS1_SHOWCOLORHINTS=true
-
-git_dirty_flag() {
-  if [ "true" = "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]; then
-
-    # modifications of tracked files
-    # git diff-files --no-ext-diff --ignore-submodules --exit-code --quiet \
-    # now, from __git_ps1:
-    git diff --no-ext-diff --quiet --exit-code \
-      || echo -n "${TEXT_YELLOW}*${TEXT_RESET}"
-
-    # staged hunks
-    if git rev-parse --quiet --verify HEAD >/dev/null; then
-      # git diff-index --no-ext-diff --ignore-submodules --cached --exit-code HEAD --quiet \
-      git diff-index --cached --quiet HEAD -- \
-        || echo -n "${TEXT_GREEN}+${TEXT_RESET}"
-    fi
-
-    # untracked files
-    if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-      echo -n "${TEXT_CYAN}?${TEXT_RESET}"
-    fi
-
-    # stashed changes
-    git rev-parse --verify refs/stash >/dev/null 2>&1 && echo -n "${TEXT_PURPLE}\$${TEXT_RESET}"
-  fi
-}
 
 if [[ $TERM_PROGRAM == 'iTerm.app' ]]; then
   # 0 means both tab and window, 1 is tab, 2 is window
