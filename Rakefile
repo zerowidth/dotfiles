@@ -3,9 +3,7 @@ load "plugins.rake"
 ### CORE
 
 # fast file navigation
-plugin "command-t", "https://github.com/wincent/Command-T.git" do
-  sh "cd ruby/command-t && ruby extconf.rb && make clean && make"
-end
+plugin "ctrl-p", "https://github.com/kien/ctrlp.vim"
 
 # project tree navigation
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"

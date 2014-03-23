@@ -9,6 +9,10 @@ function Refresh()
     CommandTFlush
   endif
 
+  if exists(":CtrlPClearCache")
+    CtrlPClearCache
+  endif
+
   if exists("t:NERDTreeBufName")
     let nr = bufwinnr(t:NERDTreeBufName)
     if nr != -1

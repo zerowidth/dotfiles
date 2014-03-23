@@ -71,19 +71,26 @@ let vimclojure#SplitPos="bottom"
 let vimclojure#SplitSize=10
 
 
-""" Command-T
-" put commandT window at the top of the screen
-let g:CommandTMatchWindowAtTop=1
+""" Ctrl-P
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_match_window = 'top,order:ttb,min:1,max:20,results:20'
+let g:ctrlp_switch_buffer = 'ET' " jump to buffers where it's already open
+let g:ctrlp_use_caching = 1
+let g:ctrlp_max_files = 0 " no limits
+let g:ctrlp_user_command = {
+  \ 'types': {
+    \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard | grep -v vendor'],
+    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    \ },
+  \ 'fallback': 'find %s -type f'
+  \ }
+let g:ctrlp_mruf_relative = 1 " only relative MRU files (not cross-project)
 
-if has("gui_macvim")
-  map <D-t> :CommandT<CR>
-  imap <D-t> <Esc>:CommandT<CR>
-endif
 
-let g:CommandTTagIncludeFilenames=1
-
-map <Leader>f :CommandT<CR>
-map <Leader>tt :CommandTTag<CR>
+map <Leader>ff :CtrlPMixed<CR>
+map <Leader>fb :CtrlPBuffer<CR>
+map <Leader>ft :CtrlPBufTag<CR>
+map <Leader>tt :CtrlPTag<CR>
 
 """ tagbar
 " map <silent> <Leader>tb :TagbarOpen<CR>
