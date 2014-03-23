@@ -27,7 +27,7 @@ task :link_configs do
 end
 
 task :update_repo do
-  sh "git pull"
+  # sh "git pull"
 end
 
 # reload the helptags using the pathogen Helptags command
@@ -153,6 +153,7 @@ def pull(type)
   case type
   when :git
     sh "git pull --stat"
+    try "git log --color --oneline HEAD@{1}.."
   when :hg
     sh "hg incoming && hg pull -u"
   end
