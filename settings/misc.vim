@@ -3,7 +3,7 @@
 function Refresh()
   echo "refreshing tags and files..."
 
-  silent !if [ -d .git ]; then git ls-files -c -o --exclude-standard | ctags -L -; else ctags -R; fi
+  silent !if [ -d .git ]; then git ls-files -c -o --exclude-standard | grep -v vendor | ctags -L -; else ctags -R; fi
 
   if exists(":CommandTFlush") == 2
     CommandTFlush
