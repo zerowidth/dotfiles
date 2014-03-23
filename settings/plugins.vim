@@ -173,3 +173,8 @@ let g:neocomplcache_enable_at_startup = 1
 """ bash-support
 " prevent mapping conflict with ,ta &c
 let g:BASH_MapLeader  = '\'
+
+
+""" vim-markdown
+" add sql to the list
+let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', 'javascript', 'html', 'sh', 'xml', 'sql']

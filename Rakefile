@@ -89,6 +89,8 @@ plugin "visual-star", "https://github.com/nelstrom/vim-visual-star-search.git"
 
 # ruby language support
 plugin "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
+# highlight heredocs with the right syntax
+plugin "ruby-heredoc-syntax", "https://github.com/joker1007/vim-ruby-heredoc-syntax"
 # run ruby tests from inside vim
 plugin "vim-vroom", "https://github.com/skalnik/vim-vroom.git"
 # toggle between :symbol "string" 'string', and more
@@ -157,5 +159,3 @@ plugin "copy-as-rtf", "git://github.com/aniero/vim-copy-as-rtf.git"
 
 # gist integration
 plugin "gist-vim", "https://github.com/mattn/gist-vim.git"
-
-
