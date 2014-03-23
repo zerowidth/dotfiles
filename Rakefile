@@ -93,6 +93,8 @@ plugin "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
 plugin "vim-vroom", "https://github.com/skalnik/vim-vroom.git"
 # toggle between :symbol "string" 'string', and more
 plugin "switch", "git://github.com/AndrewRadev/switch.vim.git"
+# toggle block style
+plugin "blockle", "https://github.com/jgdavey/vim-blockle.git"
 
 # html/erb editing support
 plugin "vim-ragtag", "https://github.com/tpope/vim-ragtag.git"
