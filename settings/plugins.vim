@@ -158,12 +158,19 @@ vmap <leader>, :Align =
 " use ghc functionality for haskell files
 " au Bufenter *.hs compiler ghc
 
-let g:haddock_browser = "open"
-let g:haddock_browser_callformat = "%s %s"
+" disable the haddock browser, as it conflicts with neco-ghc
+let g:haddock_index = 'ignored'
+" let g:haddock_browser = "open"
+" let g:haddock_browser_callformat = "%s %s"
+
+""" haskell syntax
+let hs_highlight_boolean = 1
+let hs_highlight_types = 1
+let hs_highlight_more_types = 1
 
 """ haskell-indent
 let g:haskell_indent_if = 2
-let g:haskell_indent_case = 4
+let g:haskell_indent_case = 2
 
 """ neocomplcache
 let g:neocomplcache_enable_cursor_hold_i=1
@@ -186,3 +193,4 @@ map <leader>g :GitGutterToggle<cr>
 """ vim-markdown
 " add sql to the list
 let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', 'javascript', 'html', 'sh', 'xml', 'sql']
+
