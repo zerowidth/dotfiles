@@ -177,6 +177,12 @@ let g:neocomplcache_force_overwrite_completefunc=1
 let g:BASH_MapLeader  = '\'
 
 
+""" vim-gitgutter disabled by default
+let g:gitgutter_enabled = 0
+" toggle gitgutter
+map <leader>g :GitGutterToggle<cr>
+
+
 """ vim-markdown
 " add sql to the list
 let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', 'javascript', 'html', 'sh', 'xml', 'sql']

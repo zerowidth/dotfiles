@@ -103,7 +103,6 @@ plugin "vim-ragtag", "https://github.com/tpope/vim-ragtag.git"
 
 plugin "csv", "https://github.com/vim-scripts/csv.vim.git"
 plugin "cucumber", "https://github.com/tpope/vim-cucumber.git"
-plugin "git", "https://github.com/tpope/vim-git.git"
 plugin "haml", "https://github.com/tpope/vim-haml.git"
 plugin "handlebars", "https://github.com/nono/vim-handlebars.git"
 plugin "html5", "git://github.com/othree/html5.vim.git"
@@ -152,7 +151,9 @@ plugin "neco-ghc", "https://github.com/ujihisa/neco-ghc.git"
 ### MISC
 
 # git support
+plugin "git", "https://github.com/tpope/vim-git.git"
 plugin "fugitive", "https://github.com/tpope/vim-fugitive.git"
+plugin "git-gutter", "https://github.com/airblade/vim-gitgutter.git"
 
 # for using syntax-highlighted text in presentations
 plugin "copy-as-rtf", "git://github.com/aniero/vim-copy-as-rtf.git"
