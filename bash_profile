@@ -1,17 +1,7 @@
 # set -x
 
-USE_BOXEN=true
-test `hostname | cut -d. -f1` = 'bruichladdich' && USE_BOXEN=true
-test `hostname | cut -d. -f1` = 'macallan' && USE_BOXEN=true
-
-if $USE_BOXEN; then
-  [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
-  unalias git
-else
-  export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-  export PATH=/usr/local/share/python:$PATH
-  export PATH=/Users/nathan/.rbenv/bin:$PATH
-fi
+[ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
+unalias git
 
 export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH
 export PATH=/Users/nathan/.cabal/bin:$PATH
@@ -46,17 +36,12 @@ test -f ~/.secrets && {
   . ~/.secrets # api keys etc
 }
 
-if [ `uname` = 'Darwin' ]; then
-  alias ls='ls -FG'
-  alias mv='mv -nv'
-else
-  alias ls='ls -p --color'
-  alias mv='mv -v'
-fi
-
+alias ls='ls -FG'
+alias mv='mv -nv'
 alias ll='ls -lah'
 alias vi='vim'
 alias js='NODE_NO_READLINE=1 rlwrap node'
+alias aniero="git config -l | grep remote | grep aniero | sed s/aniero/zerowidth/ | sed 's/=/ /' | xargs git config"
 alias g='grep -in'
 alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
 
@@ -169,29 +154,6 @@ alias be="bundle exec"
 alias fs="foreman start"
 alias bumpgems="git add -u vendor/cache Gemfile*"
 
-# alias mateup="
-#   pushd ~/Library/Application\ Support/TextMate/Bundles; svn up; svn st; popd;
-#   pushd /Library/Application\ Support/TextMate/Bundles/Git.tmbundle; git pull; popd;
-#   pushd /Library/Application\ Support/TextMate/Support; svn up; svn st; popd;
-#   pushd ~/Library/Application\ Support/TextMate/Themes; svn up; svn st; popd;
-#   osascript -e 'tell app \"TextMate\" to reload bundles'
-# "
-
-# export MYSQL_PS1="\u@\h \d> "
-
-# -------------------------------------------------#
-
-# zero() {
-#   if [ -n "$1" ]; then
-#     for f in $@; do
-#       echo "zeroing $f"
-#       cat /dev/null > $f
-#     done
-#   else
-#     echo "specify some log files to zero, yo"
-#   fi
-# }
-
 # from @glv: no need to prefix bin/rake etc. in a bundle'd project
 BUNDLED_COMMANDS="foreman rackup rails rake rspec ruby shotgun spec cap guard compass jekyll testrb"
 ## Functions
@@ -224,10 +186,8 @@ run-with-bundler()
 for CMD in $BUNDLED_COMMANDS; do
   alias $CMD="run-with-bundler $CMD"
 done
-# via mojombo http://gist.github.com/180587
-function psg {
-  ps wwwaux | egrep "($1|%CPU)" | grep -v grep
-}
+
+export MYSQL_PS1="\u@\h \d> "
 
 function ssh-setup {
   cat ~/.ssh/id_rsa.pub | ssh $1 'cat - >> ~/.ssh/authorized_keys'
@@ -357,6 +317,9 @@ else
 fi
 
 PROMPT_HOST="${TEXT_PURPLE}\h${TEXT_RESET}";
+# timing.app tracking
+# PROMPT_TITLE='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
+# PROMPT_TITLE="\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
 
 set_prompt(){
   status_color=$(previous_exit_color $?)
