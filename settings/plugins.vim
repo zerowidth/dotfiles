@@ -40,6 +40,8 @@ vmap <C-Down> ]egv
 
 
 """ Ack
+" use the_silver_searcher
+let g:ackprg = 'ag --nogroup --nocolor --column'
 vnoremap <C-a> "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 map <leader>a :Ack<space>
 vmap <leader>a "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
