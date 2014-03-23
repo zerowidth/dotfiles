@@ -122,6 +122,7 @@ plugin "less", "https://github.com/groenewege/vim-less"
 plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
 plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
+plugin "bash-support", "https://github.com/vim-scripts/bash-support.vim.git"
 plugin "json", "https://github.com/leshill/vim-json.git"
 
 # auto-expand html

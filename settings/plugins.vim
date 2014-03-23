@@ -170,3 +170,6 @@ let g:haskell_indent_case = 4
 """ neocomplcache
 let g:neocomplcache_enable_cursor_hold_i=1
 let g:neocomplcache_enable_at_startup = 1
+""" bash-support
+" prevent mapping conflict with ,ta &c
+let g:BASH_MapLeader  = '\'
