@@ -127,10 +127,12 @@ plugin "emmet", "https://github.com/mattn/emmet-vim"
 
 # clojure:
 # plugin "paredit", "git://github.com/vim-scripts/paredit.vim.git"
-plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", :hg do
-  try "ln -s vim/* ."
-end
-plugin "vim-foreplay", "https://github.com/tpope/vim-foreplay.git"
+plugin "fireplace", "https://github.com/tpope/vim-fireplace"
+plugin "clojure-static", "https://github.com/guns/vim-clojure-static"
+plugin "rainbow_parentheses", "https://github.com/kien/rainbow_parentheses.vim.git"
+
+plugin "vim-sexp", "https://github.com/guns/vim-sexp"
+plugin "vim-sexp-mappings", "https://github.com/tpope/vim-sexp-mappings-for-regular-people"
 
 # haskell:
 plugin "haskellmode", "https://github.com/lukerandall/haskellmode-vim.git"

@@ -63,12 +63,31 @@ let g:surround_61 = "<%= \r %>" " =
 
 
 """ vimclojure
-
 let vimclojure#HighlightBuiltins=1
 let vimclojure#ParenRainbow=1
 let vimclojure#WantNailgun=1
 let vimclojure#SplitPos="bottom"
 let vimclojure#SplitSize=10
+
+
+""" vim-clojure-static
+let g:clojure_align_multiline_strings=1
+
+
+""" rainbow-parentheses
+" mimic vimclojure's rainbow settinsg
+let g:rbpt_colorpairs = [
+    \ ['yellow',  'orange1'],
+    \ ['green',   'yellow1'],
+    \ ['cyan',    'greenyellow'],
+    \ ['magenta', 'green1'],
+    \ ['red',     'springgreen1'],
+    \ ['yellow',  'cyan1'],
+    \ ['green',   'slateblue1'],
+    \ ['cyan',    'magenta1'],
+    \ ['magenta', 'purple1'],
+    \ ]
+let g:rbpt_max = 9
 
 
 """ Ctrl-P
@@ -85,7 +104,6 @@ let g:ctrlp_user_command = {
   \ 'fallback': 'find %s -type f'
   \ }
 let g:ctrlp_mruf_relative = 1 " only relative MRU files (not cross-project)
-
 
 map <Leader>ff :CtrlPMixed<CR>
 map <Leader>fb :CtrlPBuffer<CR>
