@@ -259,37 +259,35 @@ TEXT_RESET='\[\e[0m\]'    # Text Reset
 # default:
 # PS1="\h:\W \u\$ "
 
-previous_exit_status() {
+previous_exit_color() {
   if [ $1 -eq 0 ]; then
-    # HEAVY ROUND-TIPPED RIGHTWARDS ARROW
-    echo -n "${TEXT_GREEN}▸${TEXT_RESET}"
-    # echo -n "➜"
-    #echo -n "•"
-    # echo -n "⧫"
+    echo -n "${TEXT_GREEN}" #▸${TEXT_RESET}"
   else
-    # HEAVY BALLOT X
-    echo -n "${TEXT_RED}✘${TEXT_RESET}"
+    #echo -n "${TEXT_RED}✘${TEXT_RESET}"
+    echo -n "${TEXT_RED}" #▸${TEXT_RESET}"
   fi
 }
 
-# good bits are all via git-completion.bash from git.
-# using custom function to allow for colors instead of the
-#   GIT_PS1_SHOWDIRTYSTATE
-#   GIT_PS1_SHOWSTASHSTATE
-#   GIT_PS1_SHOWUNTRACKEDFILES
-# environment variables.
+export GIT_PS1_SHOWUPSTREAM="git verbose"
+export GIT_PS1_DESCRIBE_STYLE="branch"
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWSTASHSTATE=true
+export GIT_PS1_SHOWUNTRACKEDFILES=true
+export GIT_PS1_SHOWCOLORHINTS=true
+
 git_dirty_flag() {
   if [ "true" = "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]; then
 
     # modifications of tracked files
     # git diff-files --no-ext-diff --ignore-submodules --exit-code --quiet \
     # now, from __git_ps1:
-    git diff --no-ext-diff --ignore-submodules --quiet --exit-code \
+    git diff --no-ext-diff --quiet --exit-code \
       || echo -n "${TEXT_YELLOW}*${TEXT_RESET}"
 
     # staged hunks
     if git rev-parse --quiet --verify HEAD >/dev/null; then
-      git diff-index --no-ext-diff --ignore-submodules --cached --exit-code HEAD --quiet \
+      # git diff-index --no-ext-diff --ignore-submodules --cached --exit-code HEAD --quiet \
+      git diff-index --cached --quiet HEAD -- \
         || echo -n "${TEXT_GREEN}+${TEXT_RESET}"
     fi
 
@@ -309,20 +307,19 @@ if [[ $TERM_PROGRAM == 'iTerm.app' ]]; then
   #   http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss4.3
   #   http://www.mit.edu/afs/athena/system/x11r4/src/mit/clients/xterm/ctlseq2.txt via
   #   http://ubuntuforums.org/archive/index.php/t-448614.html
-  TAB_NAME='\[\e]1;\w\a\]'
-  WINDOW_NAME='\[\e]2;\u@\h:\w\a\]'
+  TAB_NAME='\[\e]1;${PWD/#$HOME/~}\a\]'
+  WINDOW_NAME='\[\e]2;\u@\h:${PWD/#$HOME/~}\a\]'
 else
   TAB_NAME=''
   WINDOW_NAME=''
 fi
 
-# PROMPT_HOST="${TEXT_PURPLE}\h${TEXT_RESET}";
-PROMPT_HOST="${TEXT_PURPLE}$(hostname | cut -c1)${TEXT_RESET}";
+PROMPT_HOST="${TEXT_PURPLE}\h${TEXT_RESET}";
 
 set_prompt(){
   status_color=$(previous_exit_color $?)
   history -a # append history after each command
-  PS1="${status_color}╭─${TEXT_RESET} ${TAB_NAME}${WINDOW_NAME}${PROMPT_HOST}:${TEXT_BLUE}\w${TEXT_RESET} [$(rbenv version-name)]$(__git_ps1) $(git_dirty_flag)\n${status_color}╰▸${TEXT_RESET} "
+  __git_ps1 "${TAB_NAME}${WINDOW_NAME}${PROMPT_HOST}:${TEXT_BLUE}\w${TEXT_RESET}" " ${status_color}▸${TEXT_RESET} "
 }
 
 PROMPT_COMMAND=set_prompt
