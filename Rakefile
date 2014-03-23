@@ -78,6 +78,8 @@ plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
   sh "make -f make_mac.mak"
 end
 
+plugin "visual-star", "https://github.com/nelstrom/vim-visual-star-search.git"
+
 
 ### LANGUAGE AND SYNTAX
 
