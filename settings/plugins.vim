@@ -31,6 +31,11 @@ if has("gui_macvim")
 endif
 
 
+""" ruby
+" let ruby_no_expensive = 1 " disable 'end' syntax matching (breaks other stuff)
+let ruby_operators = 1 " highlight ruby operators
+
+
 """ unimpaired
 " bubble lines:
 nmap <C-Up> [e
@@ -170,6 +175,10 @@ let g:haskell_indent_case = 4
 """ neocomplcache
 let g:neocomplcache_enable_cursor_hold_i=1
 let g:neocomplcache_enable_at_startup = 1
+" rails.vim sets a complete func, but we don't want it:
+let g:neocomplcache_force_overwrite_completefunc=1
+
+
 """ bash-support
 " prevent mapping conflict with ,ta &c
 let g:BASH_MapLeader  = '\'
