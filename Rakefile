@@ -14,8 +14,6 @@ plugin "ack", "https://github.com/mileszs/ack.vim.git"
 # ctags file management
 plugin "autotag", "https://github.com/vim-scripts/AutoTag.git"
 
-# plugin "powerline", "https://github.com/Lokaltog/vim-powerline.git"
-# plugin "airline", "https://github.com/bling/vim-airline"
 
 ### EDITING AND MOVING
 

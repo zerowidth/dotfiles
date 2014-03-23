@@ -150,37 +150,3 @@ let g:haskell_indent_case = 4
 """ neocomplcache
 let g:neocomplcache_enable_cursor_hold_i=1
 let g:neocomplcache_enable_at_startup = 1
-""" powerline
-" let g:Powerline_symbols='unicode'
-" let g:Powerline_colorscheme = 'base16tomorrow'
-" call Pl#Theme#RemoveSegment('mode_indicator')
-" let g:Powerline_mode_n='N'
-" let g:Powerline_mode_i='I'
-" let g:Powerline_mode_R='R'
-" let g:Powerline_mode_v='V'
-" let g:Powerline_mode_V='V'
-" let g:Powerline_mode_cv='V'
-" let g:Powerline_mode_s='S'
-
-""" airline
-" let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-" let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-" let g:airline_linecolumn_prefix = '␊ '
-let g:airline_linecolumn_prefix = '␤ '
-" let g:airline_linecolumn_prefix = '¶ '
-let g:airline_fugitive_prefix = '⎇ '
-let g:airline_paste_symbol = 'ρ'
-" let g:airline_paste_symbol = 'Þ'
-" let g:airline_paste_symbol = '∥'
-
-let g:airline_mode_mpa = {
-      \ 'n'  : 'normal',
-      \ 'i'  : 'insert',
-      \ 'R'  : 'rplace',
-      \ 'v'  : 'visual',
-      \ 'V'  : 'v-line',
-      \ 'c'  : 'cmd   ',
-      \ '' : 'v-blck',
-      \ }
