@@ -64,7 +64,7 @@ plugin "align", "https://github.com/tsaleh/vim-align.git"
 
 # snippets
 plugin "snipmate", "https://github.com/garbas/vim-snipmate.git"
-plugin "snipmate-snippets", "https://github.com/honza/snipmate-snippets.git"
+plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 
 # snipmate dependencies
 plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
