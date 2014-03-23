@@ -39,7 +39,6 @@ test -f ~/.secrets && {
 alias ls='ls -FG'
 alias mv='mv -nv'
 alias ll='ls -lah'
-alias vi='vim'
 alias js='NODE_NO_READLINE=1 rlwrap node'
 alias aniero="git config -l | grep remote | grep aniero | sed s/aniero/zerowidth/ | sed 's/=/ /' | xargs git config"
 alias g='grep -in'
@@ -64,7 +63,6 @@ function sc() {
   fi
 }
 alias sb='script/bootstrap'
-
 
 
 function wait-for-host() {
@@ -378,8 +376,16 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # use this for setting EMAIL, for host-specific git email addresses
 # as well as any work-specific load paths, commands, helpers, etc.
-test -f ~/work/environment.sh && {
-  . ~/work/environment.sh
+if [[ -f ~/Dropbox/sync/dotfiles/github.sh ]]; then
+  . ~/Dropbox/sync/dotfiles/github.sh
+fi
+
+# Not using custom git email for work, so always check:
+gitemail=`git config user.email`
+if [[ $gitemail != "nathan@zerowidth.com" ]]; then
+  echo "whoa, fix your git email: $gitemail"
+fi
+
 # ----- haskell/cabal helpers ----- #
 # unregister broken GHC packages. Run this a few times to resolve dependency rot in installed packages.
 # ghc-pkg-clean -f cabal/dev/packages*.conf also works.
