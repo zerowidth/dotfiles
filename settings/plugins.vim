@@ -117,24 +117,12 @@ map <Leader>fb :CtrlPBuffer<CR>
 map <Leader>ft :CtrlPBufTag<CR>
 map <Leader>tt :CtrlPTag<CR>
 
-""" tagbar
-" map <silent> <Leader>tb :TagbarOpen<CR>
-
 """ gist
 " post gists privately by default
 " let g:gist_private = 1
 " show private gists by default
 let g:gist_show_privates = 1
 
-
-""" copy-as-rtf/TOhtml
-" tell TOhtml to disable line numbering when generating HTML
-let g:html_number_lines=0
-" and to use a reasonable font
-let g:html_font="Menlo"
-
-
-""" gist
 if executable("pbcopy")
   " The copy command
   let g:gist_clip_command = 'pbcopy'
@@ -149,16 +137,21 @@ end
 " detect filetype if vim failed auto-detection.
 let g:gist_detect_filetype = 1
 
-""" zencoding
-let g:user_zen_settings = {
-\  'indentation' : '  '
-\}
+
+""" copy-as-rtf/TOhtml
+" tell TOhtml to disable line numbering when generating HTML
+let g:html_number_lines=0
+" and to use a reasonable font
+let g:html_font="Menlo"
+
 
 """ switch.vim
 nnoremap - :Switch<cr>
 
+
 """ align: disable alignmaps
 let g:loaded_AlignMapsPlugin=1
+vmap <leader>, :Align =
 
 
 """ haskellmode
