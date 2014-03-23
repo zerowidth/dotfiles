@@ -108,21 +108,22 @@ function d() {
     if [ -d "$1" ]; then
       pushd $1 >/dev/null
       if [ -d .git ]; then
-        git ls-files -c -o --exclude-standard | ctags -L -
+        git ls-files -c --exclude-standard | grep -v vendor | ctags -L -
       else
         ctags -R
       fi
-      # mvim --servername $(basename $(pwd)) --remote-silent .
       mvim .
       popd >/dev/null
     else
       echo "$1 is not a directory"
     fi
   else
-    ctags -R
-    # mvim --servername $(basename $(pwd)) --remote-silent .
+    if [ -d .git ]; then
+      git ls-files -c --exclude-standard | grep -v vendor | ctags -L -
+    else
+      ctags -R
+    fi
     mvim .
-    # echo "specify a directory to edit"
   fi
 }
 alias e='mvim'
