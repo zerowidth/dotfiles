@@ -19,11 +19,12 @@ set statusline+=%r      "read only flag
 set statusline+=%m      "modified flag
 
 "display a warning if &et is wrong, or we have mixed-indenting
-set statusline+=%#error#
+set statusline+=%#warningmsg#
+" set statusline+=%#error#
 set statusline+=%{StatuslineTabWarning()}
 set statusline+=%*
 
-set statusline+=%{StatuslineTrailingSpaceWarning()}
+" set statusline+=%{StatuslineTrailingSpaceWarning()}
 
 " set statusline+=%{StatuslineLongLineWarning()}
 
@@ -46,7 +47,7 @@ set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
 "recalculate the trailing whitespace warning when idle, and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
+" autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
 "return '[\s]' if trailing white space is detected
 "return '' otherwise
@@ -95,7 +96,7 @@ function! StatuslineTabWarning()
 endfunction
 
 "recalculate the long line warning when idle and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
+" autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
 
 "return a warning for "long lines" where "long" is either &textwidth or 80 (if
 "no &textwidth is set)
