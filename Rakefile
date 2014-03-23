@@ -123,8 +123,7 @@ plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 plugin "json", "https://github.com/leshill/vim-json.git"
 
 # auto-expand html
-# plugin "sparkup", "https://github.com/kogakure/vim-sparkup.git"
-plugin "zencoding", "https://github.com/mattn/zencoding-vim.git"
+plugin "emmet", "https://github.com/mattn/emmet-vim"
 
 # clojure:
 # plugin "paredit", "git://github.com/vim-scripts/paredit.vim.git"
