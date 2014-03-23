@@ -191,6 +191,7 @@ done
 export MYSQL_PS1="\u@\h \d> "
 
 function ssh-setup {
+  ssh $1 'mkdir .ssh; chmod 700 .ssh; touch .ssh/authorized_keys; chmod 600 .ssh/authorized_keys'
   cat ~/.ssh/id_rsa.pub | ssh $1 'cat - >> ~/.ssh/authorized_keys'
 }
 
