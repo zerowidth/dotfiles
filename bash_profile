@@ -316,10 +316,8 @@ else
   WINDOW_NAME=''
 fi
 
-PROMPT_HOST="${TEXT_PURPLE}\h${TEXT_RESET}";
-# timing.app tracking
-# PROMPT_TITLE='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
-# PROMPT_TITLE="\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
+# PROMPT_HOST="${TEXT_PURPLE}\h${TEXT_RESET}";
+PROMPT_HOST="${TEXT_PURPLE}$(hostname | cut -c1)${TEXT_RESET}";
 
 set_prompt(){
   status_color=$(previous_exit_color $?)
