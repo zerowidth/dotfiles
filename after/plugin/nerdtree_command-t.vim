@@ -19,6 +19,14 @@ function ReplaceNERDTreeIfDirectory()
   endif
 endfunction
 
+function ReplaceBrowserWithEmptyBuffer()
+  if argc() == 0 || (argc() == 1 && isdirectory(argv(0)))
+    " replace the directory browser with an empty buffer
+    enew
+  endif
+endfunction
+
 augroup NERDTreeHijackNetrw
-  au VimEnter * call ReplaceNERDTreeIfDirectory()
+  " au VimEnter * call ReplaceNERDTreeIfDirectory()
+  au VimEnter * call ReplaceBrowserWithEmptyBuffer()
 augroup END
