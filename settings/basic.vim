@@ -89,7 +89,7 @@ set noswapfile " livin' on the edge
 set history=1000 " store lots of :cmdline history, defaults to 20
 
 " what files to ignore when doing filename completion, etc.
-set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.class,.svn,*.gem
+set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.class,.svn,*.gem,_site
 " Disable archive files
 set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
 " Ignore bundler and sass cache
