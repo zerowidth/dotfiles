@@ -3,6 +3,8 @@ au FileType qf set cc=
 
 au FileType clojure RainbowParenthesesActivate
 au FileType clojure RainbowParenthesesLoadRound
+au FileType clojure RainbowParenthesesLoadSquare
+au FileType clojure RainbowParenthesesLoadChevrons
 
 " auto-save everything when vim loses focus
 au FocusLost * silent! wa
