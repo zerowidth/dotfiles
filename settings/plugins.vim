@@ -207,3 +207,5 @@ map <leader>gc :Gcommit<CR>
 " add sql to the list
 let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', 'javascript', 'html', 'sh', 'xml', 'sql']
 
+""" vim-go
+let g:go_disable_autoinstall = 1
