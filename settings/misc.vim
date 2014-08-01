@@ -5,10 +5,6 @@ function Refresh()
 
   silent !if [ -d .git ]; then git ls-files -c -o --exclude-standard | grep -v vendor | ctags -L -; else ctags -R; fi
 
-  if exists(":CommandTFlush") == 2
-    CommandTFlush
-  endif
-
   if exists(":CtrlPClearCache")
     CtrlPClearCache
   endif
@@ -21,9 +17,12 @@ function Refresh()
       wincmd p
     endif
   endif
+
+  echo "refresh complete."
 endfunction
 
-map <silent> <Leader>r :call Refresh()<CR>
+" map <silent> <Leader>r :call Refresh()<CR>
+command Refresh call Refresh()
 
 """ copy filename of current file to clipboard
 map <Leader>cf :silent exe '!echo -n % \| pbcopy'<CR>:echo bufname('%')<CR>
