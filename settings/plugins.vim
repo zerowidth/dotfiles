@@ -180,11 +180,11 @@ let g:haskell_indent_if = 2
 let g:haskell_indent_case = 2
 
 """ neocomplcache
-let g:neocomplcache_enable_cursor_hold_i=1
-let g:neocomplcache_enable_at_startup = 1
+""" neocomplete
+let g:neocomplete#enable_cursor_hold_i=1
+let g:neocomplete#enable_at_startup = 1
 " rails.vim sets a complete func, but we don't want it:
-let g:neocomplcache_force_overwrite_completefunc=1
-
+let g:neocomplete#force_overwrite_completefunc=1
 
 """ bash-support
 " prevent mapping conflict with ,ta &c

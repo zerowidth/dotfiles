@@ -76,7 +76,7 @@ plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
 plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
 
 # fast autocomplete
-plugin "neocomplcache", "https://github.com/Shougo/neocomplcache.git"
+plugin "neocomplete", "https://github.com/Shougo/neocomplete.git"
 
 # async execution, builds neocomplcache in the background
 plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
