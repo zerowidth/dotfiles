@@ -19,8 +19,7 @@ set statusline+=%r      "read only flag
 set statusline+=%m      "modified flag
 
 "display a warning if &et is wrong, or we have mixed-indenting
-set statusline+=%#warningmsg#
-" set statusline+=%#error#
+set statusline+=%#error#
 set statusline+=%{StatuslineTabWarning()}
 set statusline+=%*
 
