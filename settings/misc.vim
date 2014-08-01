@@ -103,3 +103,6 @@ function CopyGitHubURL(mode, open) range
     let _ = system('open ' . shellescape(url))
   endif
 endfunction
+
+" http://lyonheart.us/articles/making-vim-open-the-thing-under-the-cursor/
+nnoremap <silent><Leader>o :!open -g <cWORD><CR><CR>
