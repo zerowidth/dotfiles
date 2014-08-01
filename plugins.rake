@@ -1,3 +1,6 @@
+# Quiet, please (sh commands in particular)
+verbose false
+
 # Global plugin registry, used for tracking known plugins for cleanup
 PLUGINS=[]
 
@@ -13,14 +16,14 @@ end
 task :link_configs do
   dotvim = File.expand_path("~/.vim")
   unless File.exist?(dotvim)
-    puts "linking .vim"
+    puts "* linking .vim"
     ln_s(Dir.pwd, dotvim)
   end
 
   %w[ vimrc gvimrc ].each do |file|
     dest = File.expand_path("~/.#{file}")
     unless File.exist?(dest)
-      puts "linking #{file}"
+      puts "* linking #{file}"
       ln_s(File.expand_path(file), dest)
     end
   end
@@ -33,7 +36,7 @@ end
 # reload the helptags using the pathogen Helptags command
 desc "update the help tags from the installed plugins"
 task :helptags do
-  puts "updating help tags..."
+  puts "* updating help tags..."
   sh "vim -c Helptags -c qa"
 end
 
@@ -45,8 +48,9 @@ task :clean do
     PLUGINS.include? File.basename(dir)
   end
   if unused.size > 0
-    puts "cleaning unused plugins..."
+    puts "* Removing unused plugins..."
     unused.each do |dir|
+      puts "  #{dir}..."
       rm_rf dir
     end
   end
@@ -61,7 +65,7 @@ desc "update the vim distribution and plugins"
 task :update => [:update_repo, :install_plugins, :clean, :update_plugins, :helptags] do
 end
 
-task :default => :install
+task :default => :update
 
 
 # Define a vim plugin
@@ -88,11 +92,7 @@ def plugin(name, repo=nil, type=:git)
 
         if repo
           task :install do
-            puts
-            puts "*" * 80
-            puts "*#{"Installing #{name}".center(78)}*"
-            puts "*" * 80
-            puts
+            puts "* Installing #{name}..."
             if repo
               clone type, repo, plugin_dir
             else
@@ -102,11 +102,7 @@ def plugin(name, repo=nil, type=:git)
           end
         else
           directory plugin_dir do
-            puts
-            puts "*" * 80
-            puts "*#{"Installing #{name}".center(78)}*"
-            puts "*" * 80
-            puts
+            puts "* Installing #{name}..."
             Dir.chdir(plugin_dir) { yield } if block_given?
           end
           task :install => plugin_dir
@@ -116,11 +112,7 @@ def plugin(name, repo=nil, type=:git)
 
       # desc "update the #{name} plugin"
       task :update do
-        puts
-        puts "*" * 80
-        puts "*#{"Updating #{name}".center(78)}*"
-        puts "*" * 80
-        puts
+        puts "* Updating #{name}..."
         Dir.chdir(plugin_dir) do
           if File.directory?(".git")
             pull type
@@ -152,8 +144,15 @@ end
 def pull(type)
   case type
   when :git
-    sh "git pull --stat"
-    try "git log --color --oneline HEAD@{1}.."
+    head = `git rev-parse HEAD`
+    out = `git pull --log --stat 2>&1`
+    if $? != 0
+      puts out.split("\n").map { |l| "  #{l}" }.join("\n")
+    end
+    new_head = `git rev-parse HEAD`
+    if new_head != head
+      sh "git --no-pager log --pretty='  * %C(yellow)%h%Creset %s' @{1}.."
+    end
   when :hg
     sh "hg incoming && hg pull -u"
   end

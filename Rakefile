@@ -59,7 +59,7 @@ plugin "matchit", "https://github.com/edsono/vim-matchit.git"
 # merge tabs together
 plugin "tabmerge" do
   mkdir_p "plugin"
-  sh "curl 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
+  sh "curl -s 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
 end
 
 plugin "vim-multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
@@ -81,6 +81,7 @@ plugin "neocomplete", "https://github.com/Shougo/neocomplete.git"
 
 # async execution, builds neocomplcache in the background
 plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
+  print "  "
   sh "make -f make_mac.mak"
 end
 

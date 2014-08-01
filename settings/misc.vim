@@ -41,7 +41,7 @@ function EditFromClipboard()
       exe ':' . parts[1]
     endif
   else
-    echo 'not a file: ' . filename
+    echo 'not a file? ' . filename
   endif
 endfunction
 
