@@ -3,3 +3,5 @@ if has('gui')
   " disable ri for ruby
   setlocal noballooneval
 endif
+
+set expandtab
