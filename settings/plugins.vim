@@ -99,8 +99,8 @@ let g:rbpt_max = 9
 
 """ Ctrl-P
 let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_match_window = 'top,order:ttb,min:1,max:20,results:20'
-let g:ctrlp_switch_buffer = 'ET' " jump to buffers where it's already open
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
+let g:ctrlp_switch_buffer = 'ETVH' " jump to buffers where they're already open
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 0 " no limits
 let g:ctrlp_user_command = {
@@ -116,6 +116,13 @@ map <Leader>ff :CtrlPMixed<CR>
 map <Leader>fb :CtrlPBuffer<CR>
 map <Leader>ft :CtrlPBufTag<CR>
 map <Leader>tt :CtrlPTag<CR>
+map <Leader>fm :CtrlPMRUFiles<CR>
+map <Leader>r :CtrlPRegister<CR>
+map <Leader>y :CtrlPYankring<CR>
+
+let g:ctrlp_tjump_only_silent = 1 " jump immediately if only one tag
+nnoremap <c-]> :CtrlPtjump<cr>
+vnoremap <c-]> :CtrlPtjumpVisual<cr>
 
 """ gist
 " post gists privately by default
