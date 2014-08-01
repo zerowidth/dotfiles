@@ -15,6 +15,10 @@ endfunc
 
 nnoremap <Leader>n :silent call NumberToggle()<cr>
 
+" move line-wise always, for markdown in particular
+map j gj
+map k gk
+
 " move quickly between splits
 map <C-j> <C-w>j
 map <C-k> <C-w>k
