@@ -197,6 +197,11 @@ let g:gitgutter_sign_modified_removed='±_'
 map <leader>gg :GitGutterToggle<cr>
 
 
+""" fugitive
+" map <leader>gd :Gvdiff<CR>:wincmd p<CR>
+map <leader>gd :Gvdiff<CR>
+map <leader>gs :Gstatus<CR>4j
+map <leader>gc :Gcommit<CR>
 
 """ vim-markdown
 " add sql to the list
