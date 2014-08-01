@@ -119,6 +119,7 @@ plugin "markdown", "https://github.com/tpope/vim-markdown.git"
 plugin "nodejs", "https://github.com/mmalecki/vim-node.js.git"
 plugin "puppet", "https://github.com/ajf/puppet-vim.git"
 plugin "rails", "https://github.com/tpope/vim-rails.git"
+plugin "bundler", "https://github.com/tpope/vim-bundler"
 # plugin "rspec", "https://github.com/taq/vim-rspec.git" # gone?
 plugin "rspec", "https://github.com/Keithbsmiley/rspec.vim"
 # plugin "scala", "https://github.com/bdd/vim-scala.git" # moved? gone?
