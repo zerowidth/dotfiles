@@ -34,3 +34,11 @@ autocmd BufWinEnter *.md call MatchTechWordsToAvoid()
 autocmd InsertEnter *.md call MatchTechWordsToAvoid()
 autocmd InsertLeave *.md call MatchTechWordsToAvoid()
 autocmd BufWinLeave *.md call clearmatches()
+
+
+" disable syntax highlighting in vimdiff windows
+" http://superuser.com/questions/157676/change-color-scheme-when-calling-vimdiff-inside-vim
+" save the existing highlighting when starting a diff mode
+au FilterWritePre * if &diff | set syn=OFF | GitGutterDisable
+" and restore it when quitting the diff window
+au BufWinLeave * if &diff | wincmd p | set syn=ON | GitGutterEnable
