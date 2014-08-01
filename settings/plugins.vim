@@ -191,10 +191,11 @@ let g:neocomplete#force_overwrite_completefunc=1
 let g:BASH_MapLeader  = '\'
 
 
-""" vim-gitgutter disabled by default
-let g:gitgutter_enabled = 0
-" toggle gitgutter
-map <leader>g :GitGutterToggle<cr>
+""" vim-gitgutter
+let g:gitgutter_sign_modified='±'
+let g:gitgutter_sign_modified_removed='±_'
+map <leader>gg :GitGutterToggle<cr>
+
 
 
 """ vim-markdown
