@@ -130,6 +130,8 @@ plugin "bash-support", "https://github.com/vim-scripts/bash-support.vim.git"
 plugin "json", "https://github.com/leshill/vim-json.git"
 plugin "go", "https://github.com/fatih/vim-go"
 
+plugin "rust", "https://github.com/wting/rust.vim"
+
 # auto-expand html
 plugin "emmet", "https://github.com/mattn/emmet-vim"
 
