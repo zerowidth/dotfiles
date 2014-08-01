@@ -63,6 +63,8 @@ plugin "tabmerge" do
   sh "curl 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
 end
 
+plugin "vim-multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
+
 # align vs tabular plugins
 # plugin "tabular", "https://github.com/godlygeek/tabular.git"
 plugin "align", "https://github.com/tsaleh/vim-align.git"
