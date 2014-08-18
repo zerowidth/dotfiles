@@ -194,6 +194,9 @@ let g:BASH_MapLeader  = '\'
 """ vim-gitgutter
 let g:gitgutter_sign_modified='±'
 let g:gitgutter_sign_modified_removed='±_'
+" bufenter commands are a harsh mistress:
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
 map <leader>gg :GitGutterToggle<cr>
 
 
