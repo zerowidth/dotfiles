@@ -107,30 +107,32 @@ function sshr() {
 complete -F _ssh sshr
 
 function d() {
+  local dir="."
   if [ -n "$1" ]; then
     if [ -d "$1" ]; then
-      pushd $1 >/dev/null
-      if [ -d .git ]; then
-        git ls-files -c --exclude-standard | grep -v vendor | ctags -L -
-      else
-        ctags -R
-      fi
-      mvim .
-      popd >/dev/null
+      dir=${1%/} # strip trailing slash so vim stays happy
+      shift
     else
-      echo "$1 is not a directory"
+      echo "$1 is not a directory?"
+      return 1
     fi
+  fi
+  pushd $dir >/dev/null
+  mvim +Refresh $dir $@
+  popd >/dev/null
+}
+function e() {
+  if [ -n "$1" ]; then
+    file=`basename $1`
+    dir=`dirname $1`
+    shift
+    pushd $dir >/dev/null
+    mvim $file $@
+    popd >/dev/null
   else
-    if [ -d .git ]; then
-      git ls-files -c --exclude-standard | grep -v vendor | ctags -L -
-    else
-      ctags -R
-    fi
-    mvim .
+    mvim $@
   fi
 }
-alias e='mvim'
-
 
 alias gx="gitx --all"
 
