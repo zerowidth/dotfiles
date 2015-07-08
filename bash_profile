@@ -175,7 +175,7 @@ function gpp() {
   git push
 }
 
-alias bo="EDITOR=mvim bundle open"
+alias bo="EDITOR='mvim +Refresh' bundle open"
 alias be="bundle exec"
 alias fs="foreman start"
 alias bumpgems="git add -u vendor/cache Gemfile*"
