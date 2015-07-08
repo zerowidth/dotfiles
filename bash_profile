@@ -374,7 +374,6 @@ set -o vi
 # Meta-V: go back to vi editing
  # bind -m emacs '"\ev": vi-editing-mode'i
 
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # ----- load up work script / bash functions ----- #
 
