@@ -48,6 +48,7 @@ alias js='NODE_NO_READLINE=1 rlwrap node'
 alias aniero="git config -l | grep remote | grep aniero | sed s/aniero/zerowidth/ | sed 's/=/ /' | xargs git config"
 alias g='grep -in'
 alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
+alias rehash='hash -r'
 
 function ss() {
   if [[ -e script/server ]]; then
