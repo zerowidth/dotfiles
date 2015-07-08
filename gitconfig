@@ -36,6 +36,8 @@
 	lp = log -p
 	ss = stash show -p
 	ls = log -p -S
+	cb = clean-merged-branches
+	clean-merged-branches = "!git branch --merged | grep  -v '\\*\\|master' | xargs -n 1 git branch -d"
 [core]
 	excludesfile = /opt/boxen/config/git/gitignore
 	autocrlf = input

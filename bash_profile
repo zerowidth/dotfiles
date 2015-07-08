@@ -139,17 +139,14 @@ alias gx="gitx --all"
 function gp() {
   local dirty=false
   git diff --no-ext-diff --quiet --exit-code || dirty=true
-
-  if [ "true" = "$dirty" ]; then
+  if [ "true" = $dirty ]; then
     git stash
   fi
-
-  git fetch --all
-  git pull --stat
-
-  if [ "true" = "$dirty" ]; then
+  git pull --stat --all --prune --progress
+  if [ "true" = $dirty ]; then
     git stash pop
   fi
+  git clean-merged-branches
 }
 
 alias gr="growlnotify -m"
