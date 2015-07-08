@@ -154,6 +154,23 @@ function gp() {
 
 alias gr="growlnotify -m"
 alias grs="growlnotify -s -m"
+function gpp() {
+  local branch=`git rev-parse --abbrev-ref HEAD`
+  if [ "master" = $branch ]; then
+    echo "not on master!"
+    return -1
+  fi
+  local dirty=false
+  git diff --no-ext-diff --quiet --exit-code || dirty=true
+  if [ "true" = $dirty ]; then
+    git stash
+  fi
+  git pull --stat --all --prune --progress
+  if [ "true" = $dirty ]; then
+    git stash pop
+  fi
+  git push
+}
 
 alias bo="EDITOR=mvim bundle open"
 alias be="bundle exec"
