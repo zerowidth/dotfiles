@@ -1,7 +1,12 @@
 # set -x
 
+# rbenv first, because boxen puts bin on the path too and that needs to go in
+# front of rbenv (so shims don't get in the way of local bin scripts in the
+# github app environment)
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
-unalias git
+
+unalias git # don't want hub (provided by boxen)
 
 export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH
 export PATH=/Users/nathan/.cabal/bin:$PATH
