@@ -17,11 +17,15 @@
 	di = diff --cached
 	du = !git diff `git merge-base HEAD origin/master`
 	p = pull --stat
-	recent = whatchanged --since=\"1 day ago\" -p
+  pp = !git push && git pull
+	recent = for-each-ref --count=5 --sort=-committerdate --format='%(refname:short)' refs/heads/
   lg = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n'
+  lgb = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
+  lgu = !git log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
   lgs = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --stat
+  lgbs = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --first-parent --stat
 	au = add -u
-	fa = fetch --all --prune
+	f = fetch --all --prune
 	ribbon = tag --force _ribbon origin/master
 	catchup = log --patch --reverse --topo-order _ribbon..origin/master
 	apply-commit = !git format-patch -1 --stdout $@ | git apply - --reject
@@ -36,6 +40,8 @@
 	lp = log -p
 	ss = stash show -p
 	ls = log -p -S
+	cob = checkout -b
+	sha = rev-parse HEAD
 	cb = clean-merged-branches
 	clean-merged-branches = "!git branch --merged | grep  -v '\\*\\|master' | xargs -n 1 git branch -d"
 [core]
