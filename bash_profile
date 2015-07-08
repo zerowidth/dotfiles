@@ -58,6 +58,9 @@ function ss() {
     fi
   elif [[ -e bin/rails ]]; then
     bundle exec rails server
+  else
+    echo "no server here"
+    return 1
   fi
 }
 function sc() {
@@ -65,6 +68,9 @@ function sc() {
     bundle exec script/console
   elif [[ -e bin/rails ]]; then
     bundle exec rails console
+  else
+    echo "no console here"
+    return 1
   fi
 }
 alias sb='script/bootstrap'
