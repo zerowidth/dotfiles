@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+text = ARGV.join.upcase.split("").join(" ")
+if $stdout.tty?
+  system("printf \"#{text}\" | pbcopy")
+  puts text
+else
+  print text
+end
