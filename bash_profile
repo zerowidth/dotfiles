@@ -180,10 +180,12 @@ run-with-bundler()
 {
   local command="$1"
   shift
-  if bundler-installed && within-bundled-project; then
-    bundle exec $command $*
+  if [ -x "bin/$command" ]; then
+    bin/$command "$@"
+  elif bundler-installed && within-bundled-project; then
+    bundle exec $command "$@"
   else
-    $command $*
+    $command "$@"
   fi
 }
 
