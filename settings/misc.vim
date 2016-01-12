@@ -3,10 +3,17 @@
 function Refresh()
   echo "refreshing tags and files..."
 
-  silent !if [ -d .git ]; then git ls-files -c -o --exclude-standard | grep -v vendor | ctags -L -; else ctags -R; fi
+  if isdirectory(".git")
+    " allow vendor/internal-gems but not anything else in vendor:
+    " disable json tagging
+    " disable contexts in ruby (ctags --list-kinds=ruby)
+    :! git ls-files -c -o --exclude-standard | egrep -v '^vendor/[^i][^n][^t]' | ctags --json-kinds= --ruby-kinds=-C -L -
+  else
+    :! ctags -R
+  endif
 
-  if exists(":CtrlPClearCache")
-    CtrlPClearCache
+  if exists(":CtrlPClearAllCaches")
+    CtrlPClearAllCaches
   endif
 
   if exists("t:NERDTreeBufName")
