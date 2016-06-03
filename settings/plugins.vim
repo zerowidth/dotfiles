@@ -198,13 +198,25 @@ let g:gitgutter_sign_modified_removed='±_'
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 map <leader>gg :GitGutterToggle<cr>
+" navigation in GitGutter
+map <up> :GitGutterPrevHunk<CR>
+map <down> :GitGutterNextHunk<CR>
+map <left> :cprev<CR>
+map <right> :cnext<CR>
+" ,hs -- stage hunk
+" ,hu -- undo hunk
 
 
 """ fugitive
-" map <leader>gd :Gvdiff<CR>:wincmd p<CR>
+map <leader>gd :Gvdiff<CR>:wincmd p<CR>
+map <leader>gb :Gblame<CR>
 map <leader>gd :Gvdiff<CR>
 map <leader>gs :Gstatus<CR>4j
 map <leader>gc :Gcommit<CR>
+
+map <leader>du :diffupdate<CR>
+vmap <leader>do :diffget<CR>:diffupdate<CR>
+vmap <leader>dp :diffput<CR>:diffupdate<CR>
 
 """ vim-markdown
 " add sql to the list

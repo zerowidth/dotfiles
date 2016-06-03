@@ -108,3 +108,7 @@ set undoreload=10000
 """ multi-byte characters
 
 set encoding=utf-8 " set default encoding (default in macvim)
+
+""" diffing
+" filler lines, vsplit, show 3 lines of context around folds
+set diffopt=filler,vertical,context:3
