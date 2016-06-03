@@ -100,10 +100,6 @@ map <Space> :
 " easy tabs
 map <leader>tn :tabnew<CR>
 
-" easy escape
-imap jj <Esc>
-imap kk <Esc>
-
 " easy close
 map <leader>x :x<CR>
 
