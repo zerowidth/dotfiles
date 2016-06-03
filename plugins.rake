@@ -8,9 +8,6 @@ end
 require "fileutils"
 require "open3"
 
-# Quiet, please (sh commands in particular)
-verbose false
-
 # Global plugin registry, used for tracking defined plugins
 PLUGINS=[]
 
@@ -41,14 +38,22 @@ task :update do
 
   failed = false
   updates.each do |name, update|
-    if update.kind_of?(Exception)
+    case update
+    when Plugin::CommandFailed
+      puts "* Failed to update #{name}:"
+      puts update.previous_output.split("\n").map { |l| l.prepend("  ") }.join("\n")
+      puts update.message
+      failed = true
+    when Exception
       puts "* Failed to update #{name}:"
       puts update
       failed = true
+    end
+    if update.kind_of?(Exception)
     else
       next if update.empty?
       puts "* Updated #{name}:"
-      puts update.split("\n").map { |l| "  #{l}" }.join("\n")
+      puts update.split("\n").map { |l| l.prepend("  ") }.join("\n")
     end
   end
 
@@ -103,6 +108,12 @@ end
 
 task :default => [:link_configs, :clean, :install, :update, :helptags]
 
+task :foo do
+  plugin = PLUGINS.detect { |p| p.name == "vimproc" }
+  up = plugin.update
+  puts "up: #{up.inspect}"
+end
+
 # Define a vim plugin
 #
 # name      - plugin name, this is the directory the plugin is installed to
@@ -117,6 +128,15 @@ def plugin(name, repo=nil, type=:git, commands: [])
 end
 
 class Plugin
+
+  class CommandFailed < StandardError
+    attr_reader :previous_output
+    def initialize(message, previous_output="")
+      super message
+      @previous_output = previous_output
+    end
+  end
+
   attr_reader :name
   attr_reader :updates
 
@@ -156,22 +176,23 @@ class Plugin
         sh "git pull --log --stat"
         if sh("git rev-parse HEAD") != head
           updates = sh("git --no-pager log --pretty='* %C(yellow)%h%Creset %s' @{1}..")
-          updates << run_install_commands
+          run_install_commands do |output|
+            updates << output
+          end
         end
       end
     end
     updates
+  rescue CommandFailed => e
+    raise CommandFailed.new(e.message, updates)
   end
 
-  def run_install_commands
-    output = ""
+  def run_install_commands(&block)
     @commands.each do |cmd|
       out = sh(cmd)
       next if out.empty?
-      yield out if block_given?
-      output << out
+      yield out
     end
-    output
   end
 
   def exists?
@@ -189,8 +210,10 @@ class Plugin
   def sh(cmd)
     out, status = Open3.capture2e(cmd)
     unless status.success?
-      fail "Command failed with status (#{status.exitstatus}): #{cmd}\n#{out}"
+      raise CommandFailed, "Command failed with status (#{status.exitstatus}): #{cmd}\n#{out}"
     end
     out
+  rescue => e
+    raise CommandFailed, "Command failed: #{cmd}\n#{e.inspect}"
   end
 end
