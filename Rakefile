@@ -66,9 +66,8 @@ end
 
 plugin "vim-multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
 
-# align vs tabular plugins
-# plugin "tabular", "https://github.com/godlygeek/tabular.git"
-plugin "align", "https://github.com/tsaleh/vim-align.git"
+# alignment
+plugin "tabular", "https://github.com/godlygeek/tabular.git"
 
 # snippets
 plugin "utilisnips", "https://github.com/SirVer/ultisnips.git"

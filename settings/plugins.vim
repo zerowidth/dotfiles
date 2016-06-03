@@ -166,11 +166,8 @@ let g:html_font="Menlo"
 """ switch.vim
 nnoremap - :Switch<cr>
 
-
-""" align: disable alignmaps
-let g:loaded_AlignMapsPlugin=1
-vmap <leader>, :Align =
-
+""" tabularize
+vmap <leader>, :Tabularize /=
 
 """ haskellmode
 " use ghc functionality for haskell files
