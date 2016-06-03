@@ -95,7 +95,8 @@ plugin "gundo", "https://github.com/sjl/gundo.vim.git"
 
 # ruby language support
 plugin "ruby", "https://github.com/vim-ruby/vim-ruby.git"
-# highlight heredocs with the right syntax
+plugin "rbenv", "https://github.com/tpope/vim-rbenv"
+# highlight heredocs with the right syntax:
 plugin "ruby-heredoc-syntax", "https://github.com/joker1007/vim-ruby-heredoc-syntax"
 # run ruby tests from inside vim
 plugin "vim-vroom", "https://github.com/skalnik/vim-vroom.git"
