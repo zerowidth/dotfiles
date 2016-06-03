@@ -30,8 +30,45 @@ map <C-l> <C-w>l
 " fast zoom for a split
 map <C-_> <C-w>_
 
-" get the last pasted text (via evilchelu)
+
+" smarter tabs, adapted from
+" http://vim.wikia.com/wiki/VimTip102 and
+" https://github.com/ttaylorr/dotfiles/blob/master/vim/.vimrc
+" mappings for these are defined in plugins.vim to integrate with UltiSnips.
+function! Smart_TabComplete()
+  if pumvisible() != 0
+    return "\<C-N>"
+  endif
+  let line = getline('.')                         " current line
+  let substr = strpart(line, -1, col('.')+1)      " from the start of the current
+                                                  " line to one character right
+                                                  " of the cursor
+  let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
+  if (strlen(substr)==0)                          " nothing to match on empty string
+    return "\<tab>"
+  endif
+  let has_period = match(substr, '\.') != -1      " position of period, if any
+  let has_slash = match(substr, '\/') != -1       " position of slash, if any
+  if (!has_period && !has_slash)
+    return "\<C-X>\<C-P>"                         " existing text matching
+  elseif ( has_slash )
+    return "\<C-X>\<C-F>"                         " file matching
+  else
+    return "\<C-X>\<C-O>"                         " plugin matching
+  endif
+endfunction
+
+function! Smart_ShiftTab()
+  if pumvisible() != 0
+    return "\<C-P>"
+  endif
+  return "\<C-d>"
+endfunction
+
+
+" vselect the last pasted text (via evilchelu)
 nnoremap gb '[V']
+
 
 if !has("gui")
   " set custom cursor -- vertical bar in insert mode (iTerm2)
@@ -39,6 +76,7 @@ if !has("gui")
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
+
 
 " strip leading tabs and trailing whitespace
 command Tr %s/\s\+$//ge | %s/\t/  /ge | nohlsearch

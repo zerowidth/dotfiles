@@ -30,6 +30,28 @@ if has("gui_macvim")
   imap <D-/> <Esc><plug>NERDCommenterToggle i
 endif
 
+""" UltiSnips
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" Disable, but these two need to be the same so the ExpandSnippetOrJump is used.
+let g:UltiSnipsExpandTrigger="<nop>"
+let g:UltiSnipsJumpForwardTrigger="<nop>"
+let g:UltiSnipsJumpBackwardTrigger="<nop>"
+
+" helper to allow <Tab> to try ultisnips first, then do smart tab complete
+function! Ulti_ExpandOrJump_result()
+  call UltiSnips#ExpandSnippetOrJump()
+  return g:ulti_expand_or_jump_res " 0 fail, 1 success
+endfunction
+
+function! Ulti_JumpBackwards_result()
+  call UltiSnips#JumpBackwards()
+  return g:ulti_jump_backwards_res " 0 fail, 1 success
+endfunction
+
+inoremap <Tab> <C-R>=(Ulti_ExpandOrJump_result() > 0)?"":Smart_TabComplete()<CR>
+inoremap <S-Tab> <C-R>=(Ulti_JumpBackwards_result() > 0)?"":Smart_ShiftTab()<CR>
+
 
 """ ruby
 " let ruby_no_expensive = 1 " disable 'end' syntax matching (breaks other stuff)
