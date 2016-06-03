@@ -34,15 +34,20 @@ command Refresh call Refresh()
 """ copy filename of current file to clipboard
 map <Leader>cf :silent exe '!echo -n % \| pbcopy'<CR>:echo bufname('%')<CR>
 
-""" edit filename from clipboard
+""" edit filename from clipboard or vselect or current word
 map <silent> <Leader>ef :call EditFromClipboard()<CR>
+map <silent> <Leader>ee :call EditFile(expand('<cWORD>'),1)<CR>
+" reload the file
+map <silent> <Leader>er :w<CR>:e<CR>
 
-function EditFromClipboard()
-  let paste = expand(fnameescape(system('pbpaste')))
-  let parts = split(paste, ":")
+function EditFile(filename,newTab)
+  let parts = split(a:filename, ':')
   let filename = parts[0]
 
   if filereadable(filename)
+    if a:newTab > 0
+      exe 'tabnew'
+    endif
     exe 'edit ' . filename
     if len(parts) > 1
       exe ':' . parts[1]
@@ -51,6 +56,14 @@ function EditFromClipboard()
     echo 'not a file? ' . filename
   endif
 endfunction
+
+function EditFromClipboard()
+  let paste = expand(fnameescape(system('pbpaste')))
+  call EditFile(paste,0)
+endfunction
+
+""" Marked 2 is annoying to type
+command Marked exe '!open -a "Marked 2" %'
 
 """ copy github url to current file/branch
 
