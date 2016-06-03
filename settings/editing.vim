@@ -26,7 +26,6 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
-
 " fast zoom for a split
 map <C-_> <C-w>_
 
@@ -81,7 +80,7 @@ endif
 " strip leading tabs and trailing whitespace
 command Tr %s/\s\+$//ge | %s/\t/  /ge | nohlsearch
 
-" replace the selected text
+" replace the vselected text
 vnoremap <C-r> "hy:%s/\V<C-r>=escape(@h,'/')<CR>//gc<left><left><left>
 
 " search for the selected text in the current file
@@ -100,11 +99,11 @@ map <Space> :
 " easy tabs
 map <leader>tn :tabnew<CR>
 
-" easy close
+" easy close / save / quit
+map <leader>Q :qa<CR>
 map <leader>x :x<CR>
-
-" easy quit
-map <leader>qa :qa<CR>
+map <leader>w :bd<CR>
+map <leader>s :w<CR>
 
 " indent and tab switching
 if has("gui_macvim")
