@@ -156,30 +156,9 @@ else
   imap <C-9> <Esc>9gt
 endif
 
-" tab movement setup, via ara howard
-
-function TabMove(n)
-    let nr = tabpagenr()
-    let size = tabpagenr('$')
-    " do we want to go left?
-    if (a:n != 0)
-        let nr = nr - 2
-    endif
-    " crossed left border?
-    if (nr < 0)
-        let nr = size-1
-        " crossed right border?
-    elseif (nr == size)
-        let nr = 0
-    endif
-    " fire move command
-    exec 'tabm'.nr
-endfunction
-
-map <Leader>m gT
-map <Leader>. gt
-map <C-Left> :call TabMove(1)<CR>
-map <C-Right> :call TabMove(0)<CR>
+" move tabs around
+map <Leader>m :-tabmove<CR>
+map <Leader>. :+tabmove<CR>
 
 " from http://coderwall.com/p/zfqmiw
 " Fake '|' as text object
