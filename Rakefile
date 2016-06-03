@@ -9,10 +9,6 @@ plugin "ctrlp", "https://github.com/kien/ctrlp.vim"
 plugin "ctrlp-tjump", "https://github.com/ivalkeen/vim-ctrlp-tjump"
 plugin "ctrlp-register", "https://github.com/mattn/ctrlp-register"
 plugin "ctrlp-extensions", "https://github.com/sgur/ctrlp-extensions.vim" # yankring, etc.
-# plugin "unite", "https://github.com/Shougo/unite.vim"
-# plugin "neomru", "https://github.com/Shougo/neomru.vim" # MRU files source
-# plugin "unite-tag", "https://github.com/tsukkee/unite-tag" # tag source
-# plugin "unite-outline", "https://github.com/Shougo/unite-outline" # outline the current file
 
 # project tree navigation
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
