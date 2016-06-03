@@ -2,6 +2,8 @@ load "plugins.rake"
 
 ### CORE
 
+plugin "pathogen", "https://github.com/tpope/vim-pathogen"
+
 # fast file navigation
 plugin "ctrlp", "https://github.com/kien/ctrlp.vim"
 plugin "ctrlp-tjump", "https://github.com/ivalkeen/vim-ctrlp-tjump"

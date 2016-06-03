@@ -2,6 +2,7 @@
 source $HOME/.vim/settings/basic.vim
 
 """ load plugin paths
+runtime bundle/pathogen/autoload/pathogen.vim
 call pathogen#infect()
 
 """ and now, my own settings and mappings:
