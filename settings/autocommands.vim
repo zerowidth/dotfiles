@@ -1,3 +1,6 @@
+" set the augroup for this file
+augroup vimfiles
+
 " disable colorcolumn in quickfix window
 au FileType qf set cc=
 
@@ -42,3 +45,6 @@ autocmd BufWinLeave *.md call clearmatches()
 au FilterWritePre * if &diff | set syn=OFF | GitGutterDisable
 " and restore it when quitting the diff window
 au BufWinLeave * if &diff | wincmd p | set syn=ON | GitGutterEnable
+
+" restore the augroup
+augroup END
