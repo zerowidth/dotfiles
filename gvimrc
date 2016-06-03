@@ -13,7 +13,8 @@ if has("gui_macvim")
   " set lines=47
   " set transparency=5
   " let hostname=split(hostname(),'\.')[0]
-  set guifont=Menlo:h14
+  set macligatures
+  set guifont=Fira\ Code:h14,Menlo:h14
 
   " e - graphical tabs
   " c - use console dialogs instead of graphical windows

@@ -30,14 +30,15 @@ set relativenumber " and relatively so
 
 """ syntax, highlighting, and spelling
 
-set background=dark
+set background=light
 
 syntax enable " turn on syntax highlighting, allow overrides
 
 set hlsearch " highlight matches
 
-set cursorline " show screen line for cursor
-set cursorcolumn " show screen line for cursor
+" disabled so they play nicer with ligatures
+" set cursorline " show screen line for cursor
+" set cursorcolumn " show screen line for cursor
 
 set colorcolumn=+0,120 " show line at textwidth and 120 chars
 
