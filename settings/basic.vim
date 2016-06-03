@@ -109,6 +109,14 @@ set undoreload=10000
 
 set encoding=utf-8 " set default encoding (default in macvim)
 
+""" tags
+" Disable tag binary search, assume tag files are unsorted. This is likely true
+" given that autotag is rewriting tags files, and the tags command I'm using
+" also doesn't generate a sorted file. This will save a binary search (fast as
+" it is) and go directly to a linear search.
+set notagbsearch
+
+
 """ diffing
 " filler lines, vsplit, show 3 lines of context around folds
 set diffopt=filler,vertical,context:3

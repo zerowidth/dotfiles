@@ -4,12 +4,12 @@ function Refresh()
   echo "refreshing tags and files..."
 
   if isdirectory(".git")
-    " allow vendor/internal-gems but not anything else in vendor:
-    " disable json tagging
-    " disable contexts in ruby (ctags --list-kinds=ruby)
-    :! git ls-files -c -o --exclude-standard | egrep -v '^vendor/[^i][^n][^t]' | ctags --json-kinds= --ruby-kinds=-C -L -
+    " Allow vendor/internal-gems but not anything else in vendor:
+    " Generate ctags in parallel, Sorting doesn't matter, since autotag is
+    " shuffling the file anyway and I've set notagbsearch.
+    !git ls-files -c -o --exclude-standard | egrep -v '^vendor/[^i][^n][^t]' | parallel -N 500 --pipe 'ctags -L - -f -' > tags
   else
-    :! ctags -R
+    silent :!ctags -R
   endif
 
   if exists(":CtrlPClearAllCaches")
@@ -25,6 +25,7 @@ function Refresh()
     endif
   endif
 
+  redraw
   echo "refresh complete."
 endfunction
 
