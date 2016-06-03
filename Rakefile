@@ -38,13 +38,13 @@ plugin "endwise", "https://github.com/tpope/vim-endwise.git"
 
 # show colors in css files, including hsl and rgb
 # plugin "vim-css-color", "https://github.com/ap/vim-css-color.git"
-plugin "vim-css-color", "https://github.com/ap/vim-css-color.git"
+plugin "css-color", "https://github.com/ap/vim-css-color.git"
 
 # highlight matching html tags
 plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
 
 # '.' repetition support for plugins
-plugin "vim-repeat", "https://github.com/tpope/vim-repeat.git"
+plugin "repeat", "https://github.com/tpope/vim-repeat.git"
 
 # 'ai' "an indent" 'ii' "inside indent" mappings
 plugin "indent-object", "https://github.com/michaeljsmith/vim-indent-object.git"
@@ -64,7 +64,7 @@ plugin "tabmerge" do
   sh "curl -s 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
 end
 
-plugin "vim-multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
+plugin "multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
 
 # alignment
 plugin "tabular", "https://github.com/godlygeek/tabular.git"
@@ -82,8 +82,10 @@ plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
   sh "make -f make_mac.mak"
 end
 
-plugin "characterize", "git://github.com/tpope/vim-characterize.git"
+# <leader>ga to show character information
+plugin "characterize", "https://github.com/tpope/vim-characterize.git"
 
+# easy * search on visual selection
 plugin "visual-star", "https://github.com/nelstrom/vim-visual-star-search.git"
 
 # visual undo tree
@@ -92,25 +94,25 @@ plugin "gundo", "https://github.com/sjl/gundo.vim.git"
 ### LANGUAGE AND SYNTAX
 
 # ruby language support
-plugin "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
+plugin "ruby", "https://github.com/vim-ruby/vim-ruby.git"
 # highlight heredocs with the right syntax
 plugin "ruby-heredoc-syntax", "https://github.com/joker1007/vim-ruby-heredoc-syntax"
 # run ruby tests from inside vim
 plugin "vim-vroom", "https://github.com/skalnik/vim-vroom.git"
 # toggle between :symbol "string" 'string', and more
-plugin "switch", "git://github.com/AndrewRadev/switch.vim.git"
+plugin "switch", "https://github.com/AndrewRadev/switch.vim.git"
 # toggle block style
 plugin "blockle", "https://github.com/jgdavey/vim-blockle.git"
 
 # html/erb editing support
-plugin "vim-ragtag", "https://github.com/tpope/vim-ragtag.git"
+plugin "ragtag", "https://github.com/tpope/vim-ragtag.git"
 
 plugin "csv", "https://github.com/vim-scripts/csv.vim.git"
 plugin "cucumber", "https://github.com/tpope/vim-cucumber.git"
 plugin "haml", "https://github.com/tpope/vim-haml.git"
 plugin "handlebars", "https://github.com/nono/vim-handlebars.git"
-plugin "html5", "git://github.com/othree/html5.vim.git"
-plugin "html5-syntax", "git://github.com/othree/html5-syntax.vim.git"
+plugin "html5", "https://github.com/othree/html5.vim.git"
+plugin "html5-syntax", "https://github.com/othree/html5-syntax.vim.git"
 plugin "jasmine", "https://github.com/claco/jasmine.vim.git"
 plugin "javascript", "https://github.com/pangloss/vim-javascript.git"
 plugin "jshint", "https://github.com/wookiehangover/jshint.vim.git"
@@ -127,7 +129,7 @@ plugin "scss", "https://github.com/cakebaker/scss-syntax.vim.git"
 plugin "less", "https://github.com/groenewege/vim-less"
 plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
-plugin "vim-coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
+plugin "coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 plugin "bash-support", "https://github.com/vim-scripts/bash-support.vim.git"
 plugin "json", "https://github.com/leshill/vim-json.git"
 plugin "go", "https://github.com/fatih/vim-go"
@@ -163,7 +165,7 @@ plugin "fugitive", "https://github.com/tpope/vim-fugitive.git"
 plugin "git-gutter", "https://github.com/airblade/vim-gitgutter.git"
 
 # for using syntax-highlighted text in presentations
-plugin "copy-as-rtf", "git://github.com/zerowidth/vim-copy-as-rtf.git"
+plugin "copy-as-rtf", "https://github.com/zerowidth/vim-copy-as-rtf.git"
 
 # gist integration
 plugin "gist-vim", "https://github.com/mattn/gist-vim.git"
