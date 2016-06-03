@@ -1,0 +1,60 @@
+snippet sp "STDERR.puts ..."
+STDERR.puts ${1:"$2"}
+endsnippet
+
+snippet spi "STDERR.puts with inspect"
+STDERR.puts "$1: #{($1).inspect}"
+endsnippet
+
+snippet spl "STDERR.puts with line"
+STDERR.puts "\n"+"${1:-}"*10+" vvvvv "+"$1"*10+" #{__FILE__}:#{__LINE__}"
+${2:STDERR.puts ${3:"$4"}}
+STDERR.puts "$1"*10+" ^^^^^ "+"$1"*10
+endsnippet
+
+snippet spc "STDERR.puts caller"
+caller.grep(%r(/app|/lib)).each { |l| STDERR.puts l.prepend("  ") }
+endsnippet
+
+snippet spe "STDERR.puts error"
+STDERR.puts e
+e.backtrace.grep(%r(/app|/lib)).each { |l| STDERR.puts l.prepend("  ") }
+endsnippet
+
+snippet spd "STDERR.puts debugging"
+STDERR.puts "$1: #{$1}"
+endsnippet
+
+snippet rl "Rails.logger.error ..."
+Rails.logger.error ${1:"$2"}
+endsnippet
+
+snippet rli "Rails.logger.error with inspect"
+Rails.logger.error "$1: #{($1).inspect}"
+endsnippet
+
+snippet rll "Rails.logger.error with line"
+Rails.logger.error "\n"+"${1:-}"*10+" vvvvv "+"$1"*10+" #{__FILE__}:#{__LINE__}"
+Rails.logger.error ${2:"$3"}
+Rails.logger.error "$1"*10+" ^^^^^ "+"$1"*10
+endsnippet
+
+snippet rlc "Rails.logger.error caller"
+caller.grep(%r(/app|/lib)).each { |l| Rails.logger.error l.prepend("  ") }
+endsnippet
+
+snippet rld "Rails.logger.error debugging"
+Rails.logger.error "$1: #{$1}"
+endsnippet
+
+snippet sql "GitHub::SQL with query"
+GitHub::SQL.${1:new} <<-SQL${2:, :bindings...}
+	$0
+SQL
+endsnippet
+
+snippet bl "Wrap expression in a block"
+${VISUAL} $1
+$0
+end
+endsnippet

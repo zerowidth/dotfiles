@@ -69,7 +69,7 @@ plugin "vim-multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
 plugin "align", "https://github.com/tsaleh/vim-align.git"
 
 # snippets
-plugin "snipmate", "https://github.com/garbas/vim-snipmate.git"
+plugin "utilisnips", "https://github.com/SirVer/ultisnips.git"
 plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 
 # snipmate dependencies
