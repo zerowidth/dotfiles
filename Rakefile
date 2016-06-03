@@ -87,6 +87,8 @@ plugin "characterize", "git://github.com/tpope/vim-characterize.git"
 
 plugin "visual-star", "https://github.com/nelstrom/vim-visual-star-search.git"
 
+# visual undo tree
+plugin "gundo", "https://github.com/sjl/gundo.vim.git"
 
 ### LANGUAGE AND SYNTAX
 

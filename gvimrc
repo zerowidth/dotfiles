@@ -4,6 +4,9 @@ if has("gui_macvim")
   " unmap macvim menu key so Cmd-L is available
   macmenu Tools.List\ Errors key=<nop>
 
+  " unmap cmd-z for gundo to use
+  macmenu Edit.Undo<Tab>u key=<nop>
+
   " size the window so it's reasonable on a 11" mba
   " 156 is 120 columns plus 32 for NERDTree plus gutter
   " set columns=156

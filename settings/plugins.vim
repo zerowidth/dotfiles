@@ -132,6 +132,9 @@ let g:ctrlp_tjump_only_silent = 1 " jump immediately if only one tag
 nnoremap <c-]> :CtrlPtjump<cr>
 vnoremap <c-]> :CtrlPtjumpVisual<cr>
 
+""" gundo
+map <D-z> :GundoToggle<CR>
+
 """ gist
 " post gists privately by default
 " let g:gist_private = 1
