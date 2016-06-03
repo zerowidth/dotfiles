@@ -48,17 +48,21 @@ vmap <C-Down> ]egv
 let g:vim_markdown_folding_disabled=1
 
 
-""" Ack
-" use the_silver_searcher
-let g:ackprg = 'ag --nogroup --nocolor --column --line-numbers'
-vnoremap <C-a> "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>a :Ack<space>
-vmap <leader>a "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>ta :tabnew<CR>:Ack<space>
-vmap <leader>ta "hy:tabnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>va :vnew<CR>:Ack<space>
-vmap <leader>va "hy:vnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-
+""" Ag
+" cribbed from vim-action-ag plugin:
+let ag_escape_chars = '#%.^$*+?()[{\\|'
+map <leader>a :Ag ""<left>
+map <leader>A :Ag -a ""<left>
+vmap <leader>a "hy:Ag "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
+vmap <leader>A "hy:Ag -a "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
+map <leader>ta :tabnew<CR>:Ag ""<left>
+map <leader>tA :tabnew<CR>:Ag -a ""<left>
+vmap <leader>ta "hy:tabnew<CR>:Ag "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
+vmap <leader>tA "hy:tabnew<CR>:Ag -a "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
+map <leader>va :vnew<CR>:Ag ""<left>
+map <leader>vA :vnew<CR>:Ag -a ""<left>
+vmap <leader>va "hy:vnew<CR>:Ag "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
+vmap <leader>vA "hy:vnew<CR>:Ag -a "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
 
 """ surround
 " Use v or # to get a variable interpolation (inside of a string)}

@@ -14,7 +14,7 @@ plugin "ctrlp-extensions", "https://github.com/sgur/ctrlp-extensions.vim" # yank
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
 
 # search in project
-plugin "ack", "https://github.com/mileszs/ack.vim.git"
+plugin "ag", "https://github.com/rking/ag.vim"
 
 # ctags file management
 plugin "autotag", "https://github.com/craigemery/vim-autotag"
