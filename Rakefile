@@ -49,6 +49,12 @@ plugin "repeat", "https://github.com/tpope/vim-repeat.git"
 # 'ai' "an indent" 'ii' "inside indent" mappings
 plugin "indent-object", "https://github.com/michaeljsmith/vim-indent-object.git"
 
+# textobjects like () and []
+plugin "targets", "https://github.com/wellle/targets.vim"
+
+# faster moving to pairs of characters
+plugin "sneak", "https://github.com/justinmk/vim-sneak"
+
 # a variety of bracket mappings, including line bubbling
 plugin "unimpaired", "https://github.com/tpope/vim-unimpaired.git"
 
