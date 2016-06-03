@@ -46,5 +46,11 @@ au FilterWritePre * if &diff | set syn=OFF | GitGutterDisable
 " and restore it when quitting the diff window
 au BufWinLeave * if &diff | wincmd p | set syn=ON | GitGutterEnable
 
+
+" restore the last known position in the file, but skip for git commits
+" :help last-position-jump
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") && &filetype != 'gitcommit' | exe "normal! g`\"" | endif
+
+
 " restore the augroup
 augroup END
