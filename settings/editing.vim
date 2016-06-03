@@ -5,6 +5,8 @@ let maplocalleader = ','
 " enable plugin filetypes and indentation
 filetype plugin indent on
 
+colorscheme base16-tomorrow
+
 function! NumberToggle()
   if(&relativenumber == 1)
     set norelativenumber
