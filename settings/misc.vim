@@ -60,6 +60,10 @@ vnoremap <silent> <Leader>cg :call CopyGitHubURL('v',0)<CR>
 noremap  <silent> <Leader>co :call CopyGitHubURL('n',1)<CR>
 vnoremap <silent> <Leader>co :call CopyGitHubURL('v',1)<CR>
 
+function Trim(str)
+  return substitute(a:str, '\n', '', '')
+endfunction
+
 " this is hacky as hell, but it works...
 " mode is 'n' or 'v' for normal or vselect mode
 " open is 0 or 1, 1 to open the url as well as copying it to the clipboard
@@ -75,7 +79,7 @@ function CopyGitHubURL(mode, open) range
     return
   endif
 
-  let upstream = tlib#string#TrimRight(system('git config remote.origin.url'))
+  let upstream = Trim(system('git config remote.origin.url'))
   if v:shell_error
     echo "couldn't get origin url!"
     return
@@ -86,7 +90,7 @@ function CopyGitHubURL(mode, open) range
     return
   end
 
-  let branch = tlib#string#TrimRight(system('git rev-parse --abbrev-ref HEAD'))
+  let branch = Trim(system('git rev-parse --abbrev-ref HEAD'))
   let _ = system('git rev-parse --symbolic-full-name --abbrev-ref @{u}')
   if v:shell_error
     echo 'missing upstream, using master'

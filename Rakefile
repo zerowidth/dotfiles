@@ -74,10 +74,6 @@ plugin "align", "https://github.com/tsaleh/vim-align.git"
 plugin "utilisnips", "https://github.com/SirVer/ultisnips.git"
 plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 
-# snipmate dependencies
-plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
-plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
-
 # fast autocomplete
 plugin "neocomplete", "https://github.com/Shougo/neocomplete.git"
 
