@@ -54,8 +54,8 @@ vnoremap <C-f> "hy:/\V<C-r>=escape(@h,'/')<CR>/<CR>
 
 if has("gui_macvim")
   " cmd-l for clearing search highlights
-  nnoremap <D-l> :nohlsearch<CR>
-  inoremap <D-l> <C-O>:nohlsearch<CR>
+  nnoremap <D-l> :silent nohlsearch<CR>
+  inoremap <D-l> <C-O>:silent nohlsearch<CR>
 endif
 
 " easy command
