@@ -64,7 +64,9 @@ function EditFromClipboard()
 endfunction
 
 """ Marked 2 is annoying to type
-command Marked exe '!open -a "Marked 2" %'
+command Marked silent exe '!open -a "Marked 2" %'
+" and so is IA Writer
+command IA silent exe '!open -a "IA Writer" %'
 
 """ copy github url to current file/branch
 
