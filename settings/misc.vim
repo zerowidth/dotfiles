@@ -29,7 +29,7 @@ function Refresh()
   echo "refresh complete."
 endfunction
 
-" map <silent> <Leader>r :call Refresh()<CR>
+map <silent> <Leader>R :call Refresh()<CR>
 command Refresh call Refresh()
 
 """ copy filename of current file to clipboard
