@@ -9,6 +9,7 @@ plugin "ctrlp", "https://github.com/kien/ctrlp.vim"
 plugin "ctrlp-tjump", "https://github.com/ivalkeen/vim-ctrlp-tjump"
 plugin "ctrlp-register", "https://github.com/mattn/ctrlp-register"
 plugin "ctrlp-extensions", "https://github.com/sgur/ctrlp-extensions.vim" # yankring, etc.
+plugin "ctrlp-py-matcher", "https://github.com/FelikZ/ctrlp-py-matcher"
 
 # project tree navigation
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"

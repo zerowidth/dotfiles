@@ -137,6 +137,9 @@ let g:ctrlp_switch_buffer = 'ETVH' " jump to buffers where they're already open
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 0 " no limits
 
+" use a different matcher
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+
 " the 'gems' root marker is for vendored gems
 let g:ctrlp_user_command = {
   \ 'types': {
