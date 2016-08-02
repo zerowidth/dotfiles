@@ -29,5 +29,17 @@
 
 --langmap=ruby:+.rake
 
+# disable json tagging
+--json-kinds=
+
+# disable css selectors
+--css-kinds=
+
+# disable html anchors/js functions (currently broken?)
+--html-kinds=
+
 # disable contexts in ruby (ctags --list-kinds=ruby)
 # --ruby-kinds=-C
+
+# disable javascript objects
+--js-kinds=-r
