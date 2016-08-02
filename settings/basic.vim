@@ -84,7 +84,9 @@ set autoread " auto-reload any file modified outside vim
 
 """ the swap file
 
-set noswapfile " livin' on the edge
+" set noswapfile " livin' on the edge
+set swapfile
+set directory=~/.vimswap//
 
 """ command line editing
 

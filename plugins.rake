@@ -84,10 +84,12 @@ task :link_configs do
     ln_s(Dir.pwd, dotvim)
   end
 
-  vimundo = File.expand_path("~/.vimundo")
-  unless File.directory?(vimundo)
-    puts "* creating .vimundo"
-    FileUtils.mkdir_p vimundo
+  %w( ~/.vimundo ~/.vimswap ).each do |file|
+    expanded = File.expand_path(file)
+    unless File.directory?(expanded)
+      puts "* creating #{file}"
+      FileUtils.mkdir_p expanded
+    end
   end
 
   %w[ vimrc gvimrc ].each do |file|
