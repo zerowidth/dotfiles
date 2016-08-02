@@ -123,3 +123,9 @@ set notagbsearch
 """ diffing
 " filler lines, vsplit, show 3 lines of context around folds
 set diffopt=filler,vertical,context:3
+
+" faster redraws
+set lazyredraw
+
+" old regex engine so ruby is fast
+set regexpengine=1
