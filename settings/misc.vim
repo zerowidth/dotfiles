@@ -70,65 +70,13 @@ command IA silent exe '!open -a "IA Writer" %'
 
 """ copy github url to current file/branch
 
-" vselect mappings mean 'include the line number'
-noremap  <silent> <Leader>cg :call CopyGitHubURL('n',0)<CR>
-vnoremap <silent> <Leader>cg :call CopyGitHubURL('v',0)<CR>
-noremap  <silent> <Leader>co :call CopyGitHubURL('n',1)<CR>
-vnoremap <silent> <Leader>co :call CopyGitHubURL('v',1)<CR>
+noremap <silent> <Leader>cg :Gbrowse! -<CR>
+vnoremap <silent> <Leader>cg :'<,'>Gbrowse! -<CR>
+noremap <silent> <Leader>co :Gbrowse! -<CR>:Gbrowse -<CR>
+vnoremap <silent> <Leader>co :'<,'>Gbrowse!-<CR>:'<,'>Gbrowse -<CR>
 
 function Trim(str)
   return substitute(a:str, '\n', '', '')
-endfunction
-
-" this is hacky as hell, but it works...
-" mode is 'n' or 'v' for normal or vselect mode
-" open is 0 or 1, 1 to open the url as well as copying it to the clipboard
-function CopyGitHubURL(mode, open) range
-  if &bt != ''
-    echo 'not a normal file!'
-    return
-  endif
-
-  let _ = system('git rev-parse --is-inside-work-tree')
-  if v:shell_error
-    echo 'not in a git project!'
-    return
-  endif
-
-  let upstream = Trim(system('git config remote.origin.url'))
-  if v:shell_error
-    echo "couldn't get origin url!"
-    return
-  endif
-
-  if upstream !~ '^https://github.com'
-    echo "upstream doesn't start with https://github.com: " . upstream
-    return
-  end
-
-  let branch = Trim(system('git rev-parse --abbrev-ref HEAD'))
-  let _ = system('git rev-parse --symbolic-full-name --abbrev-ref @{u}')
-  if v:shell_error
-    echo 'missing upstream, using master'
-    let branch = 'master'
-  endif
-
-  let url = upstream . '/blob/' . branch . '/' . bufname('%')
-
-  if a:mode == 'v'
-    let url = url . '#L'
-    if a:lastline == a:firstline
-      let url = url . a:firstline
-    else
-      let url = url . a:firstline . "-L" . a:lastline
-    endif
-  endif
-
-  echo url
-  let _ = system('echo -n ' . shellescape(url) . ' | pbcopy')
-  if a:open
-    let _ = system('open ' . shellescape(url))
-  endif
 endfunction
 
 " http://lyonheart.us/articles/making-vim-open-the-thing-under-the-cursor/
