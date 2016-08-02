@@ -23,7 +23,7 @@ set nowrap " don't wrap lines
 
 set list " show invisible characters
 " set listchars=tab:➤\ ,trail:⋅,nbsp:⋅,extends:»,precedes:«
-set listchars=tab:\ \ ,trail:⋅,nbsp:⋅,extends:»,precedes:«
+set listchars=tab:⋅\ ,trail:⋅,nbsp:⋅,extends:»,precedes:«
 
 set number " show line numbers
 set relativenumber " and relatively so
