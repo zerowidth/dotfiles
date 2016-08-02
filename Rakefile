@@ -177,3 +177,6 @@ plugin "copy-as-rtf", "https://github.com/zerowidth/vim-copy-as-rtf.git"
 
 # gist integration
 plugin "gist-vim", "https://github.com/mattn/gist-vim.git"
+
+# prevent sneaky whitespace characters
+plugin "troll-stopper", "https://github.com/vim-utils/vim-troll-stopper"
