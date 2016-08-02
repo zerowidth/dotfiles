@@ -57,18 +57,18 @@ let g:vim_markdown_folding_disabled=1
 """ Ag
 " cribbed from vim-action-ag plugin:
 let ag_escape_chars = '#%.^$*+?()[{\\|'
-map <leader>a :Ag ""<left>
-map <leader>A :Ag -a ""<left>
-vmap <leader>a "hy:Ag "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
-vmap <leader>A "hy:Ag -a "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
-map <leader>ta :tabnew<CR>:Ag ""<left>
-map <leader>tA :tabnew<CR>:Ag -a ""<left>
-vmap <leader>ta "hy:tabnew<CR>:Ag "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
-vmap <leader>tA "hy:tabnew<CR>:Ag -a "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
-map <leader>va :vnew<CR>:Ag ""<left>
-map <leader>vA :vnew<CR>:Ag -a ""<left>
-vmap <leader>va "hy:vnew<CR>:Ag "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
-vmap <leader>vA "hy:vnew<CR>:Ag -a "<C-r>=escape(@h,ag_escape_chars)<CR>"<CR>
+map <leader>a :Ag '' <left><left>
+map <leader>A :Ag -a '' <left><left>
+vmap <leader>a "hy:Ag '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
+vmap <leader>A "hy:Ag -a '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
+map <leader>ta :tabnew<CR>:Ag ''<left>
+map <leader>tA :tabnew<CR>:Ag -a ''<left>
+vmap <leader>ta "hy:tabnew<CR>:Ag '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
+vmap <leader>tA "hy:tabnew<CR>:Ag -a '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
+map <leader>va :vnew<CR>:Ag ''<left>
+map <leader>vA :vnew<CR>:Ag -a ''<left>
+vmap <leader>va "hy:vnew<CR>:Ag '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
+vmap <leader>vA "hy:vnew<CR>:Ag -a '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
 
 """ surround
 " Use v or # to get a variable interpolation (inside of a string)}
