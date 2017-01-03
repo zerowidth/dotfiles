@@ -1,13 +1,19 @@
 """ ctags, command-t, NERDTree refresh
 
-function Refresh()
+function! Refresh()
   echo "refreshing tags and files..."
 
   if isdirectory(".git")
     " Allow vendor/internal-gems but not anything else in vendor:
     " Generate ctags in parallel, Sorting doesn't matter, since autotag is
     " shuffling the file anyway and I've set notagbsearch.
-    !git ls-files -c -o --exclude-standard | egrep -v '^vendor/[^i][^n][^t]' | parallel -N 500 --pipe 'ctags -L - -f -' > tags
+    " Use ripper-tags if available.
+    if executable("ripper-tags")
+      unsilent !git ls-files -c -o --exclude-standard | egrep -v '\.rb$|\.git/' | egrep -v '^vendor/[^i][^n][^t]' | parallel -j200\% -N 500 --pipe 'ctags -L - -f -' > tags
+      unsilent !eval "$(rbenv init -)" && rbenv shell $(rbenv global) && git ls-files -c -o --exclude-standard | egrep '\.rb$' | egrep -v '^vendor/[^i][^n][^t]' | parallel -X 'ripper-tags -f - {}' >> tags
+    else
+      silent !git ls-files -c -o --exclude-standard | egrep -v '^vendor/[^i][^n][^t]' | parallel -N 500 --pipe 'ctags -L - -f -' > tags
+    endif
   else
     silent :!ctags -R
   endif
