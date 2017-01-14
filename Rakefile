@@ -18,7 +18,7 @@ plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
 plugin "ag", "https://github.com/rking/ag.vim"
 
 # ctags file management
-plugin "autotag", "https://github.com/craigemery/vim-autotag"
+plugin "bgtags", "https://github.com/zerowidth/vim-bgtags"
 plugin "tagbar", "https://github.com/majutsushi/tagbar"
 
 ### EDITING AND MOVING

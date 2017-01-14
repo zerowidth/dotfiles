@@ -1,5 +1,32 @@
 """ plugin-specific settings
 
+""" Bgtags
+" Allow vendor/internal-gems but not anything else in vendor.
+" Generate ctags in parallel. Sorting doesn't matter, since this is
+" shuffling the tags file anyway and I've set notagbsearch.
+" Use ripper-tags for ruby.
+let g:bgtags_user_commands = {
+  \ 'directories': {
+    \ '.git': [
+      \ 'git ls-files -c -o --exclude-standard | ' .
+        \ 'egrep -v ''\.r(b|ake)$|\.git/'' | ' .
+        \ 'egrep -v ''^vendor/[^i][^n][^t]'' | ' .
+        \ 'parallel -j200\% -N 500 --pipe ''ctags -L - -f -'' > tags',
+      \ 'eval "$(rbenv init -)" && rbenv shell $(rbenv global) && ' .
+        \ 'git ls-files -c -o --exclude-standard | ' .
+        \ 'egrep ''\.r(b|ake)$'' | ' .
+        \ 'egrep -v ''^vendor/[^i][^n][^t]'' | ' .
+        \ 'parallel -X ''ripper-tags -f - {}'' >> tags'
+      \ ],
+    \ 'default': 'ctags -R'
+    \ },
+  \ 'filetypes': {
+    \ 'ruby': 'eval "$(rbenv init -)" && rbenv shell $(rbenv global) && ' .
+        \ 'ripper-tags -f -',
+    \ 'default': 'ctags -f-'
+    \}
+\ }
+
 """ NERDTree
 
 " auto-change CWD when changing tree root
