@@ -56,10 +56,21 @@ plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
 # '.' repetition support for plugins
 plugin "repeat", "https://github.com/tpope/vim-repeat.git"
 
-# 'ai' "an indent" 'ii' "inside indent" mappings
+# text objects
+plugin "textobj-user", "https://github.com/kana/vim-textobj-user"
+# a<space> / i<space> for blank lines:
+plugin "textobj-blanklines", "https://github.com/zandrmartin/vim-textobj-blanklines"
+# ac / ic for comments
+plugin "textobj-comment", "https://github.com/glts/vim-textobj-comment"
+# af/if functions, ar/ir blocks, ac/ic classes, an/in names
+plugin "textobj-ruby", "https://github.com/tek/vim-textobj-ruby"
+# a_/i_ for underscore text objects
+plugin "textobj-underscore", "https://github.com/lucapette/vim-textobj-underscore"
+# a-/i- for dash text objects
+plugin "textobj-dash", "https://github.com/RyanMcG/vim-textobj-dash"
+# 'ai' "an indent" 'ii' "inside indent" textobject mappings
 plugin "indent-object", "https://github.com/michaeljsmith/vim-indent-object.git"
-
-# textobjects like () and []
+# textobjects like () and [], plus ia/aa arguments, Ia/Aa contents of arg, etc.
 plugin "targets", "https://github.com/wellle/targets.vim"
 
 # a variety of bracket mappings, including line bubbling
