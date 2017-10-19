@@ -61,11 +61,10 @@ command Marked silent exe '!open -a "Marked 2" "%"'
 command IA silent exe '!open -a "IA Writer" "%"'
 
 """ copy github url to current file/branch
-
-noremap <silent> <Leader>cg :Gbrowse! -<CR>
-vnoremap <silent> <Leader>cg :'<,'>Gbrowse! -<CR>
-noremap <silent> <Leader>co :Gbrowse! -<CR>:Gbrowse -<CR>
-vnoremap <silent> <Leader>co :'<,'>Gbrowse!-<CR>:'<,'>Gbrowse -<CR>
+noremap <silent> <Leader>cg :Gbrowse!<CR>
+vnoremap <silent> <Leader>cg :'<,'>Gbrowse!<CR>
+noremap <silent> <Leader>co :Gbrowse! -<CR>:Gbrowse<CR>
+vnoremap <silent> <Leader>co :'<,'>Gbrowse!<CR>:'<,'>Gbrowse<CR>
 
 function Trim(str)
   return substitute(a:str, '\n', '', '')
