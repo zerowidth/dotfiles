@@ -29,6 +29,7 @@ map <silent> <Leader>cf :exe '!echo -n % \| pbcopy'<CR>:echo bufname('%')<CR>
 """ edit filename from clipboard or vselect or current word
 map <silent> <Leader>ef :call EditFromClipboard()<CR>
 map <silent> <Leader>ee :call EditFile(expand('<cWORD>'),1)<CR>
+vmap <silent> <Leader>ee "hy:call EditFile(getreg('h'),1)<CR>
 " reload the file
 map <silent> <Leader>er :w<CR>:e<CR>
 
