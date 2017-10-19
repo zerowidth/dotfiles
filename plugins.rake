@@ -175,12 +175,16 @@ class Plugin
     Dir.chdir(plugin_dir) do
       if File.directory?(".git")
         head = sh "git rev-parse HEAD"
-        sh "git pull --log --stat"
-        if sh("git rev-parse HEAD") != head
-          updates = sh("git --no-pager log --pretty='* %C(yellow)%h%Creset %s' @{1}..")
-          run_install_commands do |output|
-            updates << output
+        if sh?("git symbolic-ref -q HEAD")
+          sh "git pull --log --stat"
+          if sh("git rev-parse HEAD") != head
+            updates = sh("git --no-pager log --pretty='* %C(yellow)%h%Creset %s' @{1}..")
+            run_install_commands do |output|
+              updates << output
+            end
           end
+        else
+          updates << "skipped, detached HEAD"
         end
       end
     end
@@ -217,5 +221,10 @@ class Plugin
     out
   rescue => e
     raise CommandFailed, "Command failed: #{cmd}\n#{e.inspect}"
+  end
+
+  def sh?(cmd)
+    _, status = Open3.capture2e(cmd)
+    status.success?
   end
 end
