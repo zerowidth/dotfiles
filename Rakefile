@@ -50,10 +50,6 @@ plugin "surround", "https://github.com/tpope/vim-surround.git"
 # automatically add "end" to ruby, vimscript, and more
 plugin "endwise", "https://github.com/tpope/vim-endwise.git"
 
-# show colors in css files, including hsl and rgb
-# plugin "vim-css-color", "https://github.com/ap/vim-css-color.git"
-plugin "css-color", "https://github.com/ap/vim-css-color.git"
-
 # highlight matching html tags
 plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
 
@@ -66,17 +62,11 @@ plugin "indent-object", "https://github.com/michaeljsmith/vim-indent-object.git"
 # textobjects like () and []
 plugin "targets", "https://github.com/wellle/targets.vim"
 
-# faster moving to pairs of characters
-plugin "sneak", "https://github.com/justinmk/vim-sneak"
-
 # a variety of bracket mappings, including line bubbling
 plugin "unimpaired", "https://github.com/tpope/vim-unimpaired.git"
 
 # automatic syntax checking
-plugin "syntastic", "https://github.com/scrooloose/syntastic.git"
-
-# extended matching for %
-plugin "matchit", "https://github.com/edsono/vim-matchit.git"
+plugin "syntastic", "https://github.com/vim-syntastic/syntastic.git"
 
 # merge tabs together
 plugin "tabmerge", commands: [
@@ -100,13 +90,6 @@ plugin "vimproc", "https://github.com/Shougo/vimproc.git", commands: [
   "make -f make_mac.mak"
 ]
 
-
-# async execution, builds neocomplcache in the background
-plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
-  print "  "
-  sh "make -f make_mac.mak"
-end
-
 # <leader>ga to show character information
 plugin "characterize", "https://github.com/tpope/vim-characterize.git"
 
@@ -123,8 +106,6 @@ plugin "ruby", "https://github.com/vim-ruby/vim-ruby.git"
 plugin "rbenv", "https://github.com/tpope/vim-rbenv"
 # highlight heredocs with the right syntax:
 plugin "ruby-heredoc-syntax", "https://github.com/joker1007/vim-ruby-heredoc-syntax"
-# run ruby tests from inside vim
-plugin "vim-vroom", "https://github.com/skalnik/vim-vroom.git"
 # toggle between :symbol "string" 'string', and more
 plugin "switch", "https://github.com/AndrewRadev/switch.vim.git"
 # toggle block style
@@ -134,23 +115,16 @@ plugin "blockle", "https://github.com/jgdavey/vim-blockle.git"
 plugin "ragtag", "https://github.com/tpope/vim-ragtag.git"
 
 plugin "csv", "https://github.com/vim-scripts/csv.vim.git"
-plugin "cucumber", "https://github.com/tpope/vim-cucumber.git"
-plugin "haml", "https://github.com/tpope/vim-haml.git"
-plugin "handlebars", "https://github.com/nono/vim-handlebars.git"
 plugin "html5", "https://github.com/othree/html5.vim.git"
 plugin "html5-syntax", "https://github.com/othree/html5-syntax.vim.git"
-plugin "jasmine", "https://github.com/claco/jasmine.vim.git"
 plugin "javascript", "https://github.com/pangloss/vim-javascript.git"
-plugin "jshint", "https://github.com/wookiehangover/jshint.vim.git"
 plugin "liquid", "https://github.com/tpope/vim-liquid.git"
 plugin "markdown", "https://github.com/tpope/vim-markdown.git"
 plugin "nodejs", "https://github.com/mmalecki/vim-node.js.git"
 plugin "puppet", "https://github.com/ajf/puppet-vim.git"
 plugin "rails", "https://github.com/tpope/vim-rails.git"
 plugin "bundler", "https://github.com/tpope/vim-bundler"
-# plugin "rspec", "https://github.com/taq/vim-rspec.git" # gone?
 plugin "rspec", "https://github.com/Keithbsmiley/rspec.vim"
-# plugin "scala", "https://github.com/bdd/vim-scala.git" # moved? gone?
 plugin "scss", "https://github.com/cakebaker/scss-syntax.vim.git"
 plugin "less", "https://github.com/groenewege/vim-less"
 plugin "sinatra", "https://github.com/hallison/vim-ruby-sinatra.git"
@@ -173,19 +147,6 @@ plugin "erlang-omnicomplete", "https://github.com/vim-erlang/vim-erlang-omnicomp
 
 # auto-expand html
 plugin "emmet", "https://github.com/mattn/emmet-vim"
-
-# clojure:
-# plugin "paredit", "https://github.com/vim-scripts/paredit.vim.git"
-# plugin "slime", "https://github.com/jpalardy/vim-slime.git"
-# plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", type: :hg do
-#   try "ln -s vim/* ."
-# end # broken, no hg support!
-# plugin "classpath", "https://github.com/tpope/vim-classpath"
-# plugin "fireplace", "https://github.com/tpope/vim-fireplace"
-# plugin "clojure-static", "https://github.com/guns/vim-clojure-static"
-# plugin "rainbow_parentheses", "https://github.com/kien/rainbow_parentheses.vim.git"
-# plugin "vim-sexp", "https://github.com/guns/vim-sexp"
-# plugin "vim-sexp-mappings", "https://github.com/tpope/vim-sexp-mappings-for-regular-people"
 
 # haskell:
 plugin "haskellmode", "https://github.com/lukerandall/haskellmode-vim.git"
