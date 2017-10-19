@@ -17,6 +17,11 @@ endfunc
 
 nnoremap <silent> <Leader>n :call NumberToggle()<cr>
 
+" for AVR header files, installed by brew / avr-gcc / avr-libc
+if isdirectory("/usr/local/opt/avr-gcc/avr/include")
+  set path+=/usr/local/opt/avr-gcc/avr/include
+endif
+
 " move line-wise always, for markdown in particular
 map j gj
 map k gk
