@@ -29,6 +29,9 @@ plugin "airline-themes", "https://github.com/vim-airline/vim-airline-themes"
 
 ### EDITING AND MOVING
 
+# for Qdo and Qargs
+plugin "qargs", "https://github.com/henrik/vim-qargs"
+
 # color schemes
 # plugin "github-colorscheme", "https://github.com/endel/vim-github-colorscheme"
 plugin "atelier-colorscheme", "https://github.com/atelierbram/vim-colors_atelier-schemes"
