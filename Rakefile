@@ -176,7 +176,7 @@ plugin "haskell-indent", "https://github.com/vim-scripts/indenthaskell.vim.git"
 plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 # haskell-aware auto-completion
 plugin "neco-ghc", "https://github.com/ujihisa/neco-ghc.git"
-
+plugin "parsec", "https://github.com/keith/parsec.vim"
 
 ### MISC
 
