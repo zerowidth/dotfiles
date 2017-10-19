@@ -257,6 +257,16 @@ map <silent> <right> :cnext<CR>
 " ,hs -- stage hunk
 " ,hu -- undo hunk
 
+""" text objects
+" gitgutter hunk text-objects are explicitly unmapped in after/gitgutter.vim so
+" they don't conflict with vim-textobj-ruby.
+let g:textobj_comment_no_default_key_mappings=1
+xmap a' <Plug>(textobj-comment-a)
+omap a' <Plug>(textobj-comment-a)
+xmap i' <Plug>(textobj-comment-i)
+omap i' <Plug>(textobj-comment-i)
+xmap A' <Plug>(textobj-comment-big-a)
+omap A' <Plug>(textobj-comment-big-a)
 
 """ fugitive
 " map <leader>gd :Gvdiff<CR>:wincmd p<CR>
