@@ -80,7 +80,7 @@ plugin "multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
 plugin "tabular", "https://github.com/godlygeek/tabular.git"
 
 # snippets
-plugin "utilisnips", "https://github.com/SirVer/ultisnips.git"
+plugin "ultisnips", "https://github.com/SirVer/ultisnips.git"
 plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 
 # fast autocomplete, requires lua
