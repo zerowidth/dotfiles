@@ -154,6 +154,7 @@ plugin "coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 plugin "bash-support", "https://github.com/vim-scripts/bash-support.vim.git"
 plugin "json", "https://github.com/leshill/vim-json.git"
 plugin "go", "https://github.com/fatih/vim-go"
+plugin "godoctor", "https://github.com/godoctor/godoctor.vim"
 
 plugin "graphql", "https://github.com/jparise/vim-graphql"
 
