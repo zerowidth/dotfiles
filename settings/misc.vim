@@ -1,8 +1,8 @@
 """ ctags, command-t, NERDTree refresh
 
 function! Refresh()
-  if exists(":CtrlPClearAllCaches")
-    CtrlPClearAllCaches
+  if exists(":CtrlPClearCache")
+    CtrlPClearCache
   endif
 
   if exists("t:NERDTreeBufName")
