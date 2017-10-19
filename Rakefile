@@ -155,6 +155,8 @@ plugin "bash-support", "https://github.com/vim-scripts/bash-support.vim.git"
 plugin "json", "https://github.com/leshill/vim-json.git"
 plugin "go", "https://github.com/fatih/vim-go"
 
+plugin "graphql", "https://github.com/jparise/vim-graphql"
+
 plugin "rust", "https://github.com/wting/rust.vim"
 
 plugin "elixir", "https://github.com/elixir-lang/vim-elixir"
