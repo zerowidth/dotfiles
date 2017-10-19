@@ -5,7 +5,7 @@ load "plugins.rake"
 plugin "pathogen", "https://github.com/tpope/vim-pathogen"
 
 # fast file navigation
-plugin "ctrlp", "https://github.com/kien/ctrlp.vim"
+plugin "ctrlp", "https://github.com/ctrlpvim/ctrlp.vim"
 plugin "ctrlp-tjump", "https://github.com/ivalkeen/vim-ctrlp-tjump"
 plugin "ctrlp-register", "https://github.com/mattn/ctrlp-register"
 plugin "ctrlp-extensions", "https://github.com/sgur/ctrlp-extensions.vim" # yankring, etc.
