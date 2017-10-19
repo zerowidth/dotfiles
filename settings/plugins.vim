@@ -285,15 +285,15 @@ map <right> :cnext<CR>
 
 
 """ fugitive
-map <leader>gd :Gvdiff<CR>:wincmd p<CR>
+" map <leader>gd :Gvdiff<CR>:wincmd p<CR>
 map <leader>gb :Gblame<CR>
-map <leader>gd :Gvdiff<CR>
-map <leader>gs :Gstatus<CR>4j
-map <leader>gc :Gcommit<CR>
+" map <leader>gd :Gvdiff<CR>
+" map <leader>gs :Gstatus<CR>4j
+" map <leader>gc :Gcommit<CR>
 
-map <leader>du :diffupdate<CR>
-vmap <leader>do :diffget<CR>:diffupdate<CR>
-vmap <leader>dp :diffput<CR>:diffupdate<CR>
+" map <leader>du :diffupdate<CR>
+" vmap <leader>do :diffget<CR>:diffupdate<CR>
+" vmap <leader>dp :diffput<CR>:diffupdate<CR>
 
 """ vim-markdown
 " add sql to the list
