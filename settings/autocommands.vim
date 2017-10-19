@@ -13,7 +13,7 @@ au FileType clojure RainbowParenthesesLoadChevrons
 au BufNewFile,BufRead */ssh/config setf sshconfig
 
 " auto-save everything when vim loses focus
-au FocusLost * silent! wa
+au FocusLost * nested wa
 
 " fix crontab editing
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
