@@ -79,10 +79,10 @@ plugin "syntastic", "https://github.com/scrooloose/syntastic.git"
 plugin "matchit", "https://github.com/edsono/vim-matchit.git"
 
 # merge tabs together
-plugin "tabmerge" do
-  mkdir_p "plugin"
-  sh "curl -s 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
-end
+plugin "tabmerge", commands: [
+  "mkdir -p plugin",
+  "curl -s 'http://www.vim.org/scripts/download_script.php?src_id=8828' > plugin/Tabmerge.vim"
+]
 
 plugin "multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
 
