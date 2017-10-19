@@ -258,21 +258,35 @@ map <silent> <leader>gg :GitGutterToggle<cr>
 " navigation in GitGutter
 map <silent> <up> :GitGutterPrevHunk<CR>
 map <silent> <down> :GitGutterNextHunk<CR>
+" to prevent gitgutter from fighting with textobj-ruby, do all the mapping
+" manually:
+let g:gitgutter_map_keys = 0
+nmap [c <Plug>GitGutterPrevHunk
+nmap ]c <Plug>GitGutterNextHunk
+nmap <Leader>hs <Plug>GitGutterStageHunk
+nmap <Leader>hu <Plug>GitGutterUndoHunk
+nmap <Leader>hp <Plug>GitGutterPreviewHunk
+omap ih <Plug>GitGutterTextObjectInnerPending
+omap ah <Plug>GitGutterTextObjectOuterPending
+xmap ih <Plug>GitGutterTextObjectInnerVisual
+xmap ah <Plug>GitGutterTextObjectOuterVisual
+
+" regular navigation, but putting it here next to where the up/down are defined
 map <silent> <left> :cprev<CR>
 map <silent> <right> :cnext<CR>
 " ,hs -- stage hunk
 " ,hu -- undo hunk
 
 """ text objects
-" gitgutter hunk text-objects are explicitly unmapped in after/gitgutter.vim so
-" they don't conflict with vim-textobj-ruby.
+" set a different map (# instead of c) for comments to allow textobj-ruby's
+" class object to work.
 let g:textobj_comment_no_default_key_mappings=1
-xmap a' <Plug>(textobj-comment-a)
-omap a' <Plug>(textobj-comment-a)
-xmap i' <Plug>(textobj-comment-i)
-omap i' <Plug>(textobj-comment-i)
-xmap A' <Plug>(textobj-comment-big-a)
-omap A' <Plug>(textobj-comment-big-a)
+xmap a# <Plug>(textobj-comment-a)
+omap a# <Plug>(textobj-comment-a)
+xmap i# <Plug>(textobj-comment-i)
+omap i# <Plug>(textobj-comment-i)
+xmap A# <Plug>(textobj-comment-big-a)
+omap A# <Plug>(textobj-comment-big-a)
 
 """ fugitive
 " map <leader>gd :Gvdiff<CR>:wincmd p<CR>
