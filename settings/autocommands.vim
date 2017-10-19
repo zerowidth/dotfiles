@@ -10,6 +10,8 @@ au FileType clojure RainbowParenthesesLoadRound
 au FileType clojure RainbowParenthesesLoadSquare
 au FileType clojure RainbowParenthesesLoadChevrons
 
+au BufNewFile,BufRead */ssh/config setf sshconfig
+
 " auto-save everything when vim loses focus
 au FocusLost * silent! wa
 
