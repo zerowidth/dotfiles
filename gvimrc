@@ -7,18 +7,18 @@ if has("gui_macvim")
   " unmap cmd-z for gundo to use
   macmenu Edit.Undo<Tab>u key=<nop>
 
-  " size the window so it's reasonable on a 11" mba
-  " 156 is 120 columns plus 32 for NERDTree plus gutter
-  " set columns=156
-  " set lines=47
-  " set transparency=5
-  " let hostname=split(hostname(),'\.')[0]
-  set macligatures
-  set guifont=Fira\ Code:h14,Menlo:h14
+  " size for main external displays
+  set columns=147
+  set lines=58
+  " set macligatures
+  set guifont=Fira\ Code\ Retina:h14,Menlo:h14
 
   " e - graphical tabs
   " c - use console dialogs instead of graphical windows
   " g - set inactive menu items grey
   " everything else disabled
   set guioptions=ecg
+
+  " always show tabline for more predictable window sizes
+  set showtabline=2
 end

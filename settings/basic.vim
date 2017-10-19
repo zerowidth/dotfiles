@@ -22,7 +22,6 @@ set sidescroll=1    " and one to the left or right
 set nowrap " don't wrap lines
 
 set list " show invisible characters
-" set listchars=tab:➤\ ,trail:⋅,nbsp:⋅,extends:»,precedes:«
 set listchars=tab:⋅\ ,trail:⋅,nbsp:⋅,extends:»,precedes:«
 
 set number " show line numbers
@@ -48,8 +47,17 @@ set laststatus=2 " always show a status line
 
 """ set statusline= " set in statusline.vim
 
-set winheight=10   " current window always has a nice size
-set winminheight=3 " but the other windows aren't *too* small
+set winminwidth=20
+set winwidth=87 " include gitgutter &c
+
+" winheight=1 by default, so set it larger so minheight can be set.
+" Setting it to a large value first confuses winminheight.
+set winheight=10
+set winminheight=3
+set winheight=999
+
+set lines=999 " open with max height
+set columns=135 " left two thirds of main screen
 
 set hidden " hide buffers when not displayed (vs. unloading them)
 
@@ -129,3 +137,7 @@ set lazyredraw
 
 " old regex engine so ruby is fast
 set regexpengine=1
+
+""" new options from vim 8
+set breakindent
+set termguicolors
