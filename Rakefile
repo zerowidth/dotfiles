@@ -38,6 +38,9 @@ plugin "atelier-colorscheme", "https://github.com/atelierbram/vim-colors_atelier
 
 plugin "show-trailing-whitespace", "https://github.com/vim-scripts/ShowTrailingWhitespace"
 
+# paste with indent
+plugin "pasta", "git://github.com/sickill/vim-pasta.git"
+
 # code commenting
 plugin "nerdcommenter", "https://github.com/scrooloose/nerdcommenter.git"
 
