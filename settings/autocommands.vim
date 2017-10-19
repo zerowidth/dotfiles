@@ -3,6 +3,7 @@ augroup vimfiles
 
 " disable colorcolumn in quickfix window
 au FileType qf set cc=
+au BufEnter * if (&ft == "qf") | resize 10 | endif
 
 au FileType clojure RainbowParenthesesActivate
 au FileType clojure RainbowParenthesesLoadRound
