@@ -35,7 +35,6 @@ let g:airline_theme = "tomorrow"
 
 
 """ NERDTree
-
 " auto-change CWD when changing tree root
 let NERDTreeChDirMode=2
 command -n=? -complete=dir NT NERDTreeToggle <args>
@@ -54,7 +53,6 @@ endif
 
 
 """ NERDCommenter
-
 " include space in comments
 let g:NERDSpaceDelims = 1
 let g:NERDRemoveExtraSpaces = 1
@@ -134,34 +132,6 @@ let g:surround_45 = "<% \r %>"  " -
 let g:surround_61 = "<%= \r %>" " =
 
 
-""" vimclojure
-let vimclojure#HighlightBuiltins=1
-let vimclojure#ParenRainbow=1
-let vimclojure#WantNailgun=1
-let vimclojure#SplitPos="bottom"
-let vimclojure#SplitSize=10
-
-
-""" vim-clojure-static
-let g:clojure_align_multiline_strings=1
-
-
-""" rainbow-parentheses
-" mimic vimclojure's rainbow settinsg
-let g:rbpt_colorpairs = [
-    \ ['yellow',  'orange1'],
-    \ ['green',   'yellow1'],
-    \ ['cyan',    'greenyellow'],
-    \ ['magenta', 'green1'],
-    \ ['red',     'springgreen1'],
-    \ ['yellow',  'cyan1'],
-    \ ['green',   'slateblue1'],
-    \ ['cyan',    'magenta1'],
-    \ ['magenta', 'purple1'],
-    \ ]
-let g:rbpt_max = 9
-
-
 """ Ctrl-P
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
@@ -202,8 +172,10 @@ let g:ctrlp_tjump_only_silent = 1 " jump immediately if only one tag
 nnoremap <c-]> :CtrlPtjump<cr>
 vnoremap <c-]> :CtrlPtjumpVisual<cr>
 
+
 """ gundo
 map <D-z> :GundoToggle<CR>
+
 
 """ gist
 " post gists privately by default
@@ -235,6 +207,7 @@ let g:html_font="Fira Code"
 
 """ switch.vim
 nnoremap - :Switch<cr>
+
 
 """ tabularize
 vmap <leader>, :Tabularize /=
@@ -310,26 +283,3 @@ let g:go_autodetect_gopath = 1
 let g:go_auto_type_info = 1
 " snakecase instead of camelcase by default
 let g:go_addtags_transform = "snakecase"
-
-
-""" tagbar
-" let g:tagbar_type_markdown = {
-"     \ 'ctagstype': 'markdown',
-"     \ 'ctagsbin' : 'markdown2ctags.py',
-"     \ 'ctagsargs' : '-f - --sort=yes',
-"     \ 'kinds' : [
-"         \ 's:sections',
-"         \ 'i:images'
-"     \ ],
-"     \ 'sro' : '|',
-"     \ 'kind2scope' : {
-"         \ 's' : 'section',
-"     \ },
-"     \ 'sort': 0,
-" \ }
-
-" let g:tagbar_width=50
-" let g:tagbar_zoomwidth=0
-
-" fj means "jump to window when opening, jump to window if already open
-map <leader>tb :TagbarOpen fj<CR>
