@@ -183,6 +183,7 @@ plugin "neco-ghc", "https://github.com/ujihisa/neco-ghc.git"
 # git support
 plugin "git", "https://github.com/tpope/vim-git.git"
 plugin "fugitive", "https://github.com/tpope/vim-fugitive.git"
+plugin "rhubarb", "https://github.com/tpope/vim-rhubarb.git"
 plugin "git-gutter", "https://github.com/airblade/vim-gitgutter.git"
 
 # for using syntax-highlighted text in presentations
