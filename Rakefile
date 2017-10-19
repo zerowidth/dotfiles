@@ -157,6 +157,11 @@ plugin "go", "https://github.com/fatih/vim-go"
 
 plugin "rust", "https://github.com/wting/rust.vim"
 
+plugin "elixir", "https://github.com/elixir-lang/vim-elixir"
+plugin "erlang-runtime", "https://github.com/vim-erlang/vim-erlang-runtime"
+plugin "erlang-compiler", "https://github.com/vim-erlang/vim-erlang-compiler"
+plugin "erlang-omnicomplete", "https://github.com/vim-erlang/vim-erlang-omnicomplete"
+
 # auto-expand html
 plugin "emmet", "https://github.com/mattn/emmet-vim"
 
