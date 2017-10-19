@@ -303,23 +303,23 @@ let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', '
 let g:go_disable_autoinstall = 1
 
 """ tagbar
-let g:tagbar_type_markdown = {
-    \ 'ctagstype': 'markdown',
-    \ 'ctagsbin' : 'markdown2ctags.py',
-    \ 'ctagsargs' : '-f - --sort=yes',
-    \ 'kinds' : [
-        \ 's:sections',
-        \ 'i:images'
-    \ ],
-    \ 'sro' : '|',
-    \ 'kind2scope' : {
-        \ 's' : 'section',
-    \ },
-    \ 'sort': 0,
-\ }
+" let g:tagbar_type_markdown = {
+"     \ 'ctagstype': 'markdown',
+"     \ 'ctagsbin' : 'markdown2ctags.py',
+"     \ 'ctagsargs' : '-f - --sort=yes',
+"     \ 'kinds' : [
+"         \ 's:sections',
+"         \ 'i:images'
+"     \ ],
+"     \ 'sro' : '|',
+"     \ 'kind2scope' : {
+"         \ 's' : 'section',
+"     \ },
+"     \ 'sort': 0,
+" \ }
 
-let g:tagbar_width=50
-let g:tagbar_zoomwidth=0
+" let g:tagbar_width=50
+" let g:tagbar_zoomwidth=0
 
 " fj means "jump to window when opening, jump to window if already open
 map <leader>tb :TagbarOpen fj<CR>

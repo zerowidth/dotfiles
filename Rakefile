@@ -19,7 +19,7 @@ plugin "ack", "https://github.com/mileszs/ack.vim"
 
 # ctags file management
 plugin "bgtags", "https://github.com/zerowidth/vim-bgtags"
-plugin "tagbar", "https://github.com/majutsushi/tagbar"
+# plugin "tagbar", "https://github.com/majutsushi/tagbar"
 
 # open file:line
 plugin "file-line", "https://github.com/bogado/file-line"
