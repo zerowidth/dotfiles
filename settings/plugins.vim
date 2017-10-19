@@ -247,7 +247,7 @@ let g:gitgutter_sign_modified='±'
 let g:gitgutter_sign_modified_removed='±_'
 " bufenter commands are a harsh mistress:
 let g:gitgutter_realtime = 0
-let g:gitgutter_eager = 0
+" let g:gitgutter_eager = 0
 map <silent> <leader>gg :GitGutterToggle<cr>
 " navigation in GitGutter
 map <silent> <up> :GitGutterPrevHunk<CR>
