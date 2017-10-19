@@ -15,7 +15,7 @@ plugin "ctrlp-py-matcher", "https://github.com/FelikZ/ctrlp-py-matcher"
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
 
 # search in project
-plugin "ag", "https://github.com/rking/ag.vim"
+plugin "ack", "https://github.com/mileszs/ack.vim"
 
 # ctags file management
 plugin "bgtags", "https://github.com/zerowidth/vim-bgtags"
