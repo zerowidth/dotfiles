@@ -93,8 +93,13 @@ plugin "tabular", "https://github.com/godlygeek/tabular.git"
 plugin "utilisnips", "https://github.com/SirVer/ultisnips.git"
 plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 
-# fast autocomplete
+# fast autocomplete, requires lua
 plugin "neocomplete", "https://github.com/Shougo/neocomplete.git"
+# async execution for neocomplete
+plugin "vimproc", "https://github.com/Shougo/vimproc.git", commands: [
+  "make -f make_mac.mak"
+]
+
 
 # async execution, builds neocomplcache in the background
 plugin "vimproc", "https://github.com/Shougo/vimproc.git" do
