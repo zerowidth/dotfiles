@@ -24,7 +24,7 @@ map <silent> <Leader>R :call Refresh()<CR>
 command Refresh call Refresh()
 
 """ copy filename of current file to clipboard
-map <Leader>cf :silent exe '!echo -n % \| pbcopy'<CR>:echo bufname('%')<CR>
+map <silent> <Leader>cf :exe '!echo -n % \| pbcopy'<CR>:echo bufname('%')<CR>
 
 """ edit filename from clipboard or vselect or current word
 map <silent> <Leader>ef :call EditFromClipboard()<CR>

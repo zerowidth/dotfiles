@@ -15,7 +15,7 @@ function! NumberToggle()
   endif
 endfunc
 
-nnoremap <Leader>n :silent call NumberToggle()<cr>
+nnoremap <silent> <Leader>n :call NumberToggle()<cr>
 
 " move line-wise always, for markdown in particular
 map j gj
@@ -54,8 +54,8 @@ vnoremap <C-f> "hy:/\V<C-r>=escape(@h,'/')<CR>/<CR>
 
 if has("gui_macvim")
   " cmd-l for clearing search highlights
-  nnoremap <D-l> :silent nohlsearch<CR>
-  inoremap <D-l> <C-O>:silent nohlsearch<CR>
+  nnoremap <silent> <D-l> :nohlsearch<CR>
+  inoremap <silent> <D-l> <C-O>:nohlsearch<CR>
 endif
 
 " easy command
@@ -65,10 +65,10 @@ map <Space> :
 map <leader>tn :tabnew<CR>
 
 " easy close / save / quit
-map <leader>Q :qa<CR>
-map <leader>x :x<CR>
-map <leader>w :bd<CR>
-map <leader>s :w<CR>
+map <silent> <leader>Q :qa<CR>
+map <silent> <leader>x :x<CR>
+map <silent> <leader>w :bd<CR>
+map <silent> <leader>s :w<CR>
 
 " indent and tab switching
 if has("gui_macvim")

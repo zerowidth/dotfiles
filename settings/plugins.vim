@@ -230,11 +230,11 @@ let hs_highlight_more_types = 1
 let g:haskell_indent_if = 2
 let g:haskell_indent_case = 2
 
-""" neocomplcache
+
 """ neocomplete
 let g:neocomplete#enable_cursor_hold_i=1
 let g:neocomplete#enable_at_startup = 1
-" rails.vim sets a complete func, but we don't want it:
+" rails.vim sets a complete func, but I don't want it:
 let g:neocomplete#force_overwrite_completefunc=1
 
 """ bash-support
@@ -248,12 +248,12 @@ let g:gitgutter_sign_modified_removed='±_'
 " bufenter commands are a harsh mistress:
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
-map <leader>gg :GitGutterToggle<cr>
+map <silent> <leader>gg :GitGutterToggle<cr>
 " navigation in GitGutter
-map <up> :GitGutterPrevHunk<CR>
-map <down> :GitGutterNextHunk<CR>
-map <left> :cprev<CR>
-map <right> :cnext<CR>
+map <silent> <up> :GitGutterPrevHunk<CR>
+map <silent> <down> :GitGutterNextHunk<CR>
+map <silent> <left> :cprev<CR>
+map <silent> <right> :cnext<CR>
 " ,hs -- stage hunk
 " ,hu -- undo hunk
 
