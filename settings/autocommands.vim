@@ -18,6 +18,10 @@ au FocusLost * nested wa
 " fix crontab editing
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
+" rails.vim overrides the tags settings with a setlocal. reset to the global
+" less-inclusive version, since I'm managing tags myself with bgtags.
+au User Rails set tags<
+
 " Close all open buffers on entering a window if the only buffer that's left is
 " the NERDTree buffer
 autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
