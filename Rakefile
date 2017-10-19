@@ -175,13 +175,17 @@ plugin "erlang-omnicomplete", "https://github.com/vim-erlang/vim-erlang-omnicomp
 plugin "emmet", "https://github.com/mattn/emmet-vim"
 
 # clojure:
-# plugin "paredit", "git://github.com/vim-scripts/paredit.vim.git"
-plugin "fireplace", "https://github.com/tpope/vim-fireplace"
-plugin "clojure-static", "https://github.com/guns/vim-clojure-static"
-plugin "rainbow_parentheses", "https://github.com/kien/rainbow_parentheses.vim.git"
-
-plugin "vim-sexp", "https://github.com/guns/vim-sexp"
-plugin "vim-sexp-mappings", "https://github.com/tpope/vim-sexp-mappings-for-regular-people"
+# plugin "paredit", "https://github.com/vim-scripts/paredit.vim.git"
+# plugin "slime", "https://github.com/jpalardy/vim-slime.git"
+# plugin "vimclojure", "https://bitbucket.org/kotarak/vimclojure", type: :hg do
+#   try "ln -s vim/* ."
+# end # broken, no hg support!
+# plugin "classpath", "https://github.com/tpope/vim-classpath"
+# plugin "fireplace", "https://github.com/tpope/vim-fireplace"
+# plugin "clojure-static", "https://github.com/guns/vim-clojure-static"
+# plugin "rainbow_parentheses", "https://github.com/kien/rainbow_parentheses.vim.git"
+# plugin "vim-sexp", "https://github.com/guns/vim-sexp"
+# plugin "vim-sexp-mappings", "https://github.com/tpope/vim-sexp-mappings-for-regular-people"
 
 # haskell:
 plugin "haskellmode", "https://github.com/lukerandall/haskellmode-vim.git"
