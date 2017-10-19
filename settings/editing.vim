@@ -5,7 +5,7 @@ let maplocalleader = ','
 " enable plugin filetypes and indentation
 filetype plugin indent on
 
-colorscheme base16-atelierforest
+colorscheme Atelier_ForestLight
 
 function! NumberToggle()
   if(&relativenumber == 1)

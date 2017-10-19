@@ -27,7 +27,8 @@ plugin "airline-themes", "https://github.com/vim-airline/vim-airline-themes"
 ### EDITING AND MOVING
 
 # color schemes
-plugin "base16", "https://github.com/chriskempson/base16-vim.git"
+# plugin "github-colorscheme", "https://github.com/endel/vim-github-colorscheme"
+plugin "atelier-colorscheme", "https://github.com/atelierbram/vim-colors_atelier-schemes"
 
 plugin "show-trailing-whitespace", "https://github.com/vim-scripts/ShowTrailingWhitespace"
 
