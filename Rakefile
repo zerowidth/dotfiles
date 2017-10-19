@@ -21,6 +21,9 @@ plugin "ack", "https://github.com/mileszs/ack.vim"
 plugin "bgtags", "https://github.com/zerowidth/vim-bgtags"
 plugin "tagbar", "https://github.com/majutsushi/tagbar"
 
+plugin "airline", "https://github.com/vim-airline/vim-airline"
+plugin "airline-themes", "https://github.com/vim-airline/vim-airline-themes"
+
 ### EDITING AND MOVING
 
 # color schemes

@@ -27,6 +27,12 @@ let g:bgtags_user_commands = {
     \}
 \ }
 
+""" Airline
+let g:airline_powerline_fonts = 1
+" tomorrow theme extracts its colors from the current colorscheme:
+let g:airline_theme = "tomorrow"
+
+
 """ NERDTree
 
 " auto-change CWD when changing tree root
