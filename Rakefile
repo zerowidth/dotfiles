@@ -76,7 +76,7 @@ plugin "targets", "https://github.com/wellle/targets.vim"
 plugin "unimpaired", "https://github.com/tpope/vim-unimpaired.git"
 
 # automatic syntax checking
-plugin "syntastic", "https://github.com/vim-syntastic/syntastic.git"
+plugin "ale", "https://github.com/w0rp/ale"
 
 # merge tabs together
 plugin "tabmerge", commands: [

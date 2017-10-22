@@ -305,10 +305,13 @@ let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', '
 """ vim-go
 " let g:go_disable_autoinstall = 1
 let g:go_fmt_command = "goimports"
-let g:syntastic_go_checkers = ['go', 'golint', 'govet']
 let g:go_autodetect_gopath = 1
-" let g:go_list_type = "quickfix" " for no conflicts with syntastic
-" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_auto_type_info = 1
 " snakecase instead of camelcase by default
 let g:go_addtags_transform = "snakecase"
+
+""" ale syntax checking
+let g:ale_linters = {
+\   'go': ['go build', 'gofmt', 'golint', 'govet'],
+\   'ruby': ['ruby'],
+\}

@@ -5,7 +5,9 @@ fun! s:detectAVR()
   let n = 1
   while n < 20 && n < line("$")
     if getline(n) =~ "#include.*avr/"
-      let b:syntastic_checkers = ["avrgcc"]
+      let b:ale_linters = {
+      \   'c': ['avrgcc'],
+      \}
       return
     endif
     let n = n + 1
