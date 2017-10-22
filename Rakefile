@@ -55,6 +55,8 @@ plugin "repeat", "https://github.com/tpope/vim-repeat.git"
 
 # text objects
 plugin "textobj-user", "https://github.com/kana/vim-textobj-user"
+# al / il for lines:
+plugin "textobj-line", "https://github.com/kana/vim-textobj-line"
 # a<space> / i<space> for blank lines:
 plugin "textobj-blanklines", "https://github.com/zandrmartin/vim-textobj-blanklines"
 # ac / ic for comments
