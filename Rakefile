@@ -50,9 +50,6 @@ plugin "sandwich", "https://github.com/machakann/vim-sandwich"
 # automatically add "end" to ruby, vimscript, and more
 plugin "endwise", "https://github.com/tpope/vim-endwise.git"
 
-# highlight matching html tags
-plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
-
 # '.' repetition support for plugins
 plugin "repeat", "https://github.com/tpope/vim-repeat.git"
 
@@ -124,6 +121,8 @@ plugin "blockle", "https://github.com/jgdavey/vim-blockle.git"
 
 # html/erb editing support
 plugin "ragtag", "https://github.com/tpope/vim-ragtag.git"
+# highlight matching html tags
+plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
 
 plugin "csv", "https://github.com/vim-scripts/csv.vim.git"
 plugin "html5", "https://github.com/othree/html5.vim.git"
