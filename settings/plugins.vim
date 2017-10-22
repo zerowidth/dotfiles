@@ -125,17 +125,16 @@ map <leader>vA :vnew<CR>:Ag -a '' -Q <left><left><left><left><left>
 vmap <leader>va "hy:vnew<CR>:Ag '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
 vmap <leader>vA "hy:vnew<CR>:Ag -a '<C-r>=escape(@h,ag_escape_chars)<CR>'<CR>
 
-""" surround
-" Use v or # to get a variable interpolation (inside of a string)}
-" ysiw#   Wrap the token under the cursor in #{}
-" v...s#  Wrap the selection in #{}
-let g:surround_113 = "#{\r}" " v
-let g:surround_35  = "#{\r}" " #
-
-" Select text in an ERb file with visual mode and then press s- or s=
-" Or yss- to do entire line.
-let g:surround_45 = "<% \r %>"  " -
-let g:surround_61 = "<%= \r %>" " =
+""" sandwich
+" unmap substitue command, use cl instead:
+nmap s <Nop>
+xmap s <Nop>
+let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+let g:sandwich#recipes += [
+      \ {'buns': ['#{', '}'], 'input': ['#'], 'filetype': ['ruby'], },
+      \ {'buns': ['<% ', ' %>'], 'input': ['-'], 'filetype': ['eruby'], },
+      \ {'buns': ['<%= ', ' %>'], 'input': ['='], 'filetype': ['eruby'], },
+      \ ]
 
 
 """ Ctrl-P

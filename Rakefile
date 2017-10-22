@@ -45,7 +45,7 @@ plugin "pasta", "git://github.com/sickill/vim-pasta.git"
 plugin "nerdcommenter", "https://github.com/scrooloose/nerdcommenter.git"
 
 # pairs of surroundings
-plugin "surround", "https://github.com/tpope/vim-surround.git"
+plugin "sandwich", "https://github.com/machakann/vim-sandwich"
 
 # automatically add "end" to ruby, vimscript, and more
 plugin "endwise", "https://github.com/tpope/vim-endwise.git"
