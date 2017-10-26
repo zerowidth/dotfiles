@@ -214,8 +214,9 @@ let g:html_font="Fira Code"
 nnoremap - :Switch<cr>
 
 
-""" tabularize
-vmap <leader>, :Tabularize /=
+""" easy-align
+vmap <leader>, <Plug>(EasyAlign)
+
 
 """ haskellmode
 " use ghc functionality for haskell files

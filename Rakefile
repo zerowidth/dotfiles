@@ -87,7 +87,7 @@ plugin "tabmerge", commands: [
 plugin "multiple-cursors", "https://github.com/terryma/vim-multiple-cursors"
 
 # alignment
-plugin "tabular", "https://github.com/godlygeek/tabular.git"
+plugin "easy-align", "https://github.com/junegunn/vim-easy-align"
 
 # snippets
 plugin "ultisnips", "https://github.com/SirVer/ultisnips.git"
