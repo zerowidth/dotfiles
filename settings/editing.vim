@@ -163,23 +163,3 @@ endif
 map <Leader>m :-tabmove<CR>
 map <Leader>. :+tabmove<CR>
 
-" from http://coderwall.com/p/zfqmiw
-" Fake '|' as text object
-nnoremap di\| T\|d,
-nnoremap da\| F\|d,
-nnoremap ci\| T\|c,
-nnoremap ca\| F\|c,
-nnoremap yi\| T\|y,
-nnoremap ya\| F\|y,
-nnoremap vi\| T\|v,
-nnoremap va\| F\|v,
-
-" Fake '/' as text object
-nnoremap di/ T/d,
-nnoremap da/ F/d,
-nnoremap ci/ T/c,
-nnoremap ca/ F/c,
-nnoremap yi/ T/y,
-nnoremap ya/ F/y,
-nnoremap vi/ T/v,
-nnoremap va/ F/v,
