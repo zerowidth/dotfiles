@@ -214,10 +214,6 @@ let g:html_font="Fira Code"
 nnoremap - :Switch<cr>
 
 
-""" easy-align
-vmap <leader>, <Plug>(EasyAlign)
-
-
 """ haskellmode
 " use ghc functionality for haskell files
 " au Bufenter *.hs compiler ghc
@@ -246,6 +242,18 @@ let g:neocomplete#force_overwrite_completefunc=1
 """ bash-support
 " prevent mapping conflict with ,ta &c
 let g:BASH_MapLeader  = '\'
+
+
+""" characterize
+" ga mapping used by easy-align, so change this to gc
+nmap gc <Plug>(characterize)
+
+
+""" easy-align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 
 """ vim-gitgutter
