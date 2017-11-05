@@ -233,11 +233,14 @@ let g:haskell_indent_if = 2
 let g:haskell_indent_case = 2
 
 
-""" neocomplete
-let g:neocomplete#enable_cursor_hold_i=1
-let g:neocomplete#enable_at_startup = 1
-" rails.vim sets a complete func, but I don't want it:
-let g:neocomplete#force_overwrite_completefunc=1
+""" completor
+let g:completor_gocode_binary = expand('~/go/bin/gocode')
+" use tab to select completion option
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" FIXME why doesn't this work?
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+
 
 """ bash-support
 " prevent mapping conflict with ,ta &c

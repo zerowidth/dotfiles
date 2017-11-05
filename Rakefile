@@ -93,12 +93,8 @@ plugin "easy-align", "https://github.com/junegunn/vim-easy-align"
 plugin "ultisnips", "https://github.com/SirVer/ultisnips.git"
 plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 
-# fast autocomplete, requires lua
-plugin "neocomplete", "https://github.com/Shougo/neocomplete.git"
-# async execution for neocomplete
-plugin "vimproc", "https://github.com/Shougo/vimproc.git", commands: [
-  "make -f make_mac.mak"
-]
+# autocomplete
+plugin "completor", "https://github.com/maralla/completor.vim"
 
 # <leader>ga to show character information
 plugin "characterize", "https://github.com/tpope/vim-characterize.git"
@@ -168,6 +164,10 @@ plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 # haskell-aware auto-completion
 plugin "neco-ghc", "https://github.com/ujihisa/neco-ghc.git"
 plugin "parsec", "https://github.com/keith/parsec.vim"
+# async execution used by ghc-mod
+plugin "vimproc", "https://github.com/Shougo/vimproc.git", commands: [
+  "make -f make_mac.mak"
+]
 
 ### MISC
 
