@@ -51,7 +51,6 @@ if has("gui_macvim")
   nnoremap <D-R> :NERDTree<CR><C-w>p:NERDTreeFind<CR>
 endif
 
-
 """ NERDCommenter
 " include space in comments
 let g:NERDSpaceDelims = 1
@@ -75,10 +74,8 @@ let g:ruby_heredoc_syntax_filetypes = {
         \},
   \}
 
-
 """ python-mode
 let g:pymode_folding=0
-
 
 """ unimpaired
 " bubble lines:
@@ -87,10 +84,8 @@ nmap <C-Down> ]e
 vmap <C-Up> [egv
 vmap <C-Down> ]egv
 
-
 """ vim-markdown
 let g:vim_markdown_folding_disabled=1
-
 
 """ Ag/Ack
 if executable('ag')

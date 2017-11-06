@@ -2,10 +2,10 @@
 let mapleader = ','
 let maplocalleader = ','
 
-" enable plugin filetypes and indentation
 filetype plugin indent on
-
+syntax enable
 colorscheme Atelier_ForestLight
+set background=light
 
 function! NumberToggle()
   if(&relativenumber == 1)
@@ -34,10 +34,14 @@ map <C-l> <C-w>l
 " fast zoom for a split
 map <C-_> <C-w>_
 
+" move between quickfix / location list items
+map <silent> <left> :cprev<CR>
+map <silent> <right> :cnext<CR>
+map <silent> <S-left> :lprev<CR>
+map <silent> <S-right> :lnext<CR>
 
 " vselect the last pasted text (via evilchelu)
 nnoremap gb '[V']
-
 
 if !has("gui")
   " set custom cursor -- vertical bar in insert mode (iTerm2)
@@ -45,7 +49,6 @@ if !has("gui")
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
-
 
 " strip leading tabs and trailing whitespace
 command Tr %s/\s\+$//ge | %s/\t/  /ge | nohlsearch

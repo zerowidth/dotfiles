@@ -8,8 +8,8 @@ if has("gui_macvim")
   macmenu Edit.Undo<Tab>u key=<nop>
 
   " size for main external displays
-  set columns=147
-  set lines=58
+  set columns=148
+  set lines=59
   " set macligatures
   set guifont=Fira\ Code\ Retina:h14,Menlo:h14
 

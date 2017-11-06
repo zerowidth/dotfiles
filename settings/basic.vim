@@ -29,23 +29,15 @@ set relativenumber " and relatively so
 
 """ syntax, highlighting, and spelling
 
-set background=light
-
-syntax enable " turn on syntax highlighting, allow overrides
-
 set hlsearch " highlight matches
-
-" disabled so they play nicer with ligatures
-" set cursorline " show screen line for cursor
-" set cursorcolumn " show screen line for cursor
 
 set colorcolumn=+0,120 " show line at textwidth and 120 chars
 
 """ multiple windows
 
 set laststatus=2 " always show a status line
-
-""" set statusline= " set in statusline.vim
+" set statusline= " set elsewhere
+set noshowmode " statusline plugin does this already
 
 set winminwidth=20
 set winwidth=87 " include gitgutter &c
@@ -67,17 +59,13 @@ set splitright " and to the right
 """ messages and info
 
 set showcmd " show the current command as it's typed
-
 set ruler " show ruler in lower right
-
 set visualbell t_vb= " visual bell, but disabled (no beeping!)
 
 """ editing text
 
 set textwidth=80 " a reasonable default, no?
-
 set backspace=indent,eol,start " backspace through everything in insert mode
-
 set nojoinspaces " disable two-space joins
 
 """ tabs and indenting
