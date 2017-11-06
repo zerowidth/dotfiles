@@ -19,7 +19,7 @@ au User Rails set tags<
 
 " Close all open buffers on entering a window if the only buffer that's left is
 " the NERDTree buffer
-autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree")) | q | endif
 
 " Highlight words to avoid in tech writing
 " ========================================
