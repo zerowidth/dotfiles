@@ -169,6 +169,9 @@ plugin "vimproc", "https://github.com/Shougo/vimproc.git", commands: [
   "make -f make_mac.mak"
 ]
 
+# vim:
+plugin "scriptease", "https://github.com/tpope/vim-scriptease"
+
 ### MISC
 
 # git support
