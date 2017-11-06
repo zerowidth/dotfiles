@@ -321,7 +321,6 @@ nnoremap va/ F/v,
 map <leader>gb :Gblame<CR>
 
 """ vim-markdown
-" add sql to the list
 let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', 'javascript', 'html', 'sh', 'xml', 'sql']
 
 """ vim-go
