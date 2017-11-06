@@ -324,10 +324,8 @@ map <leader>gb :Gblame<CR>
 let g:markdown_fenced_languages=['coffee', 'css', 'sass', 'ruby', 'erb=eruby', 'javascript', 'html', 'sh', 'xml', 'sql']
 
 """ vim-go
-" let g:go_disable_autoinstall = 1
 let g:go_fmt_command = "goimports"
 let g:go_autodetect_gopath = 1
-let g:go_auto_type_info = 1
 " snakecase instead of camelcase by default
 let g:go_addtags_transform = "snakecase"
 
