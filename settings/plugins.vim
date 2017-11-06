@@ -32,7 +32,7 @@ let g:bgtags_user_commands = {
 let g:airline_powerline_fonts = 1
 " tomorrow theme extracts its colors from the current colorscheme:
 let g:airline_theme = "tomorrow"
-
+let g:airline#extensions#ale#enabled = 1
 
 """ NERDTree
 " auto-change CWD when changing tree root
