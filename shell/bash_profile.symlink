@@ -1,9 +1,8 @@
-dotfiles=$(readlink $HOME/.dotfiles || echo "$HOME/.dotfiles")
-for file in $(find $dotfiles -name 'path.sh'); do
+for file in $(find -H "$HOME/.dotfiles" -name 'path.sh' -maxdepth 2); do
   source "$file"
 done
 
-for file in $(find $dotfiles -name '*.sh' | egrep -v '/bin/|(install|path)\.sh'); do
+for file in $(find -H "$HOME/.dotfiles" -name '*.sh' -maxdepth 2 | egrep -v '/bin/|(install|path)\.sh'); do
   source "$file"
 done
 
