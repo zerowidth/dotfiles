@@ -141,6 +141,7 @@ plugin "textile", "https://github.com/timcharper/textile.vim.git"
 plugin "coffee-script", "https://github.com/kchmck/vim-coffee-script.git"
 plugin "bash-support", "https://github.com/vim-scripts/bash-support.vim.git"
 plugin "json", "https://github.com/elzr/vim-json"
+plugin "dockerfile", "https://github.com/ekalinin/Dockerfile.vim.git"
 
 plugin "go", "https://github.com/fatih/vim-go"
 plugin "godoctor", "https://github.com/godoctor/godoctor.vim"
