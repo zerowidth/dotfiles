@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require "bubs"
-text = ARGV.join.upcase.split("").join(" ")
+text = ARGV.join.split("").join(" ")
 bubs = Bubs.convert(text)
 Bubs.copy bubs
 if $stdout.tty?
