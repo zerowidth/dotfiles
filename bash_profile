@@ -1,15 +1,7 @@
 # set -x
 
-# rbenv first, because boxen puts bin on the path too and that needs to go in
-# front of rbenv (so shims don't get in the way of local bin scripts in the
-# github app environment)
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-[ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
-
-unalias git # don't want hub (provided by boxen)
-
+export PATH=${PATH}:/usr/local/sbin
 export PATH=/Users/nathan/bin:/Users/nathan/scripts:$PATH
-export PATH=/Users/nathan/.cabal/bin:$PATH
 
 export EDITOR="vim"
 
@@ -17,7 +9,6 @@ export HISTCONTROL=ignoredups;
 export HISTSIZE=10000;
 shopt -s histappend; # append not rewrite history
 
-# export LESS='-iMRXFx4' -- says bleything
 # -i case ignore | -M more verbose prompting | -R raw control chars
 # -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
 export LESS='-MRXFx4'
@@ -26,92 +17,109 @@ export LESS='-MRXFx4'
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;33'
 
-# export JAVA_HOME=`/usr/libexec/java_home`
-
-export RUBYOPT="-rubygems"
-export NODE_PATH=/usr/local/lib/node_modules
-export PGDATA=/usr/local/var/postgres
-
-mkdir -p ~/go
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:/opt/boxen/homebrew/Cellar/go/1.2.1/libexec/bin
 
-test -f ~/.secrets && {
-  . ~/.secrets # api keys etc
-}
+test -f ~/.secrets && . ~/.secrets
 
 alias ls='ls -FG'
-alias mv='mv -nv'
 alias ll='ls -lah'
-alias js='NODE_NO_READLINE=1 rlwrap node'
-alias aniero="git config -l | grep remote | grep aniero | sed s/aniero/zerowidth/ | sed 's/=/ /' | xargs git config"
-alias g='grep -in'
+alias mv='mv -nv'
 alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
 alias rehash='hash -r'
+alias p4="ping 4.2.2.2"
+alias ia="open -a 'IA Writer' "
+
+function up() {
+  set -e
+  echo '--- brew ---'
+  brew update
+  brew outdated
+  brew upgrade
+  brew cu --cleanup --no-brew-update --yes
+  brew cleanup
+  echo '--- vim ---'
+  pushd ~/.vim >/dev/null
+  rake
+  popd >/dev/null
+}
+
+# because macos forgets how to use cameras sometimes
+alias kill-camera="sudo killall VDCAssistant"
+
+# quickly get to the real path (e.g. go project symlinks)
+alias cdr='cd $(pwd -P)'
+
+# format ag output for markdown
+alias mdformat='ruby -lne '\''x, y = $_.split(/\s+/,2); puts "* #{x} `#{y}`"'\'''
 
 function ss() {
+  local bundle="bundle"
+  if [ -x bin/bundle ]; then
+    bundle="bin/bundle"
+  fi
   if [[ -e script/server ]]; then
     if [[ -e Gemfile ]]; then
-      bundle exec script/server
+      $bundle exec script/server
     else
       script/server
     fi
   elif [[ -e bin/rails ]]; then
-    bundle exec rails server
+    $bundle exec rails server
   else
     echo "no server here"
     return 1
   fi
 }
 function sc() {
+  local bundle="bundle"
+  if [ -x bin/bundle ]; then
+    bundle="bin/bundle"
+  fi
   if [[ -e script/console ]]; then
-    bundle exec script/console
+    $bundle exec script/console
   elif [[ -e bin/rails ]]; then
-    bundle exec rails console
+    $bundle exec rails console
   else
     echo "no console here"
     return 1
   fi
 }
-alias sb='script/bootstrap'
+alias sb='script/bootstrap --local'
+alias sv='script/vendor'
+alias st='script/test'
+alias cst='clear; script/test'
 
-
-function wait-for-host() {
-  if [ -n "$1" ]; then
-    while ! ping -c 1 $1;
-    do
-      sleep 5
-    done
-    echo "$1 is up: `date`"
-    growlnotify -s -w -m "$1 is up: `date`"
+function bo() {
+  local bundle="bundle" paths path
+  if [ -x bin/bundle ]; then
+    bundle="bin/bundle"
+  fi
+  if ! paths=$($bundle show --paths); then
+    echo "$paths"
+    return 1
+  fi
+  if [ $# -gt 0 ]; then
+    path=$(echo "$paths" | fzf -d/ --nth=-1 --with-nth=-1 -1 -q "$@")
   else
-    echo "... specify a host, n00b"
+    path=$(echo "$paths" | fzf -d/ --nth=-1 --with-nth=-1 -1)
+  fi
+  if [ -n "$path" ]; then
+    d "$path"
+  else
+    return 1
   fi
 }
 
-
-function wait-for-service() {
-  while ! nc -z $1 $2;
-  do
-    sleep 5
-  done
-  echo "$1:$2 is up: `date`"
-  growlnotify -s -w -m "$1:$2 is up: `date`"
-}
-
-function sshr() {
-  if [ -n "$1" ]; then
-    if [ -n "$2" ]; then
-      ssh -t $1 sudo $2
-    else
-      ssh -t $1 sudo su -
-    fi
-  else
-    echo "... specify a host, n00b"
+function be() {
+  local bundle="bundle"
+  if [ -x bin/bundle ]; then
+    bundle="bin/bundle"
   fi
+  $bundle exec "$@"
 }
-complete -F _ssh sshr
+
+alias scan-ssh="dns-sd -B _ssh._tcp"
 
 function d() {
   local dir="."
@@ -124,97 +132,74 @@ function d() {
       return 1
     fi
   fi
-  pushd $dir >/dev/null
-  mvim +Refresh $dir $@
-  popd >/dev/null
+  pushd "$dir" >/dev/null || return 1
+  mvim +Refresh "$dir" "$@"
+  popd >/dev/null || return 1
 }
+
 function e() {
   if [ -n "$1" ]; then
-    file=`basename $1`
-    dir=`dirname $1`
+    local file dir
+    file=$(basename "$1")
+    dir=$(dirname "$1")
     shift
-    pushd $dir >/dev/null
-    mvim $file $@
-    popd >/dev/null
+    pushd "$dir" >/dev/null || return 1
+    mvim "$file" "$@"
+    popd >/dev/null || return 1
   else
-    mvim $@
+    mvim "$@"
   fi
 }
-
-alias gx="gitx --all"
 
 function gp() {
-  local dirty=false
-  git diff --no-ext-diff --quiet --exit-code || dirty=true
-  if [ "true" = $dirty ]; then
-    git stash
-  fi
-  git pull --stat --all --prune --progress
-  if [ "true" = $dirty ]; then
-    git stash pop
-  fi
-  git clean-merged-branches
+  git pull --stat --all --prune --progress --autostash &&
+    git clean-merged-branches
 }
 
-alias gr="growlnotify -m"
-alias grs="growlnotify -s -m"
 function gpp() {
-  local branch=`git rev-parse --abbrev-ref HEAD`
-  if [ "master" = $branch ]; then
-    echo "not on master!"
-    return -1
-  fi
-  local dirty=false
-  git diff --no-ext-diff --quiet --exit-code || dirty=true
-  if [ "true" = $dirty ]; then
-    git stash
-  fi
-  git pull --stat --all --prune --progress
-  if [ "true" = $dirty ]; then
-    git stash pop
-  fi
-  git push
+  git pull --stat --all --prune --progress --autostash &&
+    git push
 }
 
-alias bo="EDITOR='mvim +Refresh' bundle open"
-alias be="bundle exec"
-alias fs="foreman start"
-alias bumpgems="git add -u vendor/cache Gemfile*"
-
-# from @glv: no need to prefix bin/rake etc. in a bundle'd project
-BUNDLED_COMMANDS="foreman rackup rails rake rspec ruby shotgun spec cap guard compass jekyll testrb"
-## Functions
-bundler-installed()
-{
-  which bundle > /dev/null 2>&1
+# Run a command, copying the command line first and then capturing the output.
+# This is in support of the alfred github details snippet
+function details() {
+  if [ $# = 0 ]; then
+    echo -n "details <command> captures the command and its output "
+    echo "for the 'details' alfred snippet"
+    return
+  fi
+  echo "capturing output of ${*}..."
+  echo "\$ $*" | pbcopy
+  sleep 1 # let alfred pick it up
+  "$@" | pbcopy
+  echo "done."
 }
 
-within-bundled-project()
-{
-  local dir="$(pwd)"
-  while [ "$(dirname $dir)" != "/" ]; do
-    [ -f "$dir/Gemfile" ] && return
-    dir="$(dirname $dir)"
-  done
-  false
-}
-
-run-with-bundler()
-{
-  local command="$1"
-  shift
-  if [ -x "bin/$command" ]; then
-    bin/$command "$@"
-  elif bundler-installed && within-bundled-project; then
-    bundle exec $command "$@"
+function g() {
+  if [[ $# -gt 0 ]]; then
+    git "$@"
   else
-    $command "$@"
+    git status --short --branch -uall
   fi
 }
-
-for CMD in $BUNDLED_COMMANDS; do
-  alias $CMD="run-with-bundler $CMD"
-done
+alias gam="git amend"
+alias gap="git ap"
+alias gbn="git branchname"
+alias gc-="git co -"
+alias gcb="git co -b"
+alias gci="git ci"
+alias gcm="git co master"
+alias gco="git co"
+alias gcr="git cor"
+alias gls="git ls"
+alias gd="git diff"
+alias gi="git di"
+alias gdi="git di"
+# alias gs="git stash"
+# alias gss="git stash show -p"
+# alias gst="git st"
+# alias gsp="git stash pop"
 
 export MYSQL_PS1="\u@\h \d> "
 
@@ -252,39 +237,66 @@ pkill() {
 
 # fancy prompt stuff
 
-TEXT_BLACK='\[\e[0;30m\]' # Black - Regular
-TEXT_RED='\[\e[0;31m\]' # Red
-TEXT_GREEN='\[\e[0;32m\]' # Green
-TEXT_YELLOW='\[\e[0;33m\]' # Yellow
-TEXT_BLUE='\[\e[0;34m\]' # Blue
-TEXT_PURPLE='\[\e[0;35m\]' # Purple
-TEXT_CYAN='\[\e[0;36m\]' # Cyan
-TEXT_WHITE='\[\e[0;37m\]' # White
-# BLDBLK='\[\e[1;30m\]' # Black - Bold
-# BLDRED='\[\e[1;31m\]' # Red
-# BLDGRN='\[\e[1;32m\]' # Green
-# BLDYLW='\[\e[1;33m\]' # Yellow
-# BLDBLU='\[\e[1;34m\]' # Blue
-# BLDPUR='\[\e[1;35m\]' # Purple
-# BLDCYN='\[\e[1;36m\]' # Cyan
-# BLDWHT='\[\e[1;37m\]' # White
-# UNDBLK='\[\e[4;30m\]' # Black - Underline
-# UNDRED='\[\e[4;31m\]' # Red
-# UNDGRN='\[\e[4;32m\]' # Green
-# UNDYLW='\[\e[4;33m\]' # Yellow
-# UNDBLU='\[\e[4;34m\]' # Blue
-# UNDPUR='\[\e[4;35m\]' # Purple
-# UNDCYN='\[\e[4;36m\]' # Cyan
-# UNDWHT='\[\e[4;37m\]' # White
-# BAKBLK='\[\e[40m\]'   # Black - Background
-# BAKRED='\[\e[41m\]'   # Red
-# BAKGRN='\[\e[42m\]'   # Green
-# BAKYLW='\[\e[43m\]'   # Yellow
-# BAKBLU='\[\e[44m\]'   # Blue
-# BAKPUR='\[\e[45m\]'   # Purple
-# BAKCYN='\[\e[46m\]'   # Cyan
-# BAKWHT='\[\e[47m\]'   # White
-TEXT_RESET='\[\e[0m\]'    # Text Reset
+# http://misc.flogisoft.com/bash/tip_colors_and_formatting#bash_tipscolors_and_formatting_ansivt100_control_sequences
+TEXT_FOREGROUND='\e[39m'
+TEXT_BLACK='\e[30m'
+TEXT_RED='\e[31m'
+TEXT_GREEN='\e[32m'
+TEXT_YELLOW='\e[33m'
+TEXT_BLUE='\e[34m'
+TEXT_MAGENTA='\e[35m'
+TEXT_CYAN='\e[36m'
+TEXT_LIGHTGRAY='\e[37m'
+TEXT_DARKGRAY='\e[90m'
+TEXT_LIGHTRED='\e[91m'
+TEXT_LIGHTGREEN='\e[92m'
+TEXT_LIGHTYELLOW='\e[93m'
+TEXT_LIGHTBLUE='\e[94m'
+TEXT_LIGHTMAGENTA='\e[95m'
+TEXT_LIGHTCYAN='\e[96m'
+TEXT_WHITE='\e[97m'
+
+BG_BACKGROUND='\e[49m'
+BG_BLACK='\e[40m'
+BG_RED='\e[41m'
+BG_GREEN='\e[42m'
+BG_YELLOW='\e[43m'
+BG_BLUE='\e[44m'
+BG_MAGENTA='\e[45m'
+BG_CYAN='\e[46m'
+BG_LIGHTGRAY='\e[47m'
+BG_DARKGRAY='\e[100m'
+BG_LIGHTRED='\e[101m'
+BG_LIGHTGREEN='\e[102m'
+BG_LIGHTYELLOW='\e[103m'
+BG_LIGHTBLUE='\e[104m'
+BG_LIGHTMAGENTA='\e[105m'
+BG_LIGHTCYAN='\e[106m'
+BG_WHITE='\e[107m'
+
+TEXT_RESET='\e[0m'    # Text Reset
+
+debug_colors() {
+  echo -e \
+    "${TEXT_FOREGROUND}foreground" \
+    "${TEXT_BLACK}black" \
+    "${TEXT_RED}red" \
+    "${TEXT_GREEN}green" \
+    "${TEXT_YELLOW}yellow" \
+    "${TEXT_BLUE}blue" \
+    "${TEXT_MAGENTA}magenta" \
+    "${TEXT_CYAN}cyan" \
+    "${TEXT_LIGHTGRAY}lgray" \
+    "${TEXT_DARKGRAY}dkgray" \
+    "${TEXT_LIGHTRED}lred" \
+    "${TEXT_LIGHTGREEN}lgreen" \
+    "${TEXT_LIGHTYELLOW}lyellow" \
+    "${TEXT_LIGHTBLUE}lblue" \
+    "${TEXT_LIGHTMAGENTA}lmagenta" \
+    "${TEXT_LIGHTCYAN}lcyan" \
+    "${TEXT_WHITE}white" \
+    $TEXT_RESET
+}
 
 # default:
 # PS1="\h:\W \u\$ "
@@ -297,8 +309,16 @@ previous_exit_color() {
     echo -n "${TEXT_RED}" #▸${TEXT_RESET}"
   fi
 }
+previous_exit_bg() {
+  if [ $1 -eq 0 ]; then
+    echo -n "${BG_GREEN}" #▸${TEXT_RESET}"
+  else
+    #echo -n "${TEXT_RED}✘${TEXT_RESET}"
+    echo -n "${BG_RED}" #▸${TEXT_RESET}"
+  fi
+}
 
-export GIT_PS1_SHOWUPSTREAM="git verbose"
+export GIT_PS1_SHOWUPSTREAM="verbose"
 export GIT_PS1_DESCRIBE_STYLE="branch" # for (master~4) style
 export GIT_PS1_SHOWDIRTYSTATE=true
 # export GIT_PS1_SHOWSTASHSTATE=true
@@ -318,103 +338,50 @@ else
   WINDOW_NAME=''
 fi
 
-PROMPT_HOST="${TEXT_PURPLE}$(hostname | cut -c1)${TEXT_RESET}";
+PROMPT_HOST="${TEXT_PURPLE}$(hostname | cut -c1)${TEXT_RESET}:";
+PROMPT_DIRTRIM=2
+
+# powerline symbols: 
+# prompt: ▸ ❯
 
 set_prompt(){
-  status_color=$(previous_exit_color $?)
+  local last=$?
+  local status_color=$(previous_exit_color $last)
+  local status_bg=$(previous_exit_bg $last)
+  local pre="${TAB_NAME}${WINDOW_NAME}" # for the term
+  # light magenta is close to white in my term:
+  # pre+="\[${BG_GREEN}${TEXT_LIGHTMAGENTA}\]\t " # time
+  # pre+="\[${BG_BLUE}${TEXT_GREEN}\] " # separator
+  # pre+="\[${BG_BLUE}${TEXT_LIGHTMAGENTA}\]\w " # working dir
+  # pre+="\[${BG_LIGHTMAGENTA}${TEXT_BLUE}\]" # separator
+  # pre+="\[${TEXT_FOREGROUND}\]" # ready for next section
+  pre+="\[${TEXT_BLUE}\]\w\[${TEXT_RESET}\]"
+  local post=""
+  # post+="\[${TEXT_LIGHTMAGENTA}${status_bg}\]"
+  # post+="\[${BG_BACKGROUND}${status_color}\]\[${TEXT_RESET}\] "
+  post+=" \[${status_color}\]❯\[${TEXT_RESET}\] "
   history -a # append history after each command
-  __git_ps1 "${TAB_NAME}${WINDOW_NAME}${PROMPT_HOST}:${TEXT_BLUE}\w${TEXT_RESET}" " ${status_color}▸${TEXT_RESET} "
+  # to get powerline style:
+  # uncomment to remove parens, also comment out git ps1 color directive
+  __git_ps1 "$pre" "$post" # " %s "
 }
 
 PROMPT_COMMAND=set_prompt
 
-set -o vi
-
-# from http://limestone.truman.edu/~dbindner/mirror/bash_bindings.txt
-# For those who want to use Vi bindings in bash, this corrects a
-# few annoyances:
-#
-# 1) up and down arrows retrieve history lines even in insert mode
-# 2) left and right arrows work in insert mode
-# 3) Ctrl-A and Ctrl-E work how you expect if you have had to
-#    live in Emacs mode in the past.
-# 4) So does Ctrl-D.
-
-## Command-mode bindings
-# up arrow or PgUp: append to previous history line
- bind -m vi-command '"[A": "kA"'
- bind -m vi-command '"[5~": "kA"'
-# dn arrow or PgDn: append to next history line
- bind -m vi-command '"[B": "jA"'
- bind -m vi-command '"[6~": "jA"'
-# rt arrow: space then append (doesn't work right at column 1)
- bind -m vi-command '"[C": "\ a"'
-# lt arrow: insert before this char
- bind -m vi-command '"[D": vi-insertion-mode'
-# Ctrl-A or Home: insert at line beginning like in emacs mode
- bind -m vi-command 'Control-a: vi-insert-beg'
- bind -m vi-command '"[7~": vi-insert-beg'
-# Ctrl-E or End: append at line end like in emacs mode
- bind -m vi-command 'Control-e: vi-append-eol'
- bind -m vi-command '"[8~": vi-append-eol'
-# to switch to emacs editing mode
- bind -m vi-command '"ZZ": emacs-editing-mode'
-
-## Insert-mode bindings
-# Ctrl-A: insert at line start like in emacs mode
- bind -m vi-insert 'Control-a: beginning-of-line'
-# Ctrl-E: append at line end like in emacs mode
- bind -m vi-insert 'Control-e: end-of-line'
-# Ctrl-D: delete character
- bind -m vi-insert 'Control-d: delete-char'
-# Ctrl-L: clear screen
- bind -m vi-insert 'Control-l: clear-screen'
-
-## Emacs bindings
-# Meta-V: go back to vi editing
- # bind -m emacs '"\ev": vi-editing-mode'i
-
-
-# ----- load up work script / bash functions ----- #
-
-# use this for setting EMAIL, for host-specific git email addresses
-# as well as any work-specific load paths, commands, helpers, etc.
-if [[ -f ~/Dropbox/sync/dotfiles/github.sh ]]; then
-  . ~/Dropbox/sync/dotfiles/github.sh
+if [[ -f ~/.github.sh ]]; then
+  . ~/.github.sh
 fi
 
-# Not using custom git email for work, so always check:
-gitemail=`git config user.email`
-if [[ $gitemail != "nathan@zerowidth.com" ]]; then
-  echo "whoa, fix your git email: $gitemail"
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+if [ -d /usr/local/opt/git/share/git-core/contrib/diff-highlight ]; then
+  export PATH=$PATH:/usr/local/opt/git/share/git-core/contrib/diff-highlight
+else
+  echo 'diff-highlight not found'
 fi
 
-# ----- haskell/cabal helpers ----- #
-# unregister broken GHC packages. Run this a few times to resolve dependency rot in installed packages.
-# ghc-pkg-clean -f cabal/dev/packages*.conf also works.
-function ghc-pkg-clean() {
-    for p in `ghc-pkg check $* 2>&1  | grep problems | awk '{print $6}' | sed -e 's/:$//'`
-    do
-        echo unregistering $p; ghc-pkg $* unregister $p
-    done
-}
+which -s rbenv && eval "$(rbenv init -)" || echo "no rbenv"
 
-# remove all installed GHC/cabal packages, leaving ~/.cabal binaries and docs in place.
-# When all else fails, use this to get out of dependency hell and start over.
-function ghc-pkg-reset() {
-    read -p 'erasing all your user ghc and cabal packages - are you sure (y/n) ? ' ans
-    test x$ans == xy && ( \
-        echo 'erasing directories under ~/.ghc'; rm -rf `find ~/.ghc -maxdepth 1 -type d`; \
-        echo 'erasing ~/.cabal/lib'; rm -rf ~/.cabal/lib; \
-        # echo 'erasing ~/.cabal/packages'; rm -rf ~/.cabal/packages; \
-        # echo 'erasing ~/.cabal/share'; rm -rf ~/.cabal/share; \
-        )
-}
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-alias cabalupgrades="cabal list --installed  | egrep -iv '(synopsis|homepage|license)'"
-
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
-fi
-
-true # last command should have a zero exit code!
+true # last command should have a zero exit code
