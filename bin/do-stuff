@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+require "pathname"
+
+class RandomEditor
+  def initialize
+    @files = Pathname.new(".").entries.select(&:file?).map(&:to_s)
+  end
+
+  def run(iterations = 1, commit = false)
+    iterations.times do
+      if @files.empty?
+        create_new_file
+      else
+        case rand
+        when 0..0.3
+          if @files.length > 5 && rand < 0.3
+            delete_file @files.shuffle.first
+          else
+            create_new_file
+          end
+        else
+          file = @files.shuffle.first
+          if rand < 0.5
+            edit_file file
+            puts "edited #{file}"
+          else
+            insert_content file
+            puts "appended to #{file}"
+          end
+        end
+        commit_changes if commit
+      end
+    end
+  end
+
+  def commit_changes
+    `git add .`
+    puts `git status`
+    message = (1 + rand(3)).times.map { next_word }.join(" ")
+    puts `git commit -m "#{message}"`
+  end
+
+  def create_new_file
+    fn = "#{next_word}.txt"
+    insert_content fn
+    puts "created #{fn}"
+    @files << fn
+  end
+
+  def delete_file(file)
+    File.unlink(file)
+    @files.delete file
+    puts "deleted #{file}"
+  end
+
+  def edit_file(file)
+    contents = File.open(file).each_line.map(&:strip)
+    File.open(file, "w") do |f|
+      contents.each do |line|
+        words = line.split(" ").map do |word|
+          case rand
+          when 0..0.1
+            next
+          when 0.1..0.3
+            word = next_word
+          when 0.3..0.4
+            word = [word, next_word]
+          end
+          word
+        end.flatten.compact
+        f.puts words.join(" ") unless words.empty?
+      end
+    end
+  end
+
+  def insert_content(filename)
+    File.open(filename, "a") do |f|
+      count = rand(8) + 2
+      count.times do |n|
+        f.print next_word
+        if rand < 0.3 || (n + 1) == count
+          f.puts
+        elsif (n + 1) < count
+          f.print " "
+        end
+      end
+    end
+  end
+
+  def next_word
+    @words ||= File.open("/usr/share/dict/words").each_line.to_a.shuffle
+    @words.shift.strip.downcase
+  end
+
+end
+
+if ARGV.include?("-h") || ARGV.include?("--help")
+  puts <<~HELP
+    do-stuff [iterations] [--commit|-c]
+
+    do-stuff simulates git activity. --commit automatically commits changes.
+  HELP
+  exit
+end
+
+commit = ARGV.delete("-c") || ARGV.delete("--commit")
+iterations = ARGV[0] ? ARGV[0].to_i : 1
+RandomEditor.new.run(iterations, commit)
