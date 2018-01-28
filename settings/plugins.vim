@@ -15,15 +15,12 @@ let g:bgtags_user_commands = {
         \ 'git ls-files -c -o --exclude-standard ''*.rb'' ''*.rake'' | ' .
         \ 'egrep -v ''^vendor/[^i][^n][^t]'' | ' .
         \ 'parallel -X -L200 ''ripper-tags -f - {}'' >> tags',
-      \ 'git ls-files -c -o --exclude-standard ''*.go'' | ' .
-        \ 'parallel -X -L200 ''gotags -f - {}'' >> tags'
       \ ],
     \ 'default': 'ctags -R'
     \ },
   \ 'filetypes': {
     \ 'ruby': 'eval "$(rbenv init -)" && rbenv shell $(rbenv global) && ' .
         \ 'ripper-tags -f -',
-    \ 'go': 'gotags -f -',
     \ 'default': 'ctags -f-'
     \}
 \ }
