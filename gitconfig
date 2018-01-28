@@ -17,14 +17,14 @@
 	di = diff --cached
 	du = !git diff `git merge-base HEAD origin/master`
 	p = pull --stat
-  pp = !git push && git pull
+	pp = !git push && git pull
 	recent = for-each-ref --count=10 --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads/
-  cor = !git for-each-ref --count=10 --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads | fzf --reverse --nth=1 --preview 'git log --patch --color {1}...{1}~5' | awk '{print $1}' | xargs git checkout
-  lg = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n'
-  lgb = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
-  lgu = !git log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
-  lgs = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --stat
-  lgbs = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --first-parent --stat
+	cor = !git for-each-ref --count=10 --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads | fzf --reverse --nth=1 --preview 'git log --patch --color {1}...{1}~5' | awk '{print $1}' | xargs git checkout
+	lg = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n'
+	lgb = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
+	lgu = !git log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
+	lgs = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --stat
+	lgbs = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --first-parent --stat
 	au = add -u
 	f = fetch --all --prune
 	ribbon = tag --force _ribbon origin/master
@@ -45,7 +45,7 @@
 	cob = checkout -b
 	sha = !git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
-	clean-merged-branches = "!git branch --merged | grep  -v '\\*\\|master' | xargs -n 1 git branch -d"
+	clean-merged-branches = "!git branch --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
 	log-all-simple = log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
@@ -60,6 +60,11 @@
 [diff]
 	tool = opendiff
 	algorithm = patience
+	renames = copies
+	mnemonicPrefix = 1
+	compactionHeuristic = true
+	indentHeuristic = true
+	renameLimit = 3000
 [merge]
 	tool = opendiff
 	conflictstyle = diff3
@@ -102,9 +107,9 @@
 	name = Nathan Witmer
 	email = nathan@zerowidth.com
 [hub]
-protocol = https
+	protocol = https
 [github]
-	username = zerowidth
+	user = zerowidth
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
