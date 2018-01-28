@@ -1,6 +1,9 @@
 *.tmproj
 .DS_Store
 tags
+tags.new
 *.rbc
 .bundle
 ./tags
+.envrc
+.agignore

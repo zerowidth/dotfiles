@@ -1,14 +1,14 @@
 [color]
-	diff = auto
-	status = auto
-	branch = auto
-	ui = auto
+	diff = always
+	status = always
+	branch = always
+	ui = always
 [apply]
 	whitespace = fix
 [alias]
 	ci = commit -v
 	cia = commit -av
-	st = status -sb
+	st = status -sb -uall
 	co = checkout
 	dh = diff -w HEAD
 	ds = diff HEAD --stat
@@ -18,7 +18,8 @@
 	du = !git diff `git merge-base HEAD origin/master`
 	p = pull --stat
   pp = !git push && git pull
-	recent = for-each-ref --count=5 --sort=-committerdate --format='%(refname:short)' refs/heads/
+	recent = for-each-ref --count=10 --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads/
+  cor = !git for-each-ref --count=10 --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads | fzf --reverse --nth=1 --preview 'git log --patch --color {1}...{1}~5' | awk '{print $1}' | xargs git checkout
   lg = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n'
   lgb = log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
   lgu = !git log --color --graph --date=iso --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
@@ -29,7 +30,7 @@
 	ribbon = tag --force _ribbon origin/master
 	catchup = log --patch --reverse --topo-order _ribbon..origin/master
 	apply-commit = !git format-patch -1 --stdout $@ | git apply - --reject
-	amend = commit --amend
+	amend = commit --amend -v
 	ca = commit --amend -v
 	rc = rebase --continue
 	ri = rebase --interactive
@@ -37,15 +38,19 @@
 	s = stash
 	sp = stash pop
 	ap = add -p
+	an = add -N
 	lp = log -p
 	ss = stash show -p
 	ls = log -p -S
 	cob = checkout -b
-	sha = rev-parse HEAD
-	cb = clean-merged-branches
+	sha = !git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy
+	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	clean-merged-branches = "!git branch --merged | grep  -v '\\*\\|master' | xargs -n 1 git branch -d"
+	mc = diff --name-status --diff-filter=U
+	conflicts = diff --name-only --diff-filter=U
+	log-all-simple = log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
 [core]
-	excludesfile = /opt/boxen/config/git/gitignore
+	excludesfile = ~/.gitignore
 	autocrlf = input
 [branch]
 	autosetupmerge = true
@@ -76,22 +81,45 @@
 [pull]
 	rebase = true
 [push]
-	default = tracking
+	default = current
 [include]
 	path = code/gitconfig
 	path = work/gitconfig
 	path = .gitsecrets
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+[browser "gitscm"]
+	cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
+[help]
+	browser = gitscm
 [advice]
 	statusHints = false
 [rerere]
 	enabled = true
 [credential]
-	helper = /opt/boxen/bin/boxen-git-credential
+	helper = osxkeychain
 [user]
 	name = Nathan Witmer
 	email = nathan@zerowidth.com
-
 [hub]
 protocol = https
 [github]
 	username = zerowidth
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[pager]
+	; disabled diff-so-fancy and highlights for demos
+	show = diff-so-fancy | less -RF
+	diff = diff-so-fancy | less -RF
+	log = diff-highlight | less -RF
+	; log = diff-so-fancy | less -RF
+	; show = diff-highlight | less -RF
+	; diff = diff-highlight | less -RF
+[interactive]
+	diffFilter = diff-highlight
+[rebase]
+	autoStash = 1
+[fetch]
+	prune = true
