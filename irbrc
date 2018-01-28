@@ -1,7 +1,10 @@
 require "irb/completion"
+require 'irb/ext/save-history'
 IRB.conf[:AUTO_INDENT] = true
+IRB.conf[:SAVE_HISTORY] = 10000
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb-history"
 
-def t; b = Time.now; yield; Time.now-b; end
+def timed; b = Time.now; value = yield; puts Time.now-b.inspect; value; end
 
 module Enumerable
   def histogram
