@@ -130,5 +130,3 @@ set_prompt(){
 }
 
 PROMPT_COMMAND=set_prompt
-
-export MYSQL_PS1="\u@\h \d> "
