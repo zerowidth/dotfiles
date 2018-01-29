@@ -1,4 +1,4 @@
-call plug#begin('~/.dotfiles/vim/plugins')
+call plug#begin('~/.vim/plugins')
 
 """ CORE
 
