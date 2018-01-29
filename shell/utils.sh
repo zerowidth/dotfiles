@@ -14,19 +14,14 @@ alias scan-ssh="dns-sd -B _ssh._tcp"
 # because macos forgets how to use cameras sometimes
 alias kill-camera="sudo killall VDCAssistant"
 
-# update everything
+# update homebrew
 function up() {
   set -e
-  echo '--- brew ---'
   brew update
   brew outdated
   brew upgrade
   brew cu --cleanup --no-brew-update --yes
   brew cleanup
-  echo '--- vim ---'
-  pushd ~/.vim >/dev/null
-  rake
-  popd >/dev/null
 }
 
 # Run a command, copying the command line first and then capturing the output.

@@ -1,14 +1,2 @@
 let &runtimepath=expand("~/.dotfiles/vim").",".&runtimepath
-
-""" basic settings first:
-source $HOME/.dotfiles/vim/settings/basic.vim
-
-""" load plugin paths
-runtime bundle/pathogen/autoload/pathogen.vim
-call pathogen#infect()
-
-""" and now, my own settings and mappings:
-source $HOME/.dotfiles/vim/settings/editing.vim      " movement and editing
-source $HOME/.dotfiles/vim/settings/plugins.vim      " plugin settings
-source $HOME/.dotfiles/vim/settings/autocommands.vim " autocommands
-source $HOME/.dotfiles/vim/settings/misc.vim         " miscellaneous additional customizations
+runtime init.vim
