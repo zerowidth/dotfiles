@@ -15,7 +15,7 @@
 	unstage = reset HEAD --
 	untrack = rm --cached
 	di = diff --cached
-	du = !git diff `git merge-base HEAD origin/master`
+	du = !git diff origin/master..
 	p = pull --stat
 	pp = !git push && git pull
 	recent = for-each-ref --count=10 --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads/

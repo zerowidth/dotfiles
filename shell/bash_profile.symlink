@@ -1,0 +1,11 @@
+for file in $(find -H "$HOME/.dotfiles" -name 'path.sh' -maxdepth 2); do
+  source "$file"
+done
+
+for file in $(find -H "$HOME/.dotfiles" -name '*.sh' -maxdepth 2 | egrep -v '/bin/|(install|path)\.sh'); do
+  source "$file"
+done
+
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+true # last command should have a zero exit code
