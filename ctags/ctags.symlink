@@ -1,8 +1,0 @@
-# disable json tagging
---json-kinds=
-
-# disable css selectors
---css-kinds=
-
-# disable html anchors/js functions (currently broken?)
---html-kinds=
