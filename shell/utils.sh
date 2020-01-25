@@ -4,7 +4,13 @@ alias mv='mv -nv'
 alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
 alias rehash='hash -r'
 alias p4="ping 4.2.2.2"
+alias ping="prettyping"
 alias ia="open -a 'IA Writer' "
+
+alias gdiff="git diff --no-index"
+
+alias cat="bat"
+export BAT_THEME='Monokai Extended Light'
 
 # quickly get to the real path (e.g. go project symlinks)
 alias cdr='cd $(pwd -P)'
@@ -14,9 +20,19 @@ alias scan-ssh="dns-sd -B _ssh._tcp"
 # because macos forgets how to use cameras sometimes
 alias kill-camera="sudo killall VDCAssistant"
 
+# because logitech g-hub doesn't like sleep/wake
+function lghub() {
+  echo "killing lghub..."
+  ps ux | grep [l]ghub.app | awk '{print $2}' | xargs -t kill
+  echo "remaining:"
+  ps ux | grep [l]ghub.app
+  open -a /Applications/lghub.app
+}
+
+alias awake="pmset -g assertions | grep -i sleep"
+
 # update homebrew
 function up() {
-  set -e
   brew update
   brew outdated
   brew upgrade
@@ -71,7 +87,7 @@ function sc() {
     return 1
   fi
 }
-alias sb='script/bootstrap --local'
+alias sb='script/bootstrap'
 alias sv='script/vendor'
 alias st='script/test'
 alias cst='clear; script/test'
@@ -87,4 +103,13 @@ p() {
   else
     ps -O ppid -U $USER
   fi
+}
+
+function docker-cleanup {
+  set -x
+  docker ps -aq --no-trunc -f status=exited | xargs docker rm
+  docker ps -aq --no-trunc -f status=created | xargs docker rm
+  docker images -q --filter dangling=true | xargs docker rmi
+  docker network prune -f
+  set +x
 }

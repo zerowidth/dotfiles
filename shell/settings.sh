@@ -10,3 +10,5 @@ export LESS='-MRXFx4'
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;33'
 
+# for programs like ttyrec, which expect SHELL to match
+export SHELL=/usr/local/bin/bash

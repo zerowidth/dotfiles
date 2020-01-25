@@ -6,6 +6,7 @@ brew "bash-completion"
 brew "git"
 brew "hub"
 brew "diff-so-fancy"
+brew "git-delta"
 
 brew "jq"
 brew "mtr"
@@ -20,11 +21,15 @@ brew "rbenv"
 brew "ruby-build"
 brew "nodenv"
 
-brew "heroku-toolbelt"
+brew "flow" # for javascript
+
+brew "heroku"
+
+tap "shopify/shopify"
+brew "toxiproxy"
 
 brew "lua"
-brew "luajit"
-brew "macvim", args: ["with-lua", "with-luajit", "override-system-vim"]
+brew "macvim"
 
 tap "universal-ctags/universal-ctags"
 brew "universal-ctags/universal-ctags/universal-ctags", args: ['HEAD']
@@ -35,9 +40,18 @@ brew "go"
 brew "dep"
 
 cask "kap" # screen capturing
+cask "wireshark"
+
+brew "httpie"
 
 brew "kubectl"
 brew "stern" # for tailing logs
+
+brew "kafka"
+brew "kafkacat"
+
+brew "bat" # cat replacement
+brew "prettyping"
 
 # for flashing firmware for ergodox
 tap "PX4/homebrew-px4"
@@ -47,10 +61,13 @@ brew "python3"
 brew "cmake"
 
 # for other stuff
-tap "caskroom/homebrew-fonts"
+tap "homebrew/cask-fonts"
 cask "font-fira-code"
+cask "font-ia-writer-duo"
+cask "font-ia-writer-quattro"
 
 cask "docker"
+brew "coreutils" # for timeout, for docker-compose builds with puppet
 
 cask "qlmarkdown" # markdown quicklook
 
@@ -61,7 +78,16 @@ cask "lunchy"
 # for AVR development:
 # cask "crosspack-avr"
 tap "osx-cross/avr"
-brew "avr-libc"
+# brew "avr-libc"
+brew "avrdude"
+
+# for qmk firmware:
+tap "osx-cross/avr"
+tap "PX4/homebrew-px4"
+brew "avr-gcc@7"
+brew "dfu-programmer"
+brew "dfu-util"
+brew "gcc-arm-none-eabi"
 brew "avrdude"
 
 cask "hammerspoon"
