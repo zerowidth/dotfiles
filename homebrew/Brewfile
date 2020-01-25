@@ -18,6 +18,7 @@ brew "rename"
 
 brew "rbenv"
 brew "ruby-build"
+brew "nodenv"
 
 brew "heroku-toolbelt"
 
