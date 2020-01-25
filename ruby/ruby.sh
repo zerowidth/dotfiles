@@ -15,7 +15,7 @@ function bo() {
     path=$(echo "$paths" | fzf -d/ --nth=-1 --with-nth=-1 -1)
   fi
   if [ -n "$path" ]; then
-    d "$path"
+    e "$path"
   else
     return 1
   fi
