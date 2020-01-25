@@ -10,8 +10,8 @@ if has("gui_macvim")
   " size for main external displays
   set columns=148
   set lines=59
-  " set macligatures
-  set guifont=Fira\ Code\ Retina:h14,Menlo:h14
+  set macligatures
+  set guifont=Iosevka:h14
 
   " e - graphical tabs
   " c - use console dialogs instead of graphical windows
@@ -21,4 +21,7 @@ if has("gui_macvim")
 
   " always show tabline for more predictable window sizes
   set showtabline=2
+
+  " for opt bindings (move plugin)
+  set macmeta
 end

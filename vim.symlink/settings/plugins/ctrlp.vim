@@ -1,8 +1,12 @@
-let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
 let g:ctrlp_switch_buffer = 'ETVH' " jump to buffers where they're already open
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 0 " no limits
+
+" replace the full-screen initial nerd-tree, but not others
+" https://github.com/kien/ctrlp.vim/issues/78
+let g:ctrlp_dont_split = 'NERD_tree_1'
 
 " use a different matcher
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }

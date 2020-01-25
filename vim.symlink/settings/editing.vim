@@ -2,6 +2,12 @@
 let mapleader = ','
 let maplocalleader = ','
 
+" https://github.com/SirVer/ultisnips/issues/996
+" fix python3 imports
+if has('python3')
+  silent! python3 1
+endif
+
 filetype plugin indent on
 syntax enable
 colorscheme Atelier_ForestLight

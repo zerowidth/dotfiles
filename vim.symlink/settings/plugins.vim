@@ -39,6 +39,9 @@ Plug 'vim-scripts/ShowTrailingWhitespace'
 " paste with indent
 Plug 'sickill/vim-pasta'
 
+" move lines
+Plug 'matze/vim-move'
+
 " code commenting
 Plug 'scrooloose/nerdcommenter'
 
@@ -84,6 +87,9 @@ Plug 'terryma/vim-multiple-cursors'
 " alignment
 Plug 'junegunn/vim-easy-align'
 
+" register previews
+Plug 'junegunn/vim-peekaboo'
+
 " snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -118,14 +124,22 @@ Plug 'tpope/vim-ragtag'
 Plug 'gregsexton/MatchTag'
 
 Plug 'vim-scripts/csv.vim'
+
 Plug 'othree/html5.vim'
 Plug 'othree/html5-syntax.vim'
+
 Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx' " react syntax extension for JS
+Plug 'prettier/vim-prettier' " formatting for JS
+Plug 'flowtype/vim-flow' " typechecking for javascript
+Plug 'mmalecki/vim-node.js'
+
 Plug 'tpope/vim-liquid'
 Plug 'tpope/vim-markdown'
 " Plug 'PProvost/vim-markdown-jekyll'
-Plug 'mmalecki/vim-node.js'
+
 Plug 'ajf/puppet-vim'
+
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-bundler'
 Plug 'Keithbsmiley/rspec.vim'

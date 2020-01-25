@@ -6,6 +6,11 @@ snippet spi "STDERR.puts with inspect"
 STDERR.puts "$1: #{($1).inspect}"
 endsnippet
 
+snippet spp "STDERR.puts with pretty inspect"
+${1:require "pp"}
+STDERR.puts "$2: #{($2).pretty_inspect}"
+endsnippet
+
 snippet spl "STDERR.puts with line"
 STDERR.puts "\n"+"${1:-}"*10+" vvvvv "+"$1"*10+" #{__FILE__}:#{__LINE__}"
 ${2:STDERR.puts ${3:"$4"}}
@@ -13,12 +18,12 @@ STDERR.puts "$1"*10+" ^^^^^ "+"$1"*10
 endsnippet
 
 snippet spc "STDERR.puts caller"
-caller.grep(%r(/app|/lib)).each { |l| STDERR.puts l.prepend("  ") }
+caller.${1:grep(%r(/app|/lib)).}each { |l| STDERR.puts l.prepend("  ") }
 endsnippet
 
 snippet spe "STDERR.puts error"
-STDERR.puts e
-e.backtrace.grep(%r(/app|/lib)).each { |l| STDERR.puts l.prepend("  ") }
+STDERR.puts ${1:e}
+$1.backtrace.${2:grep(%r(/app|/lib)).}each { |l| STDERR.puts l.prepend("  ") }
 endsnippet
 
 snippet spd "STDERR.puts debugging"
@@ -57,4 +62,8 @@ snippet bl "Wrap expression in a block"
 ${VISUAL} $1
 $0
 end
+endsnippet
+
+snippet hasha "Hash with array default"
+Hash.new { |h, k| h[k] = [] }
 endsnippet

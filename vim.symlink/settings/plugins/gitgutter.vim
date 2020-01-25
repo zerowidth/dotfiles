@@ -16,11 +16,11 @@ map <silent> <down> :GitGutterNextHunk<CR>
 " to prevent gitgutter from fighting with textobj-ruby, do all the mapping
 " manually:
 let g:gitgutter_map_keys = 0
-nmap [c <Plug>GitGutterPrevHunk
-nmap ]c <Plug>GitGutterNextHunk
-nmap <Leader>hs <Plug>GitGutterStageHunk
-nmap <Leader>hu <Plug>GitGutterUndoHunk
-nmap <Leader>hp <Plug>GitGutterPreviewHunk
+nmap [c <Plug>(GitGutterPrevHunk)
+nmap ]c <Plug>(GitGutterNextHunk)
+nmap <Leader>hs <Plug>(GitGutterStageHunk)
+nmap <Leader>hu <Plug>(GitGutterUndoHunk)
+nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
 omap ih <Plug>GitGutterTextObjectInnerPending
 omap ah <Plug>GitGutterTextObjectOuterPending
 xmap ih <Plug>GitGutterTextObjectInnerVisual

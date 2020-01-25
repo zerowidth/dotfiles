@@ -16,8 +16,6 @@ alias gd="git diff"
 alias gi="git di"
 alias gdi="git di"
 
-alias gdiff="git diff --no-index"
-
 function gp() {
   git pull --stat --all --prune --progress --autostash &&
     git clean-merged-branches
