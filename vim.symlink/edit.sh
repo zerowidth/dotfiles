@@ -5,19 +5,12 @@ function e() {
     if [ -d "$1" ]; then
       local dir
       dir=${1%/} # strip trailing slash so vim stays happy
-      shift
-
-      pushd "$dir" >/dev/null || return 1
-      mvim +Refresh "$dir" "$@"
-      popd >/dev/null || return 1
+      $SHELL -l -c "cd \"$dir\" && mvim +Refresh ."
     else
       local file dir
       file=$(basename "$1")
       dir=$(dirname "$1")
-      shift
-      pushd "$dir" >/dev/null || return 1
-      mvim "$file" "$@"
-      popd >/dev/null || return 1
+      $SHELL -l -c "cd \"$dir\" && mvim +Refresh \"$file\""
     fi
   else
     mvim "$@"
