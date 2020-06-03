@@ -125,7 +125,8 @@ install_self
 install_dotfiles
 
 # find the installers and run them iteratively
-for installer in $(find . -name "*install.sh" -maxdepth 2); do
+for installer in $(find . -name "install.sh" -mindepth 2 -maxdepth 2); do
+  echo "-> installing $(basename $(dirname $installer))"
   sh -c "${installer}"
 done
 
