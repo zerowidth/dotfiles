@@ -37,9 +37,6 @@
   lgu = !git log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
 	au = add -u
 	f = fetch --all --prune
-	ribbon = tag --force _ribbon origin/master
-	catchup = log --patch --reverse --topo-order _ribbon..origin/master
-	apply-commit = !git format-patch -1 --stdout $@ | git apply - --reject
 	amend = commit --amend -v
 	rc = rebase --continue
 	ri = rebase --interactive --rebase-merges

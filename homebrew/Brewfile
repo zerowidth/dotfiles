@@ -1,7 +1,13 @@
 tap "buo/cask-upgrade"
 
+brew "mas"
+
 brew "bash"
 brew "bash-completion"
+
+brew "zsh"
+# brew "antigen" # zsh plugins
+brew "starship"
 
 brew "git"
 brew "hub"
@@ -19,14 +25,17 @@ brew "rename"
 
 brew "rbenv"
 brew "ruby-build"
+brew "node"
 brew "nodenv"
+
+brew "rustup-init"
 
 brew "flow" # for javascript
 
 brew "heroku"
 
-tap "shopify/shopify"
-brew "toxiproxy"
+# tap "shopify/shopify"
+# brew "toxiproxy"
 
 brew "lua"
 brew "macvim"
@@ -47,9 +56,13 @@ brew "httpie"
 brew "kubectl"
 brew "stern" # for tailing logs
 
+cask "homebrew/cask-versions/adoptopenjdk8" # kafka prerequisite
 brew "kafka"
 brew "kafkacat"
+brew "zookeeper"
 
+# experimental shell improvements
+brew "exa" # ls replacement
 brew "bat" # cat replacement
 brew "prettyping"
 
@@ -65,6 +78,8 @@ tap "homebrew/cask-fonts"
 cask "font-fira-code"
 cask "font-ia-writer-duo"
 cask "font-ia-writer-quattro"
+cask "font-iosevka"
+# cask "font-iosevka-slab"
 
 cask "docker"
 brew "coreutils" # for timeout, for docker-compose builds with puppet
@@ -78,19 +93,17 @@ cask "lunchy"
 # for AVR development:
 # cask "crosspack-avr"
 tap "osx-cross/avr"
-# brew "avr-libc"
+# brew "avr-libc" # doesn't exist anymore?
 brew "avrdude"
 
 # for qmk firmware:
-tap "osx-cross/avr"
-tap "PX4/homebrew-px4"
-brew "avr-gcc@7"
-brew "dfu-programmer"
-brew "dfu-util"
-brew "gcc-arm-none-eabi"
-brew "avrdude"
-
-cask "hammerspoon"
+# tap "osx-cross/avr"
+# tap "PX4/homebrew-px4"
+# brew "avr-gcc@7"
+# brew "dfu-programmer"
+# brew "dfu-util"
+# brew "gcc-arm-none-eabi"
+# brew "avrdude"
 
 cask "graphiql"
 
