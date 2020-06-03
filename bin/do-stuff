@@ -28,16 +28,21 @@ class RandomEditor
             puts "appended to #{file}"
           end
         end
-        commit_changes if commit
+        if commit
+          commit_changes
+          sleep 0.5
+        end
       end
     end
   end
 
   def commit_changes
+    puts "-" * 40
     `git add .`
     puts `git status`
     message = (1 + rand(3)).times.map { next_word }.join(" ")
     puts `git commit -m "#{message}"`
+    puts
   end
 
   def create_new_file
