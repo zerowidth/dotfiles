@@ -114,9 +114,16 @@ install_self() {
 
 install_dotfiles () {
   local overwrite_all=false backup_all=false skip_all=false
-  for src in $(find -H ~/.dotfiles -maxdepth 2 -name '*.symlink' -not -path '*.git*')
+  for src in $(find -H ~/.dotfiles -maxdepth 2 -name '*.symlink' -not -name '*.config.symlink' -not -path '*.git*')
   do
     dst="$HOME/.$(basename "${src%.*}")"
+    link_file "$src" "$dst"
+  done
+
+  mkdir -p "$HOME/.config"
+  for src in $(find -H ~/.dotfiles -maxdepth 2 -name '*.config.symlink' -not -path '*.git*')
+  do
+    dst="$HOME/.config/$(basename "${src%.config.*}")"
     link_file "$src" "$dst"
   done
 }

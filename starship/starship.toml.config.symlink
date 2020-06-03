@@ -1,0 +1,64 @@
+# Don't print a new line at the start of the prompt
+# precmd does it instead
+add_newline = false
+
+[character]
+# symbol = "❯"
+style_success = "green"
+
+[cmd_duration]
+min_time = 2_000
+# show_milliseconds = true
+# prefix = " "
+style = "yellow"
+
+[line_break]
+# disabled = true
+
+[directory]
+truncate_to_repo = false
+fish_style_pwd_dir_length = 1
+style = "blue"
+
+[ruby]
+symbol = "ruby/"
+style = "red"
+# disabled = true
+
+[golang]
+symbol = "go/"
+style = "blue"
+# disabled = true
+
+[python]
+symbol = "python/"
+style = "green"
+
+[java]
+symbol = "java/"
+style = "yellow"
+
+[php]
+symbol = "php/"
+
+[git_branch]
+symbol = ""
+style = "green"
+
+[git_status]
+# disabled = true
+style = ""
+stashed.value = ""
+staged.style = "green"
+modified.value = "*"
+modified.style = "red"
+renamed.style = "blue"
+deleted.style = "red"
+deleted.value = "x"
+untracked.style = "purple"
+prefix = "("
+suffix = ") "
+
+[git_state]
+# disabled = true
+style = "yellow"
