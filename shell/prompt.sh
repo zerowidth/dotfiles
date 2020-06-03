@@ -1,5 +1,7 @@
 # fancy prompt stuff
 
+test -z "$ZSH_VERSION" ||  return # bash-only
+
 # http://misc.flogisoft.com/bash/tip_colors_and_formatting#bash_tipscolors_and_formatting_ansivt100_control_sequences
 TEXT_FOREGROUND='\e[39m'
 TEXT_BLACK='\e[30m'

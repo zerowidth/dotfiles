@@ -1,3 +1,5 @@
+test -z "$ZSH_VERSION" ||  return # bash-only
+
 export HISTCONTROL=ignoredups;
 export HISTSIZE=10000;
 shopt -s histappend; # append not rewrite history

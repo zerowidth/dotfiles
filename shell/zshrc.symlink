@@ -61,7 +61,11 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 autoload -Uz compinit
 compinit
 
-# this includes the iterm2 shell integration
+for file in $(find -H "$HOME/.dotfiles" -name '*.sh' -maxdepth 2 | egrep -v '/bin/|(install|path)\.sh'); do
+  source "$file"
+done
+
+# this includes the iterm2 shell integration:
 for file in $(find -H "$HOME/.dotfiles" -name '*.zsh' -maxdepth 2); do
   source "$file"
 done
