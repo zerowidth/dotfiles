@@ -1,0 +1,7 @@
+export PATH=${PATH}:/usr/local/sbin
+export PATH=$HOME/.dotfiles/bin:$PATH
+
+for file in $(find -H "$HOME/.dotfiles" -name 'path.sh' -maxdepth 2); do
+  source "$file"
+done
+

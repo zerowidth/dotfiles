@@ -1,0 +1,67 @@
+# from homebrew, for completions
+if type brew &>/dev/null; then
+  FPATH=/usr/local/share/zsh/site-functions:$FPATH
+fi
+
+# plugins
+# source /usr/local/share/antigen/antigen.zsh
+# antigen bundle sindresorhus/pretty-time-zsh
+# antigen bundle mafredri/zsh-async
+# antigen bundle sindresorhus/pure
+# antigen apply
+
+# zsh settings
+setopt pushd_ignore_dups # don't push the same directory twice
+setopt extendedglob # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc.
+setopt nomatch # If a pattern for filename generation has no matches, print an error,
+setopt notify # Report the status of background jobs immediately
+unsetopt autocd # don't want
+
+HISTFILE=~/.histfile
+HISTSIZE=5000
+SAVEHIST=50000
+setopt append_history # append, not rewrite
+setopt extended_history # timestamps too
+setopt hist_ignore_dups # ignore immediate duplicates
+setopt hist_ignore_all_dups # ignore all of 'em, too
+
+# these three are mutually exclusive:
+# setopt inc_append_history # append immediately
+setopt inc_append_history_time # append after elapsed
+# setopt share_history # share history, read immediately
+
+# -i case ignore | -M more verbose prompting | -R raw control chars
+# -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
+export LESS='-MRXFx4'
+
+# colorized grep
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;33'
+
+# edit like vim, mostly
+bindkey -v
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey -M viins '^Y' yank
+bindkey -M viins '^U' kill-whole-line
+
+# prompt settings
+function set_window_title(){
+  echo -ne "\033]1;${PWD/$HOME/~}\007" # tab
+  echo -ne "\033]2;${USER}@${HOST%%.*}:${PWD/$HOME/~}\007" # window
+}
+precmd_functions+=(set_window_title)
+
+eval "$(starship init zsh)"
+
+# completions
+zstyle :compinstall filename '/Users/nathan/.zshrc'
+# case-insensitive if there's no match
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+autoload -Uz compinit
+compinit
+
+# this includes the iterm2 shell integration
+for file in $(find -H "$HOME/.dotfiles" -name '*.zsh' -maxdepth 2); do
+  source "$file"
+done
