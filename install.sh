@@ -137,5 +137,11 @@ for installer in $(find . -name "install.sh" -mindepth 2 -maxdepth 2); do
   sh -c "${installer}"
 done
 
-echo ''
+# for installers that have prerequisites
+for installer in $(find . -name "postinstall.sh" -maxdepth 2); do
+  echo "-> installing $(basename $(dirname $installer))"
+  sh -c "${installer}"
+done
+
+echo
 echo '  Done!'
