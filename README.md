@@ -17,6 +17,7 @@ Both shell and vim settings are split out by topic.
 * `<topic>/path.sh` is executed first to allow `$PATH` to be modified.
 * `<topic>/*.sh` is run when bash starts, but only after all `path.sh` files.
 * `<name>.symlink` and `<topic>/<name>.symlink` are symlinked to `~/.<name>` during installation.
+* `<name>.config.symlink` are symlinked into `~/.config/` during installation.
 
 ## Thanks
 
