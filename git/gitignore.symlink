@@ -4,6 +4,8 @@ tags
 tags.new
 *.rbc
 .bundle
+ruby/bundle.symlink/cache
 ./tags
 .envrc
 .agignore
+__pycache__

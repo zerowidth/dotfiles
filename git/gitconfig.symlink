@@ -11,8 +11,10 @@
 [alias]
 	ci = commit -v
 	cia = commit -av
+  ca = commit --amend -v
 	st = status -sb -uall
 	co = checkout
+  cob = checkout -b
 	nb = checkout -b
   cb = !git branches | fzf --query="$1" --reverse --with-nth=2.. --nth=1 --preview 'git log --color {1}...{1}~10' | awk '{print $2}' | xargs git checkout
 	dh = diff -w HEAD
@@ -20,39 +22,41 @@
 	unstage = reset HEAD --
 	untrack = rm --cached
 	di = diff --cached
+  dis = diff --cached --stat
 	du = !git diff origin/master..
 	p = pull --stat
 	pp = !git push && git pull
 	recent = for-each-ref --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads
 	cor = !git recent | fzf --reverse --nth=1 --preview 'git log --patch --color {1}...{1}~5' | awk '{print $1}' | xargs git checkout
 	lg = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n'
-	lgb = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
-	lgu = !git log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
 	lgs = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --stat
+  ; log just the branch
+  lgb = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
 	lgbs = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --first-parent --stat
+  ; log difference between upstream
+  lgu = !git log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
 	au = add -u
 	f = fetch --all --prune
 	ribbon = tag --force _ribbon origin/master
 	catchup = log --patch --reverse --topo-order _ribbon..origin/master
 	apply-commit = !git format-patch -1 --stdout $@ | git apply - --reject
 	amend = commit --amend -v
-	ca = commit --amend -v
 	rc = rebase --continue
 	ri = rebase --interactive --rebase-merges
 	riu = rebase --interactive --rebase-merges @{upstream}
 	s = stash
 	sp = stash pop
+  ss = stash show -p
 	ap = add -p
 	an = add -N
 	lp = log -p
-	ss = stash show -p
-	ls = log -p -S
-	cob = checkout -b
+	ls = log -p -S ; search for log changes to a given string
 	sha = !git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	clean-merged-branches = "!git branch --no-color --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
+  ; for git demos:
 	log-all-simple = log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
 [core]
 	excludesfile = ~/.gitignore
@@ -80,14 +84,14 @@
 	tool = opendiff
   conflictstyle = diff3
 	ff = no
-[url "git@github.com:"]
+[url "git://github.com/"]
 	insteadOf = "gh:"
+  insteadOf = "github:"
+  pushInsteadOf = "gh:"
 	pushInsteadOf = "github:"
 	pushInsteadOf = "git://github.com/"
-[url "git://github.com/"]
-	insteadOf = "github:"
 [url "git@gist.github.com:"]
-	insteadOf = "gst:"
+	insteadOf = "gist:"
 	pushInsteadOf = "gist:"
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
@@ -131,3 +135,17 @@
 	prune = true
 [protocol]
 	version = 2
+
+; color changes for diff-highlight and diff-so-fancy
+[color "diff-highlight"]
+  oldNormal = red
+  oldHighlight = red reverse
+  newNormal = green
+  newHighlight = green reverse
+[color "diff"]
+  ; meta = yellow
+  ; frag = magenta bold
+  ; commit = yellow bold
+  old = red
+  new = green
+  whitespace = red reverse
