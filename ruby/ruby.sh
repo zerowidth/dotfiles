@@ -1,4 +1,4 @@
-which -s rbenv && eval "$(rbenv init -)" || echo "no rbenv"
+type rbenv &> /dev/null && eval "$(rbenv init -)"
 
 function bo() {
   local bundle="bundle" paths path
