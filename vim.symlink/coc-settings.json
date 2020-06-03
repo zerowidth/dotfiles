@@ -1,0 +1,5 @@
+{
+   // make vim select first item on completion
+  "suggest.noselect": false,
+  // "suggest.fixInsertedWord": false
+}

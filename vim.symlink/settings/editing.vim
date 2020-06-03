@@ -11,6 +11,10 @@ endif
 filetype plugin indent on
 syntax enable
 colorscheme Atelier_ForestLight
+" let ayucolor="light"  " for light version of theme
+" let ayucolor="mirage" " for mirage version of theme
+" let ayucolor="dark"   " for dark version of theme
+" colorscheme ayu
 set background=light
 
 function! NumberToggle()
@@ -39,6 +43,10 @@ map <C-h> <C-w>h
 map <C-l> <C-w>l
 " fast zoom for a split
 map <C-_> <C-w>_
+
+" move between tabs. using this for key compatibility with vscode
+" map <C-j> gt
+" map <C-k> gT
 
 " move between quickfix / location list items
 map <silent> <left> :cprev<CR>
@@ -83,6 +91,7 @@ map <silent> <leader>Q :qa<CR>
 map <silent> <leader>x :x<CR>
 map <silent> <leader>w :bd<CR>
 map <silent> <leader>s :w<CR>
+" nmap <silent> <CR> :write<CR>
 
 " indent and tab switching
 if has("gui_macvim")
@@ -90,8 +99,8 @@ if has("gui_macvim")
   map <D-CR> :set fullscreen!<CR>
 
   " fast tab switching
-  map <D-j> gt
-  map <D-k> gT
+  " map <D-j> gt
+  " map <D-k> gT
 
   " Map command-[ and command-] to indenting or outdenting
   " while keeping the original selection in visual mode

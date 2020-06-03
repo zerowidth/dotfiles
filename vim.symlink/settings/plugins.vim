@@ -91,11 +91,16 @@ Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/vim-peekaboo'
 
 " snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+if has("python3") " system-provided vim doesn't support this
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
+endif
 
 " autocomplete
-Plug 'maralla/completor.vim'
+" Plug 'maralla/completor.vim'
+
+" even better autocomplete
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " <leader>ga to show character information
 Plug 'tpope/vim-characterize'
@@ -150,7 +155,9 @@ Plug 'timcharper/textile.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'vim-scripts/bash-support.vim'
 Plug 'elzr/vim-json'
+Plug 'neoclide/jsonc.vim'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'cespare/vim-toml'
 
 Plug 'fatih/vim-go'
 Plug 'godoctor/godoctor.vim'
@@ -200,5 +207,3 @@ Plug 'vim-utils/vim-troll-stopper'
 
 call plug#end()
 let g:plug_shallow = 0 " want full clones
-
-

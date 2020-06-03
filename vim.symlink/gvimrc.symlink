@@ -8,10 +8,14 @@ if has("gui_macvim")
   macmenu Edit.Undo<Tab>u key=<nop>
 
   " size for main external displays
-  set columns=148
-  set lines=59
-  set macligatures
+  set columns=154
+  set lines=56
+  winpos 0 0 " set window on left of screen (Y ends up being 23)
+  set nomacligatures
+  " set guifont=Fira\ Code\ Retina:h13,Menlo:h13
+  " set guifont=JetBrains\ Mono\ for\ Powerline:h13
   set guifont=Iosevka:h14
+  " set guifont=Fira\ Code:h14,Menlo:h14
 
   " e - graphical tabs
   " c - use console dialogs instead of graphical windows

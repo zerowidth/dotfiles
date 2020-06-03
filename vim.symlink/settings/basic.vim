@@ -127,3 +127,6 @@ set regexpengine=1
 """ new options from vim 8
 set breakindent
 set termguicolors
+
+""" writing
+set nowritebackup

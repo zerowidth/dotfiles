@@ -54,5 +54,9 @@ au BufWinLeave * if &diff | wincmd p | set syn=ON | GitGutterEnable
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") && &filetype != 'gitcommit' | exe "normal! g`\"" | endif
 
 
+" for json comments, e.g. kafka protocol definitions
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+
 " restore the augroup
 augroup END

@@ -19,7 +19,7 @@ let g:bgtags_user_commands = {
   \ 'filetypes': {
     \ 'ruby': 'eval "$(rbenv init -)" && rbenv shell $(rbenv global) && ' .
         \ 'ripper-tags -f -',
-    \ 'go': 'gotags',
+    \ 'go': 'gotags -L -',
     \ 'default': 'ctags -f-'
     \}
 \ }

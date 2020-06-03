@@ -1,1 +1,2 @@
+let &runtimepath=expand("~/.dotfiles/vim").",".&runtimepath
 runtime init.vim
