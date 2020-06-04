@@ -1,0 +1,25 @@
+#!/usr/bin/ruby
+
+# prints out branch format suitable for fzf. Fields:
+#
+# Fields:
+#
+# 1. refname which includes origin/ header
+# 2. shortest refname
+# 3... everything else
+#
+# The first field is intended to be used for git log in fzf preview, but hidden
+# otherwise.
+# The second field is intended to be used for `git checkout`.
+# Everything else is displayed normally.
+
+with_upstream = %x(git branch -a --format='%(upstream:lstrip=3)').split.map(&:strip).reject(&:empty?)
+
+format = "%(refname:short) %(if:equals=refs/remotes)%(refname:rstrip=-2)%(then)%(refname:lstrip=3) (remote)%(else)%(refname:short)%(end)"
+format << "%(if)%(upstream)%(then) (%(upstream:short)%(if)%(upstream:track)%(then), %(upstream:track,nobracket)%(end))%(end)"
+format << " updated %(committerdate:relative) by %(committername) %(committeremail)"
+
+branches = %x(git branch -a --color=always --sort=-committerdate --format='#{format}')
+branches = branches.split("\n").reject { |b| with_upstream.any? { |r| b.split(/\s+/)[1].start_with?(r) && b.include?("remote") } }
+
+puts branches.join("\n")
