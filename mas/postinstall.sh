@@ -1,4 +1,4 @@
-[ -n "$LINUX" ] && return
+[ -n "$LINUX" ] && exit
 
 echo "Installing apps from the app store..."
 list=$(cat << EOF

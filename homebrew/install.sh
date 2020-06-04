@@ -1,4 +1,4 @@
-[ -n "$LINUX" ] && return
+[ -n "$LINUX" ] && exit
 
 # Install Brew if it's not already installed
 if ! [ -x "$(command -v brew)" ]; then

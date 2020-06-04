@@ -1,5 +1,5 @@
-test -n "$LINUX" || return
-type ctags >/dev/null && return
+test -n "$LINUX" || exit
+type ctags >/dev/null && exit
 test -d /tmp/ctags || git clone https://github.com/universal-ctags/ctags /tmp/ctags
 
 cd /tmp/ctags && \
