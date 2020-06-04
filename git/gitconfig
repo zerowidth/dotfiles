@@ -56,7 +56,7 @@
   ; for git demos:
 	log-all-simple = log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
 [core]
-	excludesfile = ~/.gitignore
+	excludesfile = ~/.dotfiles/git/gitignore
 	autocrlf = input
 	attributesfile = ~/.dotfiles/git/gitattributes
   pager = delta --light --highlight-removed --theme GitHub; --file-style plain --hunk-style plain
@@ -99,8 +99,6 @@
 	rebase = true
 [push]
 	default = current
-[include]
-  path = ~/.gitconfig.local
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 [browser "gitscm"]
