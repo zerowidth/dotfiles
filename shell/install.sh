@@ -8,9 +8,10 @@ if [ -n "$LINUX" ]; then
   if type zsh >/dev/null; then
     echo "zsh already installed, skipping"
   else
-    sudo apt-get install -y zsh && \
-      sudo chsh --shell /bin/zsh `whoami`
+    sudo apt-get install -y zsh
   fi
+
+  sudo chsh --shell /bin/zsh `whoami`
 
   if type bat >/dev/null; then
     echo "bat already installed, skipping"
