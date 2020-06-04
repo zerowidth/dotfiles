@@ -1,6 +1,6 @@
 if [ -z "$LINUX" ]; then
   git config --global --replace-all include.path ~/.dotfiles/git/gitconfig
-  exit
+  exit 0
 fi
 
 git config --global --replace-all include.path ~/.dotfiles/git/gitconfig

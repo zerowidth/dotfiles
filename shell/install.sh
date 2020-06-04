@@ -5,7 +5,6 @@ curl -s -L https://iterm2.com/shell_integration/bash -o shell/iterm2_shell_integ
 curl -s -L https://iterm2.com/shell_integration/zsh -o shell/iterm2_shell_integration.zsh
 
 if [ -n "$LINUX" ]; then
-
   if type zsh >/dev/null; then
     echo "zsh already installed, skipping"
   else

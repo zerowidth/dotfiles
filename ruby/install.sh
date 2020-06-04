@@ -1,4 +1,4 @@
-[ -n "$LINUX" ] && exit
+[ -n "$LINUX" ] && exit 0
 
 # latest version
 latest=$(rbenv install -l | grep -E '^\d' | grep -v '-' | tail -1)

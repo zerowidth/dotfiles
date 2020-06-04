@@ -1,4 +1,4 @@
-test -z "$LINUX" && exit
+test -z "$LINUX" && exit 0
 
 if type starship >/dev/null; then
   echo "starship already installed, skipping"
