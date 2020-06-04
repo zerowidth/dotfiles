@@ -100,9 +100,7 @@
 [push]
 	default = current
 [include]
-	path = code/gitconfig
-	path = work/gitconfig
-	path = .gitsecrets
+  path = ~/.gitconfig.local
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 [browser "gitscm"]

@@ -1,4 +1,7 @@
 [ -z "$LINUX" ] && return
+
+cp git/gitconfig.nohttps ~/.gitconfig.local
+
 curl -sLo /tmp/git-delta.deb https://github.com/dandavison/delta/releases/download/0.1.1/git-delta_0.1.1_amd64.deb &&
   sudo dpkg -i /tmp/git-delta.deb
 
