@@ -50,7 +50,7 @@
 	ls = log -p -S ; search for log changes to a given string
 	sha = !git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
-	clean-merged-branches = "!git branch --no-color --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
+	clean-merged-branches = "!git branch --no-color --merged | grep -v '\\*\\|master' | xargs -t -r -n 1 git branch -d"
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
   ; for git demos:
