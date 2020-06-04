@@ -5,7 +5,7 @@
 set -e
 # set -x
 
-echo ''
+echo
 
 info () {
   printf "\r  [ \033[00;34m..\033[0m ] $1\n"
@@ -34,19 +34,16 @@ link_file () {
   if [ -f "$dst" ] || [ -d "$dst" ] || [ -L "$dst" ]
   then
 
-    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
+    if [ "$overwrite_all" = "false" ] && [ "$backup_all" = "false" ] && [ "$skip_all" = "false" ]
     then
 
       local currentSrc
-      currentSrc="$(readlink $dst)"
+      currentSrc="$(readlink $dst || echo $src)"
 
-      if [ "$currentSrc" == "$src" ]
+      if [ -z "$currentSrc" ] || [ "$currentSrc" = "$src" ]
       then
-
         skip=true;
-
       else
-
         local link
         if [ "$currentSrc" != "$src" ]; then
           link=" -> $currentSrc"
@@ -81,19 +78,19 @@ link_file () {
     backup=${backup:-$backup_all}
     skip=${skip:-$skip_all}
 
-    if [ "$overwrite" == "true" ]
+    if [ "$overwrite" = "true" ]
     then
       rm -rf "$dst"
       success "removed $dst"
     fi
 
-    if [ "$backup" == "true" ]
+    if [ "$backup" = "true" ]
     then
       mv "$dst" "${dst}.backup"
       success "moved $dst to ${dst}.backup"
     fi
 
-    if [ "$skip" == "true" ]
+    if [ "$skip" = "true" ]
     then
       success "skipped $src"
     fi
@@ -128,20 +125,30 @@ install_dotfiles () {
   done
 }
 
+cd $(dirname "$0") # so this can be run from anywhere
+
 install_self
 install_dotfiles
 
-# find the installers and run them iteratively
-for installer in $(find . -name "install.sh" -mindepth 2 -maxdepth 2); do
-  echo "-> installing $(basename $(dirname $installer))"
-  sh -c "${installer}"
+if [[ "$(uname)" = "Linux" ]]; then
+  export LINUX=1
+fi
+
+# install these first
+for installer in $(find . -mindepth 2 -maxdepth 2 -name "preinstall.sh"); do
+  info "${installer}"
+  sh -c "${installer}" && success "${installer} complete" || fail "${installer} failed"
+done
+
+for installer in $(find . -mindepth 2 -maxdepth 2 -name "install.sh"); do
+  info "${installer}"
+  sh -c "${installer}" && success "${installer} complete" || fail "${installer} failed"
 done
 
 # for installers that have prerequisites
-for installer in $(find . -name "postinstall.sh" -maxdepth 2); do
-  echo "-> installing $(basename $(dirname $installer))"
-  sh -c "${installer}"
+for installer in $(find . -maxdepth 2 -name "postinstall.sh"); do
+  info "${installer}"
+  sh -c "${installer}" && success "${installer} complete" || fail "${installer} failed"
 done
 
-echo
-echo '  Done!'
+success 'dotfiles installation complete'
