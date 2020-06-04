@@ -2,6 +2,16 @@
 # precmd does it instead
 add_newline = false
 
+[username]
+style_user = "cyan"
+
+[hostname]
+ssh_only = true
+style = "purple"
+prefix = "⟪"
+suffix = "⟫"
+# trim_at = ".companyname.com"
+
 [character]
 # symbol = "❯"
 style_success = "green"

@@ -1,3 +1,5 @@
+[ -n "$LINUX" ] && return
+
 echo "Installing apps from the app store..."
 list=$(cat << EOF
 409183694 Keynote (9.2.1)

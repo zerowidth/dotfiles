@@ -1,8 +1,12 @@
-for file in $(find -H "$HOME/.dotfiles" -name 'path.sh' -maxdepth 2); do
+if [[ "$(uname)" = "Linux" ]]; then
+  export LINUX=1
+fi
+
+for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name 'path.sh'); do
   source "$file"
 done
 
-for file in $(find -H "$HOME/.dotfiles" -name '*.sh' -maxdepth 2 | egrep -v '/bin/|(install|path)\.sh'); do
+for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.sh' | egrep -v '/bin/|(install|path)\.sh'); do
   source "$file"
 done
 

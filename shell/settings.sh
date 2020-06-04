@@ -9,8 +9,8 @@ shopt -s histappend; # append not rewrite history
 export LESS='-MRXFx4'
 
 # colorized grep
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='1;33'
+# export GREP_OPTIONS='--color=auto'
+# export GREP_COLOR='1;33'
 
 # for programs like ttyrec, which expect SHELL to match
-export SHELL=/usr/local/bin/bash
+[ -z "$LINUX" ] && export SHELL=/usr/local/bin/bash

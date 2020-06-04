@@ -1,5 +1,7 @@
 export EDITOR="vim"
 
+[ -n "$LINUX" ] && return
+
 function e() {
   if [ -n "$1" ]; then
     if [ -d "$1" ]; then

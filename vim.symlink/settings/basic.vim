@@ -39,8 +39,10 @@ set laststatus=2 " always show a status line
 " set statusline= " set elsewhere
 set noshowmode " statusline plugin does this already
 
-set winminwidth=20
-set winwidth=87 " include gitgutter &c
+if has("gui")
+  set winminwidth=20
+  set winwidth=87 " include gitgutter &c
+endif
 
 " winheight=1 by default, so set it larger so minheight can be set.
 " Setting it to a large value first confuses winminheight.
@@ -48,8 +50,10 @@ set winheight=10
 set winminheight=3
 set winheight=999
 
-set lines=999 " open with max height
-set columns=135 " left two thirds of main screen
+if has("gui")
+  set lines=999 " open with max height
+  set columns=135 " left two thirds of main screen
+endif
 
 set hidden " hide buffers when not displayed (vs. unloading them)
 

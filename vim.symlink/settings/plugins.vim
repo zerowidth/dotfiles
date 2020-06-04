@@ -99,8 +99,10 @@ endif
 " autocomplete
 " Plug 'maralla/completor.vim'
 
-" even better autocomplete
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if has('patch-8.0.1453')
+  " even better autocomplete
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
 
 " <leader>ga to show character information
 Plug 'tpope/vim-characterize'
@@ -159,7 +161,9 @@ Plug 'neoclide/jsonc.vim'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'cespare/vim-toml'
 
-Plug 'fatih/vim-go'
+if has('patch-8.0.1453')
+  Plug 'fatih/vim-go'
+endif
 Plug 'godoctor/godoctor.vim'
 
 Plug 'jparise/vim-graphql'
@@ -197,7 +201,9 @@ Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 
 " for using syntax-highlighted text in presentations
-Plug 'zerowidth/vim-copy-as-rtf'
+if has("mac")
+  Plug 'zerowidth/vim-copy-as-rtf'
+endif
 
 " gist integration
 Plug 'mattn/gist-vim'

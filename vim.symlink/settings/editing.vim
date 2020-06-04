@@ -10,11 +10,12 @@ endif
 
 filetype plugin indent on
 syntax enable
-colorscheme Atelier_ForestLight
-" let ayucolor="light"  " for light version of theme
-" let ayucolor="mirage" " for mirage version of theme
-" let ayucolor="dark"   " for dark version of theme
-" colorscheme ayu
+
+try " won't work when plugin not installed
+  colorscheme Atelier_ForestLight
+catch
+endtry
+
 set background=light
 
 function! NumberToggle()
@@ -180,4 +181,3 @@ endif
 " move tabs around
 map <Leader>m :-tabmove<CR>
 map <Leader>. :+tabmove<CR>
-

@@ -75,8 +75,8 @@ nnoremap <silent><Leader>o :!open -g <cWORD><CR><CR>
 
 " rbenv plays nicely with vim, but override the local .ruby-version if it's set
 " to `system` so the ruby syntax checker uses the assumed-latest global version
-if executable('rbenv')
-  if Trim(system('rbenv local')) == "system"
+if has("mac") && executable('rbenv')
+  if Trim(system('rbenv local || echo system')) == "system"
     let $RBENV_VERSION = Trim(system('rbenv global 2>/dev/null'))
   endif
 endif

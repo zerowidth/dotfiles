@@ -9,7 +9,9 @@ let g:ctrlp_max_files = 0 " no limits
 let g:ctrlp_dont_split = 'NERD_tree_1'
 
 " use a different matcher
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+if has("python3")
+  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+endif
 
 " the 'gems' root marker is for vendored gems
 let g:ctrlp_user_command = {

@@ -1,1 +1,1 @@
-which -s nodenv && eval "$(nodenv init -)"
+type nodenv &> /dev/null && eval "$(nodenv init -)"
