@@ -38,7 +38,7 @@ link_file () {
     then
 
       local currentSrc
-      currentSrc="$(readlink $dst || echo $src)"
+      currentSrc="$(readlink $dst || echo $dst)"
 
       if [ -z "$currentSrc" ] || [ "$currentSrc" = "$src" ]
       then
