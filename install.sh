@@ -103,50 +103,51 @@ link_file () {
   fi
 }
 
-install_self() {
-  info 'installing dotfiles'
-  local overwrite_all=false backup_all=false skip_all=false
-  link_file $(pwd -P) "$HOME/.dotfiles"
-}
-
-install_dotfiles () {
-  local overwrite_all=false backup_all=false skip_all=false
-  for src in $(find -H ~/.dotfiles -maxdepth 2 -name '*.symlink' -not -name '*.config.symlink' -not -path '*.git*')
-  do
-    dst="$HOME/.$(basename "${src%.*}")"
-    link_file "$src" "$dst"
-  done
-
-  mkdir -p "$HOME/.config"
-  for src in $(find -H ~/.dotfiles -maxdepth 2 -name '*.config.symlink' -not -path '*.git*')
-  do
-    dst="$HOME/.config/$(basename "${src%.config.*}")"
-    link_file "$src" "$dst"
-  done
-}
-
 cd $(dirname "$0") # so this can be run from anywhere
 
-install_self
-install_dotfiles
+info 'installing dotfiles'
+overwrite_all=false backup_all=false skip_all=false
+link_file $(pwd -P) "$HOME/.dotfiles"
+
+depth=2
+dir=""
+
+if [ -n "$1" ]; then
+  depth=1
+  dir="/${1}"
+fi
+
+overwrite_all=false backup_all=false skip_all=false
+for src in $(find -H ~/.dotfiles${dir} -maxdepth ${depth} -name '*.symlink' -not -name '*.config.symlink' -not -path '*.git*')
+do
+  dst="$HOME/.$(basename "${src%.*}")"
+  link_file "$src" "$dst"
+done
+
+mkdir -p "$HOME/.config"
+for src in $(find -H ~/.dotfiles${dir} -maxdepth ${depth} -name '*.config.symlink' -not -path '*.git*')
+do
+  dst="$HOME/.config/$(basename "${src%.config.*}")"
+  link_file "$src" "$dst"
+done
 
 if [[ "$(uname)" = "Linux" ]]; then
   export LINUX=1
 fi
 
 # install these first
-for installer in $(find . -mindepth 2 -maxdepth 2 -name "preinstall.sh"); do
+for installer in $(find .${dir} -mindepth ${depth} -maxdepth ${depth} -name "preinstall.sh"); do
   info "${installer}"
   sh -c "${installer}" && success "${installer} complete" || fail "${installer} failed"
 done
 
-for installer in $(find . -mindepth 2 -maxdepth 2 -name "install.sh"); do
+for installer in $(find .${dir} -mindepth ${depth} -maxdepth ${depth} -name "install.sh"); do
   info "${installer}"
   sh -c "${installer}" && success "${installer} complete" || fail "${installer} failed"
 done
 
 # for installers that have prerequisites
-for installer in $(find . -maxdepth 2 -name "postinstall.sh"); do
+for installer in $(find .${dir} -maxdepth ${depth} -name "postinstall.sh"); do
   info "${installer}"
   sh -c "${installer}" && success "${installer} complete" || fail "${installer} failed"
 done
