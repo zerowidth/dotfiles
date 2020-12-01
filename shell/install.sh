@@ -11,7 +11,7 @@ if [ -n "$LINUX" ]; then
     sudo apt-get install -y zsh
   fi
 
-  sudo chsh --shell /bin/zsh `whoami`
+type zsh >/dev/null && sudo chsh --shell /bin/zsh `whoami`
 
   if type bat >/dev/null; then
     echo "bat already installed, skipping"
