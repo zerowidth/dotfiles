@@ -1,26 +1,25 @@
-# Don't print a new line at the start of the prompt
-# precmd does it instead
+# Don't print a new line at the start of the prompt, precmd does it instead
 add_newline = false
 
 [username]
 style_user = "cyan"
 
 [hostname]
-ssh_only = true
-style = "purple"
-prefix = "⟪"
-suffix = "⟫"
+# ssh_only = true
+format = "[⟪$hostname⟫ ](purple)"
+# 
 # trim_at = ".companyname.com"
 
 [character]
-# symbol = "❯"
-style_success = "green"
+# format = "$symbol "
+success_symbol ="[❯](green)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
 
 [cmd_duration]
-min_time = 2_000
-# show_milliseconds = true
-# prefix = " "
-style = "yellow"
+# min_time = 2_000
+# show_milliseconds = false
+format = "[\\($duration\\)](yellow) "
 
 [line_break]
 # disabled = true
@@ -31,44 +30,37 @@ fish_style_pwd_dir_length = 1
 style = "blue"
 
 [ruby]
-symbol = "ruby/"
-style = "red"
+format ="[ruby/$version](red) "
 # disabled = true
 
 [golang]
-symbol = "go/"
-style = "blue"
+format = "[go/$version](blue) "
 # disabled = true
 
 [python]
-symbol = "python/"
-style = "green"
+format = "[python/${pyenv_prefix}${version}( \\($virtualenv\\))](green) "
 
 [java]
-symbol = "java/"
-style = "yellow"
+format = "[java/${version}](yellow) "
 
 [php]
-symbol = "php/"
+format = "[php/$version]($style) "
 
 [git_branch]
-symbol = ""
-style = "green"
+format = "[$branch](green) "
 
 [git_status]
 # disabled = true
+format = '([\[$all_status$ahead_behind\]]($style) )'
 style = ""
-stashed.value = ""
-staged.style = "green"
-modified.value = "*"
-modified.style = "red"
-renamed.style = "blue"
-deleted.style = "red"
-deleted.value = "x"
-untracked.style = "purple"
-prefix = "("
-suffix = ") "
+stashed = ""
+staged = "[+](green)"
+modified = "[*](yellow)"
+renamed = "[»](blue)"
+deleted = "[x](red)"
+untracked = "[?](purple)"
 
 [git_state]
 # disabled = true
+# format = "\\([$state( $progress_current/$progress_total)]($style)\\) "
 style = "yellow"
