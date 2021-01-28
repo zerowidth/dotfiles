@@ -62,6 +62,7 @@
 	autocrlf = input
 	attributesfile = ~/.dotfiles/git/gitattributes
   pager = delta --light --highlight-removed --theme GitHub; --file-style plain --hunk-style plain
+	editor = vim
 [branch]
 	autosetupmerge = true
 	autosetuprebase = remote
