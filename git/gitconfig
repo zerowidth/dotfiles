@@ -23,7 +23,7 @@
 	untrack = rm --cached
 	di = diff --cached
   dis = diff --cached --stat
-	du = !git diff origin/master..
+	du = !git show-ref -q main && git diff origin/main.. || git diff origin/master..
 	p = pull --stat
 	pp = !git push && git pull
 	recent = for-each-ref --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads
@@ -34,7 +34,7 @@
   lgb = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' --first-parent
 	lgbs = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --first-parent --stat
   ; log difference between upstream
-  lgu = !git log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/master`..
+  lgu = "!b=$(git main-branch); git log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n' `git merge-base HEAD origin/$b`.."
 	au = add -u
 	f = fetch --all --prune
 	amend = commit --amend -v
@@ -50,7 +50,9 @@
 	ls = log -p -S ; search for log changes to a given string
 	sha = !git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
-	clean-merged-branches = "!git branch --no-color --merged | grep -v '\\*\\|master' | xargs -t -n 1 -I {} git branch -d {}"
+	current-branch = rev-parse --abbrev-ref HEAD
+	main-branch = "!git show-ref -q main && echo main || echo master"
+	clean-merged-branches = "!b=$(git main-branch); git branch --no-color --merged | grep -v '*' | grep -v $b | xargs -t -n 1 -I {} git branch -d {}"
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
   ; for git demos:
@@ -142,3 +144,5 @@
   old = red
   new = green
   whitespace = red reverse
+[init]
+  defaultBranch = main

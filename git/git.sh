@@ -11,7 +11,7 @@ alias gbn="git branchname"
 alias gc-="git co -"
 alias gnb="git co -b"
 alias gci="git ci"
-alias gcm="git co master"
+alias gcm="git checkout \$(git main-branch)"
 alias gd="git diff"
 alias gi="git di"
 alias gdi="git di"
@@ -24,4 +24,10 @@ function gp() {
 function gpp() {
   git pull --stat --all --prune --progress --autostash &&
     git push
+}
+
+function main-branch() {
+  git branch -m master main
+  git fetch origin
+  git branch -u origin/main main
 }
