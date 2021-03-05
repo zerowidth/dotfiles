@@ -5,13 +5,13 @@ curl -s -L https://iterm2.com/shell_integration/bash -o shell/iterm2_shell_integ
 curl -s -L https://iterm2.com/shell_integration/zsh -o shell/iterm2_shell_integration.zsh
 
 if [ -n "$LINUX" ]; then
-  if type zsh >/dev/null; then
-    echo "zsh already installed, skipping"
-  else
-    sudo apt-get install -y zsh
-  fi
+  # if type zsh >/dev/null; then
+  #   echo "zsh already installed, skipping"
+  # else
+  #   sudo apt-get install -y zsh
+  # fi
 
-  type zsh >/dev/null && sudo chsh --shell /bin/zsh `whoami`
+  # type zsh >/dev/null && sudo chsh --shell /bin/zsh `whoami`
 
   if type bat >/dev/null; then
     echo "bat already installed, skipping"
