@@ -8,19 +8,19 @@ set -e
 echo
 
 info () {
-  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+  printf "\r  [ \033[00;34m..\033[0m ] %s\n" "$1"
 }
 
 user () {
-  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+  printf "\r  [ \033[0;33m??\033[0m ] %s\n" "$1"
 }
 
 success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" "$1"
 }
 
 fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n" "$1"
   echo ''
   exit 1
 }
@@ -28,7 +28,9 @@ fail () {
 link_file () {
   local src=$1 dst=$2
 
-  local overwrite= backup= skip=
+  local overwrite=
+  local backup=
+  local skip=
   local action=
 
   if [ -f "$dst" ] || [ -d "$dst" ] || [ -L "$dst" ]
@@ -38,7 +40,7 @@ link_file () {
     then
 
       local currentSrc
-      currentSrc="$(readlink $dst || echo $dst)"
+      currentSrc="$(readlink "$dst" || echo "$dst")"
 
       if [ -z "$currentSrc" ] || [ "$currentSrc" = "$src" ]
       then
@@ -103,11 +105,11 @@ link_file () {
   fi
 }
 
-cd $(dirname "$0") # so this can be run from anywhere
+cd "$(dirname "$0")" # so this can be run from anywhere
 
 info 'installing dotfiles'
 overwrite_all=false backup_all=false skip_all=false
-link_file $(pwd -P) "$HOME/.dotfiles"
+link_file "$(pwd -P)" "$HOME/.dotfiles"
 
 depth=2
 dir=""
