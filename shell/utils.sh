@@ -4,13 +4,18 @@ alias mv='mv -nv'
 alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
 alias rehash='hash -r'
 alias p4="ping 4.2.2.2"
-alias ping="prettyping"
+which prettyping >/dev/null && alias ping="prettyping"
 alias ia="open -a 'IA Writer' "
 
 alias gdiff="git diff --no-index"
 
-alias cat="bat"
-export BAT_THEME='Monokai Extended Light'
+alias kc="kafkacat"
+alias kcs="kafkacat -X security.protocol=ssl -X enable.ssl.certificate.verification=false"
+
+which bat >/dev/null && {
+  alias cat="bat"
+  export BAT_THEME='base16-atelier-forest-light'
+}
 
 # quickly get to the real path (e.g. go project symlinks)
 alias cdr='cd $(pwd -P)'
