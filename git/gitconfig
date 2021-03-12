@@ -84,20 +84,6 @@
 	tool = opendiff
   conflictstyle = diff3
 	ff = no
-[url "git://github.com/"]
-	insteadOf = "gh:"
-  insteadOf = "github:"
-  pushInsteadOf = "gh:"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-[url "git@gist.github.com:"]
-	insteadOf = "gist:"
-	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
-[url "git://gist.github.com/"]
-	insteadOf = "gist:"
-[url "git@heroku.com:"]
-	insteadOf = "heroku:"
 [pull]
 	rebase = true
 [push]
