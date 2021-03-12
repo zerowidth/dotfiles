@@ -6,13 +6,17 @@ brew "bash"
 brew "bash-completion"
 
 brew "zsh"
-# brew "antigen" # zsh plugins
+brew "antigen" # zsh plugins
 brew "starship"
+brew "direnv"
 
 brew "git"
-brew "hub"
+brew "hub" # old and busted
+brew "gh" # new hotness
 brew "diff-so-fancy"
 brew "git-delta"
+
+brew "s3cmd"
 
 brew "jq"
 brew "mtr"
