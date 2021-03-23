@@ -1,21 +1,21 @@
 type rbenv &> /dev/null && eval "$(rbenv init -)"
 
 function bo() {
-  local bundle="bundle" paths path
+  local bundle="bundle" gems gem
   if [ -x bin/bundle ]; then
     bundle="bin/bundle"
   fi
-  if ! paths=$($bundle show --paths); then
-    echo "$paths"
+  if ! gems=$($bundle list --paths); then
+    echo "$gems"
     return 1
   fi
   if [ $# -gt 0 ]; then
-    path=$(echo "$paths" | fzf -d/ --nth=-1 --with-nth=-1 -1 -q "$@")
+    gem=$(echo "$gems" | fzf -d/ --nth=-1 --with-nth=-1 -1 -q "$@")
   else
-    path=$(echo "$paths" | fzf -d/ --nth=-1 --with-nth=-1 -1)
+    gem=$(echo "$gems" | fzf -d/ --nth=-1 --with-nth=-1 -1)
   fi
-  if [ -n "$path" ]; then
-    e "$path"
+  if [ -n "$gem" ]; then
+    e "$gem"
   else
     return 1
   fi
