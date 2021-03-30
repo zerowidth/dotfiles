@@ -9,3 +9,4 @@ ruby/bundle.symlink/cache
 .envrc
 .agignore
 __pycache__
+.envrc
