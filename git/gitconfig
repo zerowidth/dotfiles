@@ -48,7 +48,7 @@
 	an = add -N
 	lp = log -p
 	ls = log -p -S ; search for log changes to a given string
-	sha = !git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy
+	sha = "!git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy; git rev-parse HEAD"
 	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	current-branch = rev-parse --abbrev-ref HEAD
 	main-branch = "!git show-ref -q main && echo main || echo master"
