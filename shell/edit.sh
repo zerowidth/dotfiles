@@ -2,9 +2,9 @@
 
 if which code >/dev/null; then
     export EDITOR="code"
-elif which -s vim >/dev/null; then
+elif which vim >/dev/null; then
     export EDITOR="vim"
-elif which -s vi >/dev/null; then
+elif which vi >/dev/null; then
     export EDITOR="vi"
 fi
 
