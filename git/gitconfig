@@ -57,6 +57,7 @@
 	conflicts = diff --name-only --diff-filter=U
   ; for git demos:
 	log-all-simple = log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
+	watch = !watch -t -c -x git log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
 [core]
 	excludesfile = ~/.dotfiles/git/gitignore
 	autocrlf = input
