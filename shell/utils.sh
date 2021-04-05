@@ -43,6 +43,7 @@ function up() {
   brew upgrade
   brew cu --cleanup --no-brew-update --yes
   brew cleanup
+  antigen update
 }
 
 # Run a command, copying the command line first and then capturing the output.
