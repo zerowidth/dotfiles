@@ -8,7 +8,7 @@ elif which vi >/dev/null; then
     export EDITOR="vi"
 fi
 
-[ -n "$LINUX" ] && return
+type code >/dev/null || return
 
 function e() {
   if [ -n "$1" ]; then
