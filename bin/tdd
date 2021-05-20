@@ -17,6 +17,11 @@ function run() {
 
 run "$@"
 while true; do
-  fswatch -e '.*' -i "\\.${ext}" -1 .
+  if [ -n "$LINUX" ]; then
+    # fswatch on linux sucks compared to fsnotify on mac, so just watch only the changed files
+    git branch-changes | grep .$ext | xargs fswatch -1
+  else
+    fswatch -e'.*' -i "\\.${ext}" -1 .
+  fi
   run "$@"
 done
