@@ -28,87 +28,39 @@ fail () {
 link_file () {
   local src=$1 dst=$2
 
-  local overwrite=
   local backup=
   local skip=
   local action=
 
   if [ -f "$dst" ] || [ -d "$dst" ] || [ -L "$dst" ]
   then
+    local currentSrc
+    currentSrc="$(readlink "$dst" || echo "$dst")"
 
-    if [ "$overwrite_all" = "false" ] && [ "$backup_all" = "false" ] && [ "$skip_all" = "false" ]
+    if [ -z "$currentSrc" ] || [ "$currentSrc" = "$src" ]
     then
-
-      local currentSrc
-      currentSrc="$(readlink "$dst" || echo "$dst")"
-
-      if [ -z "$currentSrc" ] || [ "$currentSrc" = "$src" ]
-      then
-        skip=true;
-      else
-        local link
-        if [ "$currentSrc" != "$src" ]; then
-          link=" -> $currentSrc"
-        fi
-
-        user "File already exists: $dst$link ($(basename "$src")), what do you want to do?\n\
-        [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -n 1 action
-
-        case "$action" in
-          o )
-            overwrite=true;;
-          O )
-            overwrite_all=true;;
-          b )
-            backup=true;;
-          B )
-            backup_all=true;;
-          s )
-            skip=true;;
-          S )
-            skip_all=true;;
-          * )
-            ;;
-        esac
-
+      success "skipped $src"
+      return
+    else
+      local link
+      if [ "$currentSrc" != "$src" ]; then
+        link=" -> $currentSrc"
       fi
 
-    fi
+      user "File already exists: $dst$link ($(basename "$src")), backing up"
 
-    overwrite=${overwrite:-$overwrite_all}
-    backup=${backup:-$backup_all}
-    skip=${skip:-$skip_all}
-
-    if [ "$overwrite" = "true" ]
-    then
-      rm -rf "$dst"
-      success "removed $dst"
-    fi
-
-    if [ "$backup" = "true" ]
-    then
       mv "$dst" "${dst}.backup"
       success "moved $dst to ${dst}.backup"
     fi
-
-    if [ "$skip" = "true" ]
-    then
-      success "skipped $src"
-    fi
   fi
 
-  if [ "$skip" != "true" ]  # "false" or empty
-  then
-    ln -s "$1" "$2"
-    success "linked $1 to $2"
-  fi
+  ln -s "$1" "$2"
+  success "linked $1 to $2"
 }
 
 cd "$(dirname "$0")" # so this can be run from anywhere
 
 info 'installing dotfiles'
-overwrite_all=false backup_all=false skip_all=false
 link_file "$(pwd -P)" "$HOME/.dotfiles"
 
 depth=2
@@ -119,7 +71,6 @@ if [ -n "$1" ]; then
   dir="/${1}"
 fi
 
-overwrite_all=false backup_all=false skip_all=false
 for src in $(find -H ~/.dotfiles${dir} -maxdepth ${depth} -name '*.symlink' -not -name '*.config.symlink' -not -path '*.git*')
 do
   dst="$HOME/.$(basename "${src%.*}")"
