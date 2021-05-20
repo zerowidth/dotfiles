@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+ext=$1
+shift
+echo "tdd with .${ext} files: $@"
+
+function run() {
+  echo
+  echo "$(date | colorize 5) $@"
+  echo
+  if sh -c "$@"; then
+    echo "================================================================================" | colorize 2
+  else
+    echo "================================================================================" | colorize 1
+  fi
+}
+
+run "$@"
+while true; do
+  fswatch -e '.*' -i "\\.${ext}" -1 .
+  run "$@"
+done

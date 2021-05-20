@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+color=${1:-1}
+while read line; do
+  echo -e "$(tput setaf $color)$line$(tput sgr0)"
+done
