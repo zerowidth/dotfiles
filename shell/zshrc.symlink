@@ -63,8 +63,9 @@ else
 fi
 precmd_functions+=(set_window_title)
 
-# eval "$(starship init zsh)"
-eval "$(direnv hook zsh)"
+if type direnv &>/dev/null; then
+  eval "$(direnv hook zsh)"
+end
 
 # # completions
 zstyle :compinstall filename '/Users/nathan/.zshrc'
