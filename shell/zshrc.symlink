@@ -77,7 +77,7 @@ compinit
 if [[ -f /usr/local/share/antigen/antigen.zsh ]]; then
   source /usr/local/share/antigen/antigen.zsh
 elif [[ -f ~/.dotfiles/antigen.zsh ]]; then
-  source ~/.dotfiles/antigen.sh
+  source ~/.dotfiles/antigen.zsh
 fi
 antigen bundle Aloxaf/fzf-tab
 antigen theme romkatv/powerlevel10k
