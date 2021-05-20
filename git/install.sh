@@ -1,6 +1,7 @@
 if [ -z "$LINUX" ]; then
   git config --global --replace-all include.path ~/.dotfiles/git/gitconfig
   git config --global core.editor "code --wait"
+  git config --global credential.helper osxkeychain
   exit 0
 fi
 

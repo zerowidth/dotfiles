@@ -101,8 +101,6 @@
 	statusHints = false
 [rerere]
 	enabled = true
-[credential]
-	helper = osxkeychain
 [hub]
 	protocol = https
 [github]
