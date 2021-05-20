@@ -53,6 +53,7 @@
 	current-branch = rev-parse --abbrev-ref HEAD
 	main-branch = "!git show-ref -q main && echo main || echo master"
 	clean-merged-branches = "!b=$(git main-branch); git branch --no-color --merged | grep -v '*' | grep -v $b | xargs -t -n 1 -I {} git branch -d {}"
+	branch-changes = !git diff --name-only $(git merge-base $(git main-branch) @)
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
   ; for git demos:
