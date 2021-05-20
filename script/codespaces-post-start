@@ -1,0 +1,6 @@
+#!/bin/sh
+# codespace customization
+
+if ! grep -q "root.*/bin/zsh" /etc/passwd; then
+  chsh -s /bin/zsh root
+fi
