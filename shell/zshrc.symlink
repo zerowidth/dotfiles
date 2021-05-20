@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # from homebrew, for completions
 if type brew &>/dev/null; then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
@@ -6,14 +13,6 @@ fi
 if [[ "$(uname)" = "Linux" ]]; then
   export LINUX=1
 fi
-
-# plugins
-source /usr/local/share/antigen/antigen.zsh
-# antigen bundle sindresorhus/pretty-time-zsh
-# antigen bundle mafredri/zsh-async
-# antigen bundle sindresorhus/pure
-antigen theme romkatv/powerlevel10k
-antigen apply
 
 # zsh settings
 setopt pushd_ignore_dups # don't push the same directory twice
@@ -65,13 +64,38 @@ fi
 precmd_functions+=(set_window_title)
 
 # eval "$(starship init zsh)"
+eval "$(direnv hook zsh)"
 
-# completions
+# # completions
 zstyle :compinstall filename '/Users/nathan/.zshrc'
-# case-insensitive if there's no match
+# # case-insensitive if there's no match
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 autoload -Uz compinit
 compinit
+
+# plugins
+if [[ -f /usr/local/share/antigen/antigen.zsh ]]; then
+  source /usr/local/share/antigen/antigen.zsh
+elif [[ -f ~/.dotfiles/antigen.zsh ]]; then
+  source ~/.dotfiles/antigen.sh
+fi
+antigen bundle Aloxaf/fzf-tab
+antigen theme romkatv/powerlevel10k
+antigen apply
+
+[[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
 for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.sh' | egrep -v '/bin/|(install|path)\.sh'); do
   source "$file"
@@ -82,7 +106,4 @@ for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.zsh'); do
   source "$file"
 done
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# echo '(( ! ${+functions[p10k]} )) || p10k finalize' >>! ~/.zshrc(( ! ${+functions[p10k]} )) || p10k finalize
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
