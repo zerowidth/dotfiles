@@ -65,7 +65,7 @@ precmd_functions+=(set_window_title)
 
 if type direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
-end
+fi
 
 # # completions
 zstyle :compinstall filename '/Users/nathan/.zshrc'
