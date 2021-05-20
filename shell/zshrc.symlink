@@ -84,8 +84,12 @@ antigen bundle Aloxaf/fzf-tab
 antigen theme romkatv/powerlevel10k
 antigen apply
 
+# mac:
 [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# linux
+[[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false

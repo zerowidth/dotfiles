@@ -14,5 +14,5 @@ if [ -n "$LINUX" ]; then
       sudo dpkg -i /tmp/bat.deb
   fi
 
-  apt-get install -y fswatch zsh
+  apt-get install -y fswatch zsh zsh-syntax-highlighting
 fi
