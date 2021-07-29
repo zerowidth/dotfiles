@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require "shellwords"
+
+text = ""
+ARGV.join(" ").split("").each_slice(2) do |s|
+  text << s.first.downcase
+  text << s.last.upcase if s.length > 1
+end
+system "echo #{Shellwords.escape(text)} | pbcopy"
+if $stdout.tty?
+  puts text
+else
+  print text
+end
