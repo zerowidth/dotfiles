@@ -17,7 +17,7 @@ Clone this repo, then:
 ## Philosophy
 
 For background, Mislav Marohnić talks about how to approach a vim configuration:
-[Vim: revisited](http://mislav.uniqpath.com/2011/12/vim-revisited/). I recommend
+[Vim: revisited](https://mislav.net/2011/12/vim-revisited/). I recommend
 his minimal and gradual approach for approaching vim as a new user.
 
 I've taken a lot of the good parts of [janus](https://github.com/carlhuda/janus)
