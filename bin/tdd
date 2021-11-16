@@ -4,17 +4,31 @@ ext=$1
 shift
 echo "tdd with .${ext} files: $@"
 
+running=false
+
 function run() {
   echo
   echo "$(date | colorize 5) $@"
   echo
+  running=true
   if "$@"; then
     echo "================================================================================" | colorize 2
   else
     echo "================================================================================" | colorize 1
   fi
+  running=false
 }
 
+# only exit if not running. otherwise assume child process will respond
+function maybequit() {
+  if [ "$running" = 'true' ]; then
+    running=false
+  else
+    exit 1
+  fi
+}
+
+trap 'maybequit' SIGINT
 run "$@"
 while true; do
   if [ -n "$LINUX" ]; then
