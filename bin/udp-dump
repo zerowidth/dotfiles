@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+# Receive UDP packets bound for a port and output them
+# based on https://stackoverflow.com/questions/7696862/strange-behaviour-of-netcat-with-udp
+
+$stdout.sync = true
+require "socket"
+
+statsd = false
+if ARGV.delete("--statsd")
+  statsd = true
+  unless require "colorize"
+    raise "gem install colorize"
+  end
+end
+
+unless ARGV.count == 2
+  puts "Usage: #{$PROGRAM_NAME} listen_ip port_number"
+  exit(1)
+end
+listen_ip = ARGV[0]
+port = ARGV[1].to_i
+
+Socket.udp_server_sockets(listen_ip, port) do |sockets|
+  loop do
+    readable, = IO.select(sockets)
+    Socket.udp_server_recv(readable) do |msg, msg_src|
+      if statsd
+        msg.split("\n").each do |line|
+          metric, type, tags = line.split("|")
+          name, value = metric.split(":")
+          tags = tags[1..].split(",").map { |tag| tag.split(":", 2) }
+          tags = tags.sort_by(&:first).map { |t, v| "#{t}:#{v}" }.join(" ")
+          puts "#{name.colorize(:magenta)} #{type.colorize(:green)} #{value.colorize(:blue)} #{tags}"
+        end
+      else
+        puts "--- #{msg.bytesize} bytes #{msg_src} ---"
+        puts msg
+      end
+    end
+  end
+end
