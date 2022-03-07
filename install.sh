@@ -28,10 +28,6 @@ fail () {
 link_file () {
   local src=$1 dst=$2
 
-  local backup=
-  local skip=
-  local action=
-
   if [ -f "$dst" ] || [ -d "$dst" ] || [ -L "$dst" ]
   then
     local currentSrc
