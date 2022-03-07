@@ -1,0 +1,6 @@
+map <Space> :
+map ,s :w<CR>
+map ,x :wq<CR>
+
+set surround
+set rnu
