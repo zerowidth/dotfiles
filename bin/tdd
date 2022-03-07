@@ -1,5 +1,16 @@
 #!/usr/bin/env zsh
 
+if [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
+  echo "-c for clear"
+  exit
+fi
+
+clear=0
+if [[ $1 == "-c" ]]; then
+    clear=1
+    shift
+fi
+
 ext=$1
 shift
 echo "tdd with .${ext} files: $@"
@@ -7,7 +18,11 @@ echo "tdd with .${ext} files: $@"
 running=false
 
 function run() {
-  echo
+  if [[ $clear == 1 ]]; then
+    echo "\033[2J\033[3J\033[1;1H"
+  else
+    echo
+  fi
   echo "$(date | colorize 5) $@"
   echo
   running=true
@@ -37,5 +52,6 @@ while true; do
   else
     fswatch -e'.*' -i "\\.${ext}" -1 .
   fi
+
   run "$@"
 done
