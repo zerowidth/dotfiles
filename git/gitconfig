@@ -16,7 +16,8 @@
 	co = checkout
   cob = checkout -b
 	nb = checkout -b
-  cb = !git branches | fzf --query="$1" --reverse --with-nth=2.. --nth=1 --preview 'git log --color {1}...{1}~10' | awk '{print $2}' | xargs git checkout
+  ; FIXME `git-branches` doesn't like leading parens, e.g. during a rebase
+  cb = !git branches | fzf --query="$1" --reverse --with-nth=2.. --nth=1 --preview 'git log --stat --color {1}...{1}~10' | awk '{print $2}' | xargs git checkout
 	dh = diff -w HEAD
 	ds = diff HEAD --stat
 	unstage = reset HEAD --
@@ -28,6 +29,7 @@
 	pp = !git push && git pull
 	recent = for-each-ref --sort=-committerdate --format='%(refname:short) (%(committerdate:relative))' refs/heads
 	cor = !git recent | fzf --reverse --nth=1 --preview 'git log --patch --color {1}...{1}~5' | awk '{print $1}' | xargs git checkout
+  ; log / log with stat
 	lg = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n'
 	lgs = log --color --graph --date=human --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar - %ad) %C(blue)<%an>%Creset%n%+b' --stat
   ; log just the branch
@@ -51,19 +53,15 @@
 	sha = "!git rev-parse --short HEAD | tee /dev/tty | tr -d '\n' | pbcopy; git rev-parse HEAD"
 	bn = !git rev-parse --abbrev-ref HEAD | tee /dev/tty | tr -d '\n' | pbcopy
 	current-branch = rev-parse --abbrev-ref HEAD
-	main-branch = "!git show-ref -q main && echo main || echo master"
-	clean-merged-branches = "!b=$(git main-branch); git branch --no-color --merged | grep -v '*' | grep -v $b | xargs -t -n 1 -I {} git branch -d {}"
+	main-branch = "!git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'"
+	clean-merged-branches = "!git branch --no-color --format '%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' --merged | xargs -t -n 1 -I {} git branch -d {}"
 	branch-changes = !git diff --name-only $(git merge-base $(git main-branch) @)
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
-  ; for git demos:
-	log-all-simple = log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
-	watch = !watch -t -c -x git log --graph --all --color --pretty=\"%Cred%h%Creset -%Cblue%d%Creset %s\"
 [core]
 	excludesfile = ~/.dotfiles/git/gitignore
 	autocrlf = input
 	attributesfile = ~/.dotfiles/git/gitattributes
-  pager = delta --light --highlight-removed --theme GitHub; --file-style plain --hunk-style plain
 	editor = vim
 [branch]
 	autosetupmerge = true
@@ -110,26 +108,11 @@
 	smudge = git-lfs smudge %f
 	required = true
 [interactive]
-	diffFilter = diff-highlight
 [rebase]
 	autoStash = 1
 [fetch]
 	prune = true
 [protocol]
 	version = 2
-
-; color changes for diff-highlight and diff-so-fancy
-[color "diff-highlight"]
-  oldNormal = red
-  oldHighlight = red reverse
-  newNormal = green
-  newHighlight = green reverse
-[color "diff"]
-  ; meta = yellow
-  ; frag = magenta bold
-  ; commit = yellow bold
-  old = red
-  new = green
-  whitespace = red reverse
 [init]
   defaultBranch = main

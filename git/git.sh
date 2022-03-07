@@ -27,7 +27,8 @@ function gpp() {
 }
 
 function main-branch() {
-  git branch -m master main
   git fetch origin
+  git remote set-head origin -a
+  git branch -m master main
   git branch -u origin/main main
 }
