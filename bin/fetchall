@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+github_projects() {
+  for dir in $(find ~/github -type d -maxdepth 2 -name .git); do
+    remote=$(git -C "$dir" remote show)
+    if [ -n "$remote" ] && git -C "$dir" symbolic-ref -q HEAD >/dev/null; then
+      echo $(dirname $dir)
+    fi
+  done
+}
+
+golang_projects() {
+  for org in $(find ~/go/src/github.com -type d -mindepth 1 -maxdepth 1); do
+    org=$(basename $org)
+    for dir in $(find ~/go/src/github.com/$org -type d -maxdepth 2 -name .git); do
+      echo $(dirname $dir)
+    done
+  done
+}
+
+projects() {
+  github_projects
+  golang_projects
+}
+fetch() {
+  git -C "${1}" symbolic-ref refs/remotes/origin/HEAD > /dev/null 2>&1 || return
+  outfile=$(mktemp)
+  git -C "${1}" pull --quiet --stat --all --prune --autostash 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
+  git -C "${1}" clean-merged-branches 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+  if [[ -s "${outfile}" ]]; then
+    echo "----- ${1} -----" | colorize 4
+    cat "${outfile}"
+  fi
+  rm "${outfile}"
+}
+export -f fetch
+
+simplefetch() {
+  echo "----- ${1} -----" | colorize 4
+  set -x
+  git -C "${1}" symbolic-ref refs/remotes/origin/HEAD > /dev/null 2>&1 || (echo "not a repo" && return)
+  git -C "${1}" pull --quiet --stat --all --prune --autostash 2> >(grep -v autostash | colorize 1) | grep -v autostash
+  git -C "${1}" clean-merged-branches 2> >(colorize 1)
+}
+export -f simplefetch
+
+
+if [[ "$1" == "simple" ]]; then
+  for project in $(projects); do
+    simplefetch "$project"
+  done
+else
+  PARALLELISM=400%
+  # PARALLELISM=100%
+  projects | parallel --bar -j $PARALLELISM fetch {}
+fi

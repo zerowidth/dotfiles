@@ -1,0 +1,350 @@
+#!/usr/bin/env ruby
+
+if ARGV.include?("-h") || ARGV.include?("--help") || ARGV.length < 4
+  STDERR.puts "Generate a markdown summary of GitHub activity."
+  STDERR.puts
+  STDERR.puts "Usage: #{File.basename($0)} <username> <org> <start date> <end date>"
+  STDERR.puts
+  STDERR.puts "Requires `gh-creds` https://github.com/TwP/dotfiles/blob/master/bin/gh-creds"
+  STDERR.puts "and defaults to `gh-creds user`."
+  STDERR.puts "Uses a local memcached to keep request data around, and requires the memcached gem."
+  exit
+end
+
+
+require "bundler/inline"
+gemfile do
+  source 'https://rubygems.org'
+  gem "memcached"
+end
+
+require "digest/md5"
+require "json"
+require "net/http"
+require "time"
+require "uri"
+
+begin
+  require "memcached"
+rescue LoadError
+  abort "memcached gem not found: `gem install memcached`"
+end
+
+if %x(which gh-creds) && $? != 0
+  abort "gh-creds not found! get it"
+end
+
+ENDPOINT = URI("https://api.github.com/graphql")
+TOKEN = %x(gh-creds token)
+CACHE = Memcached.new("localhost:11211")
+TTL = 60 * 60 * 48
+
+ACTIVITY = <<~GRAPHQL
+    query Activity($query: String!, $cursor: String) {
+    search(query: $query, type: ISSUE, first: 50, after: $cursor) {
+      pageInfo {
+        endCursor
+      }
+      nodes {
+        __typename
+        ... on Issue {
+          url
+          number
+          repository {
+            nameWithOwner
+          }
+          author {
+            login
+          }
+          createdAt
+          closedAt
+          title
+          state
+          comments(first: 100) {
+            nodes {
+              author {
+                login
+              }
+              createdAt
+            }
+          }
+        }
+        ... on PullRequest {
+          url
+          number
+          repository {
+            nameWithOwner
+          }
+          author {
+            login
+          }
+          createdAt
+          closedAt
+          mergedAt
+          title
+          comments(first: 100) {
+            nodes {
+              author {
+                login
+              }
+              createdAt
+            }
+          }
+          reviews(first: 100) {
+            nodes {
+              author {
+                login
+              }
+              createdAt
+            }
+          }
+          state
+          mergedBy {
+            login
+          }
+        }
+      }
+    }
+  }
+GRAPHQL
+
+class Fetcher
+  def initialize(endpoint, token)
+    @endpoint = endpoint
+    @token = token
+  end
+
+  # Public: retrieve all results of a query, including pagination
+  def get(query, variables = {})
+    cursor = nil
+    results = []
+    loop do
+      data = graphql_query(query, variables.merge(cursor: cursor))
+      results.push(*data["search"]["nodes"])
+      cursor = data["search"]["pageInfo"]["endCursor"]
+      break if cursor.nil?
+    end
+    results
+  end
+
+  # Internal: issue graphql query
+  def graphql_query(query, variables)
+    cached(query, variables) do
+      headers = { "Authorization" => "bearer #{@token}" }
+      body = { "query" => query, "variables" => variables }.to_json
+      res = Net::HTTP.post(@endpoint, body, headers)
+      if res.code == "200"
+        data = JSON.parse(res.body)
+        if data["errors"]
+          abort "GraphQL error:\n" + data["errors"].map["message"].join("\n")
+        end
+        data["data"]
+      else
+        abort res.body
+      end
+    end
+  end
+
+  def cached(query, args)
+    key = Digest::MD5.hexdigest(query + args.to_json)
+    if (value = CACHE.get(key))
+      STDERR.puts "cached: #{args.inspect}"
+      value
+    end
+  rescue Memcached::NotFound
+    STDERR.puts "fetching: #{args.inspect}"
+    value = yield
+    CACHE.set(key, value, TTL)
+    return value
+  end
+end
+
+class Action
+  attr_reader :name, :timestamp
+
+  def initialize(name, timestamp)
+    @name = name
+    @timestamp = timestamp
+  end
+end
+
+class Node
+  def initialize(data)
+    @data = data
+  end
+
+  def url
+    @data["url"]
+  end
+
+  def slug
+    @data["repository"]["nameWithOwner"] + "#" + @data["number"].to_s
+  end
+
+  def title
+    @data["title"]
+  end
+
+  def actions_by(user)
+    actions = []
+    if created_by?(user)
+      actions << Action.new("opened", Time.parse(@data["createdAt"]))
+    end
+
+    comments = comments_by(user).map do |comment|
+      Action.new("commented", Time.parse(comment["createdAt"]))
+    end
+    actions.concat comments
+
+    actions.sort_by(&:timestamp)
+  end
+
+  def action_by_user_within_range?(user, range)
+    actions_by(user).any? { |action| range.include? action.timestamp }
+  end
+
+  def last_action_by(user, range)
+    actions_by(user).select { |action| range.include? action.timestamp }.last
+  end
+
+  def involves?(user)
+    actions_by(user).any?
+  end
+
+  def created_by?(user)
+    @data["author"] && @data["author"]["login"].downcase == user.downcase
+  end
+
+  def comments_by(user)
+    @data["comments"]["nodes"].select do |comment|
+      comment["author"] && comment["author"]["login"].downcase == user.downcase
+    end
+  end
+
+  def state
+    @data["state"]
+  end
+end
+
+class Issue < Node
+  def kind
+    "Issue"
+  end
+
+  def actions_by(user)
+    actions = super
+
+    last_comment = @data["comments"]["nodes"].last
+    if state == "CLOSED" && last_comment && last_comment["author"]["login"].downcase == user.downcase
+      actions << Action.new("closed", Time.parse(last_comment["createdAt"]))
+    end
+
+    actions.sort_by(&:timestamp)
+  end
+
+  def primary_action_by(user)
+    actions = actions_by(user).map(&:name)
+
+    if actions.include?("closed")
+      "resolved"
+    elsif actions.include?("opened")
+      "opened"
+    elsif actions.include?("reviewed")
+      "reviewed"
+    elsif actions.include?("commented")
+      "commented"
+    else
+      "WTF"
+    end
+  end
+end
+
+class PullRequest < Node
+  def kind
+    "Pull Request"
+  end
+
+  def actions_by(user)
+    actions = super
+
+    reviews_by(user).each do |review|
+      actions << Action.new("reviewed", Time.parse(review["createdAt"]))
+    end
+
+    if merged_by?(user)
+      actions << Action.new("merged", Time.parse(@data["mergedAt"]))
+    end
+
+    actions
+  end
+
+  def primary_action_by(user)
+    actions = actions_by(user).map(&:name)
+
+    if actions.include?("merged")
+      actions.include?("opened") ? "shipped" : "merged"
+    elsif actions.include?("closed")
+      "closed???"
+    elsif actions.include?("opened")
+      "opened"
+    elsif actions.include?("reviewed")
+      "reviewed"
+    elsif actions.include?("commented")
+      "commented"
+    else
+      "WTF"
+    end
+  end
+
+  def reviews_by(user)
+    @data["reviews"]["nodes"].select do |reviews|
+      reviews["author"]["login"].downcase == user.downcase
+    end
+  end
+
+  def merged_by?(user)
+    @data["mergedBy"] && @data["mergedBy"]["login"].downcase == user.downcase
+  end
+end
+
+fetcher = Fetcher.new(ENDPOINT, TOKEN)
+
+author = ARGV[0] || `gh-creds user`.strip
+org = ARGV[1]
+start = Time.parse(ARGV[2])
+finish = Time.parse(ARGV[3])
+
+results = []
+results.concat fetcher.get(ACTIVITY, query: "org:#{org} author:#{author} updated:>#{start.strftime("%FT%T")}")
+results.concat fetcher.get(ACTIVITY, query: "org:#{org} commenter:#{author} updated:>#{start.strftime("%FT%T")}")
+results.concat fetcher.get(ACTIVITY, query: "org:#{org} reviewed-by:#{author} updated:>#{start.strftime("%FT%T")}")
+
+puts "# Summary for @#{author} in @#{org} from #{start.strftime("%B %Y")} through #{(finish - 1).strftime("%B %Y")}"
+
+results
+  .map { |node| Object.const_get(node["__typename"]).new(node) }
+  .uniq { |o| o.slug }
+  .select { |o| o.involves?(author) }
+  .select { |o| o.action_by_user_within_range?(author, start..finish) }
+  .tap { |vs| STDERR.puts "#{vs.length} unique results" }
+  .group_by { |item| item.last_action_by(author, start..finish).timestamp.strftime("%B %Y") }
+  .sort_by { |month, items| items.first.last_action_by(author, start..finish).timestamp }
+  .each do |month, items|
+  puts "## #{month}"
+  puts
+  items.group_by(&:kind).sort_by(&:first).each do |kind, list|
+    puts "### #{kind}s"
+    puts
+    list.group_by { |item| item.primary_action_by(author) }
+      .sort_by(&:first)
+      .each do |action, list|
+      puts "#### #{action.capitalize}"
+      puts
+      list.sort_by { |item| item.slug.split("#").first }.each do |item|
+        puts "* [#{item.slug}: #{item.title}](#{item.url}) " +
+               "(#{item.state.downcase}): #{item.actions_by(author).map(&:name).uniq.join(", ")}"
+      end
+      puts
+    end
+  end
+end
