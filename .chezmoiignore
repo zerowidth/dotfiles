@@ -1,0 +1,24 @@
+README.md
+install.sh
+script
+
+# for migration:
+*/install.sh
+**/*.symlink
+*/*.sh
+ag
+alfred
+bin
+ctags
+fzf
+git
+go
+homebrew
+mas
+moom
+mysql
+node
+ruby
+rust
+shell
+starship

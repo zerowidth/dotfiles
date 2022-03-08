@@ -7,6 +7,7 @@ alias rehash='hash -r'
 alias p4="ping 4.2.2.2"
 which prettyping >/dev/null && alias ping="prettyping"
 alias ia="open -a 'IA Writer' "
+alias cz=chezmoi
 
 alias gdiff="git diff --no-index"
 

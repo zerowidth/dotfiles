@@ -1,5 +1,6 @@
 tap "buo/cask-upgrade"
 
+brew "chezmoi"
 brew "1password-cli"
 
 brew "zsh"
