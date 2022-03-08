@@ -12,4 +12,4 @@ if [[ -d /opt/homebrew/sbin ]]; then
   export PATH=${PATH}:/opt/homebrew/sbin
 fi
 
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
