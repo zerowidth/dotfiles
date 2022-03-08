@@ -121,6 +121,7 @@ ulimit -u 2048
 
 source ~/.paths.sh
 source ~/.utils.sh
+source ~/.secrets.sh
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh # p10k prompt settings
 
