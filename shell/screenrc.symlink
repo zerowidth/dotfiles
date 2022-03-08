@@ -4,4 +4,4 @@ defbce "on"
 # Make xterm scrolling work properly with screen.
 # via http://stackoverflow.com/questions/810025/unable-to-use-screen-efficiently-in-macs-terminal
 termcapinfo xterm-color|xterm|xterms|xs|rxvt ti@:te@
-shell -/usr/local/bin/bash
+shell -/opt/homebrew/bin/bash

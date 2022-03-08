@@ -5,8 +5,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if [[ -d /opt/homebrew/bin ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # from homebrew, for completions
-if type brew &>/dev/null; then
+if [[ -d /opt/homebrew/share/zsh ]]; then
+  FPATH=/opt/homebrew/share/zsh/site-functions:$FPATH
+fi
+
+if [[ -d /usr/local/share/zsh ]]; then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
 fi
 
@@ -37,6 +45,8 @@ setopt inc_append_history_time # append after elapsed
 # -i case ignore | -M more verbose prompting | -R raw control chars
 # -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
 export LESS='-MRXFx4'
+
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 # colorized grep
 # export GREP_OPTIONS='--color=auto'
@@ -75,18 +85,18 @@ autoload -Uz compinit
 compinit
 
 # plugins
-if [[ -f /usr/local/share/antigen/antigen.zsh ]]; then
-  source /usr/local/share/antigen/antigen.zsh
-elif [[ -f ~/.dotfiles/antigen.zsh ]]; then
+[[ -f /opt/homebrew/share/antigen/antigen.zsh ]] &&
+  source /opt/homebrew/share/antigen/antigen.zsh
+[[ -f ~/.dotfiles/antigen.zsh ]] &&
   source ~/.dotfiles/antigen.zsh
-fi
+
 antigen bundle Aloxaf/fzf-tab
 antigen theme romkatv/powerlevel10k
 antigen apply
 
 # mac:
-[[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
-  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # linux
 [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
   source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -102,6 +112,13 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
+# Prompt not showing in Terminal and iTerm after upgrading to MacOS Catalina
+# https://github.com/romkatv/powerlevel10k/issues/379
+# https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
+# still TODO: set these limits in launchctl too
+ulimit -n 200000
+ulimit -u 2048
+
 for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.sh' | egrep -v '/bin/|(install|path)\.sh'); do
   source "$file"
 done
@@ -112,3 +129,5 @@ for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.zsh'); do
 done
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
