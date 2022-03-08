@@ -33,14 +33,11 @@ if [ -n "$(command -v code)" ]; then
   git config --global core.editor "code --wait"
 fi
 
-
 if [ -d ~/.vim/plugins ]; then
   echo "vim plugins already installed, skipping"
  else
   vim --not-a-term +PlugInstall +qa
 fi
-
-
 
 if [ -d ~/.vim/plugins ]; then
   echo "vim plugins already installed, skipping"

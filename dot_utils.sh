@@ -166,3 +166,104 @@ fkill() {
     echo $pid | xargs kill -${1:-9}
   fi
 }
+
+if [ -n "$(command -v code)" ]; then
+  export EDITOR="code"
+  function e() {
+    if [ -n "$1" ]; then
+      if [ -d "$1" ]; then
+        # local dir
+        # dir=${1%/} # strip trailing slash so vim stays happy
+        # $SHELL -l -c "cd \"$dir\" && mvim +Refresh ."
+        code -n $1
+      else
+        # local file dir
+        # file=$(basename "$1")
+        # dir=$(dirname "$1")
+        # $SHELL -l -c "cd \"$dir\" && mvim +Refresh \"$file\""
+        code -n $1
+      fi
+    else
+      # mvim "$@"
+      code -n . "$@"
+    fi
+  }
+elif [ -n "$(command -v vim)" ]; then
+  export EDITOR="vim"
+elif [ -n "$(command -v vi)" ]; then
+  export EDITOR="vi"
+fi
+
+# mysql
+export MYSQL_PS1="\u@\h \d> "
+
+# format ag output for markdown
+alias mdformat='ruby -lne '\''x, y = $_.split(/\s+/,2); puts "* #{x} `#{y}`"'\'''
+
+type nodenv &> /dev/null && eval "$(nodenv init -)"
+type rbenv &> /dev/null && eval "$(rbenv init -)"
+
+function bo() {
+  local bundle="bundle" gems gem
+  if [ -x bin/bundle ]; then
+    bundle="bin/bundle"
+  fi
+  if ! gems=$($bundle list --paths); then
+    echo "$gems"
+    return 1
+  fi
+  if [ $# -gt 0 ]; then
+    gem=$(echo "$gems" | fzf -d/ --nth=-1 --with-nth=-1 -1 -q "$@")
+  else
+    gem=$(echo "$gems" | fzf -d/ --nth=-1 --with-nth=-1 -1)
+  fi
+  if [ -n "$gem" ]; then
+    e "$gem"
+  else
+    return 1
+  fi
+}
+
+function be() {
+  local bundle="bundle"
+  if [ -x bin/bundle ]; then
+    bundle="bin/bundle"
+  fi
+  $bundle exec "$@"
+}
+
+# git utils
+function g() {
+  if [[ $# -gt 0 ]]; then
+    git "$@"
+  else
+    git status --short --branch -uall
+  fi
+}
+alias gam="git amend"
+alias gap="git ap"
+alias gbn="git branchname"
+alias gc-="git co -"
+alias gnb="git co -b"
+alias gci="git ci"
+alias gcm="git checkout \$(git main-branch)"
+alias gd="git diff"
+alias gi="git di"
+alias gdi="git di"
+
+function gp() {
+  git pull --stat --all --prune --progress --autostash &&
+    git clean-merged-branches
+}
+
+function gpp() {
+  git pull --stat --all --prune --progress --autostash &&
+    git push
+}
+
+function main-branch() {
+  git fetch origin
+  git remote set-head origin -a
+  git branch -m master main
+  git branch -u origin/main main
+}

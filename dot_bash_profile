@@ -6,14 +6,55 @@ if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
 
-for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name 'path.sh'); do
-  source "$file"
-done
+export HISTCONTROL=ignoredups;
+export HISTSIZE=10000;
+shopt -s histappend; # append not rewrite history
 
-for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.sh' | egrep -v '/bin/|(install|path)\.sh'); do
-  source "$file"
-done
+# -i case ignore | -M more verbose prompting | -R raw control chars
+# -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
+export LESS='-MRXFx4'
+
+debug_colors() {
+  echo -e \
+    "${TEXT_FOREGROUND}foreground" \
+    "${TEXT_BLACK}black" \
+    "${TEXT_RED}red" \
+    "${TEXT_GREEN}green" \
+    "${TEXT_YELLOW}yellow" \
+    "${TEXT_BLUE}blue" \
+    "${TEXT_MAGENTA}magenta" \
+    "${TEXT_CYAN}cyan" \
+    "${TEXT_LIGHTGRAY}lgray" \
+    "${TEXT_DARKGRAY}dkgray" \
+    "${TEXT_LIGHTRED}lred" \
+    "${TEXT_LIGHTGREEN}lgreen" \
+    "${TEXT_LIGHTYELLOW}lyellow" \
+    "${TEXT_LIGHTBLUE}lblue" \
+    "${TEXT_LIGHTMAGENTA}lmagenta" \
+    "${TEXT_LIGHTCYAN}lcyan" \
+    "${TEXT_WHITE}white" \
+    $TEXT_RESET
+}
+
+function pre_prompt(){
+    history -a
+    echo -ne "\033]1;${PWD/${HOME@E}/\~}\007" # tab
+    echo -ne "\033]2;${USER}@${HOSTNAME%%.*}:${PWD/${HOME@E}/\~}\007" # window
+}
+starship_precmd_user_func="pre_prompt"
+
+[ -n "$(command -v starship)" ] && eval "$(starship init bash)"
+
+# after all the prompt stuff is set up, install iterm integration
+. "$HOME/.dotfiles/shell/iterm2_shell_integration.bash"
 
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+# ghes
+if [ -d /workspace/enterprise2 ]; then
+  cd /workspace/enterprise2 || return
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 true # last command should have a zero exit code

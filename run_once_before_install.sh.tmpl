@@ -111,8 +111,8 @@ apt-get install silversearcher-ag
 [ -d ~/.fzf ] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all --no-update-rc
 
-if ! test -f ~/.dotfiles/antigen.zsh; then
-  curl -L git.io/antigen > ~/.dotfiles/antigen.zsh
+if ! test -f ~/.antigen.zsh; then
+  curl -L git.io/antigen > ~/.antigen.zsh
 fi
 
 if ! type bat >/dev/null; then

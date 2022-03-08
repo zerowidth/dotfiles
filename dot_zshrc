@@ -87,8 +87,8 @@ compinit
 # plugins
 [[ -f /opt/homebrew/share/antigen/antigen.zsh ]] &&
   source /opt/homebrew/share/antigen/antigen.zsh
-[[ -f ~/.dotfiles/antigen.zsh ]] &&
-  source ~/.dotfiles/antigen.zsh
+[[ -f ~/.antigen.zsh ]] &&
+  source ~/.antigen.zsh
 
 antigen bundle Aloxaf/fzf-tab
 antigen theme romkatv/powerlevel10k
@@ -119,15 +119,11 @@ zstyle ':fzf-tab:*' switch-group ',' '.'
 ulimit -n 200000
 ulimit -u 2048
 
-for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.sh' | egrep -v '/bin/|(install|path)\.sh'); do
-  source "$file"
-done
+source ~/.paths.sh
+source ~/.utils.sh
 
-# this includes the iterm2 shell integration:
-for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name '*.zsh'); do
-  source "$file"
-done
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh # p10k prompt settings
 
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh # local install of fzf
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+[[ -f ~/.iterm2_shell_integration.zsh ]] && source ~/.iterm2_shell_integration.zsh
