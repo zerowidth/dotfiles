@@ -1,23 +1,10 @@
 README.md
 install.sh
 script
+.vim/plugins
 
 # for migration:
-**/*.symlink
-*/*.sh
-ag
-alfred
+*.symlink
 bin
-ctags
-fzf
 git
-go
-homebrew
-mas
-moom
-mysql
-node
-ruby
-rust
 shell
-starship
