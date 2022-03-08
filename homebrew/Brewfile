@@ -1,20 +1,19 @@
 tap "buo/cask-upgrade"
 
-brew "mas"
-
-brew "bash"
-brew "bash-completion"
+brew "1password-cli"
 
 brew "zsh"
 brew "antigen" # zsh plugins
-brew "starship"
 brew "direnv"
+brew "zsh-syntax-highlighting"
+
+brew "shellcheck"
+brew "parallel"
+brew "fswatch"
 
 brew "git"
-brew "hub" # old and busted
-brew "gh" # new hotness
-brew "diff-so-fancy"
-brew "git-delta"
+brew "git-lfs"
+brew "gh"
 
 brew "s3cmd"
 
@@ -23,6 +22,7 @@ brew "mtr"
 brew "pstree"
 brew "pv"
 brew "the_silver_searcher"
+brew "rg"
 brew "tree"
 brew "watch"
 brew "rename"
@@ -31,51 +31,26 @@ brew "rbenv"
 brew "ruby-build"
 brew "node"
 brew "nodenv"
-
 brew "rustup-init"
-
 brew "flow" # for javascript
 
 brew "heroku"
 
-# tap "shopify/shopify"
-# brew "toxiproxy"
-
-brew "lua"
-brew "macvim"
-
-tap "universal-ctags/universal-ctags"
-brew "universal-ctags/universal-ctags/universal-ctags", args: ['HEAD']
-brew "parallel" # for ctags generation
-brew "shellcheck" # syntax for shell scripts
-
 brew "go"
-brew "dep"
 
 cask "kap" # screen capturing
 cask "wireshark"
 
-brew "httpie"
+# brew "kubectl"
+# brew "kubectx"
+# brew "stern" # for tailing logs
 
-brew "kubectl"
-brew "stern" # for tailing logs
-
-cask "homebrew/cask-versions/adoptopenjdk8" # kafka prerequisite
-brew "kafka"
-brew "kafkacat"
-brew "zookeeper"
+brew "kcat"
 
 # experimental shell improvements
 brew "exa" # ls replacement
 brew "bat" # cat replacement
 brew "prettyping"
-
-# for flashing firmware for ergodox
-tap "PX4/homebrew-px4"
-brew "dfu-util"
-brew "gcc-arm-none-eabi-54"
-brew "python3"
-brew "cmake"
 
 # for other stuff
 tap "homebrew/cask-fonts"
@@ -85,30 +60,25 @@ cask "font-ia-writer-quattro"
 cask "font-iosevka"
 # cask "font-iosevka-slab"
 
-cask "docker"
-brew "coreutils" # for timeout, for docker-compose builds with puppet
+# cask "docker"
+# brew "coreutils" # for timeout, for docker-compose builds with puppet
 
 cask "qlmarkdown" # markdown quicklook
 
 brew "fzf"
+brew "lunchy"
 
-cask "lunchy"
+# for flashing firmware for ergodox
+# tap "PX4/homebrew-px4"
+# brew "dfu-util"
+# brew "gcc-arm-none-eabi-54"
+# brew "python3"
+# brew "cmake"
 
 # for AVR development:
 # cask "crosspack-avr"
-tap "osx-cross/avr"
-# brew "avr-libc" # doesn't exist anymore?
-brew "avrdude"
-
-# for qmk firmware:
 # tap "osx-cross/avr"
-# tap "PX4/homebrew-px4"
-# brew "avr-gcc@7"
-# brew "dfu-programmer"
-# brew "dfu-util"
-# brew "gcc-arm-none-eabi"
+# brew "avr-libc" # doesn't exist anymore?
 # brew "avrdude"
 
 cask "graphiql"
-
-# brew "pidof"
