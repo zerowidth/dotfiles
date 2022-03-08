@@ -1,0 +1,153 @@
+#!/bin/env -S bash -x
+
+# requires: bin/ (implicitly created before this)
+
+{{ if (eq .chezmoi.os "darwin") }}
+
+if test ! $(which brew); then
+  printf '\e[33mHomebrew not found. \e[0mInstalling Homebrew...\n'
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  {{ if (eq .chezmoi.os "linux") }}
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  {{ else }}
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  {{ end }}
+else
+  printf 'Homebrew found. Continuing...\n'
+fi
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+tap "buo/cask-upgrade"
+
+brew "chezmoi"
+brew "1password-cli"
+
+brew "zsh"
+brew "antigen" # zsh plugins
+brew "direnv"
+brew "zsh-syntax-highlighting"
+
+brew "shellcheck"
+brew "parallel"
+brew "fswatch"
+
+brew "git"
+brew "git-lfs"
+brew "gh"
+
+brew "s3cmd"
+
+brew "jq"
+brew "mtr"
+brew "pstree"
+brew "pv"
+brew "the_silver_searcher"
+brew "rg"
+brew "tree"
+brew "watch"
+brew "rename"
+
+brew "rbenv"
+brew "ruby-build"
+brew "node"
+brew "nodenv"
+brew "rustup-init"
+brew "flow" # for javascript
+
+brew "heroku"
+
+brew "go"
+
+cask "kap" # screen capturing
+cask "wireshark"
+
+# brew "kubectl"
+# brew "kubectx"
+# brew "stern" # for tailing logs
+
+brew "kcat"
+
+# experimental shell improvements
+brew "exa" # ls replacement
+brew "bat" # cat replacement
+brew "prettyping"
+
+# for other stuff
+tap "homebrew/cask-fonts"
+cask "font-fira-code"
+cask "font-ia-writer-duo"
+cask "font-ia-writer-quattro"
+cask "font-iosevka"
+# cask "font-iosevka-slab"
+
+# cask "docker"
+# brew "coreutils" # for timeout, for docker-compose builds with puppet
+
+cask "qlmarkdown" # markdown quicklook
+
+brew "fzf"
+brew "lunchy"
+
+# for flashing firmware for ergodox
+# tap "PX4/homebrew-px4"
+# brew "dfu-util"
+# brew "gcc-arm-none-eabi-54"
+# brew "python3"
+# brew "cmake"
+
+# for AVR development:
+# cask "crosspack-avr"
+# tap "osx-cross/avr"
+# brew "avr-libc" # doesn't exist anymore?
+# brew "avrdude"
+
+cask "graphiql"
+EOF
+
+{{ else if (eq .chezmoi.os "linux") }}
+# FIXME: replace with ripgrep, linuxbrew?
+apt-get install silversearcher-ag
+
+[ -d ~/.fzf ] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all --no-update-rc
+
+if ! test -f ~/.dotfiles/antigen.zsh; then
+  curl -L git.io/antigen > ~/.dotfiles/antigen.zsh
+fi
+
+if ! type bat >/dev/null; then
+  curl -s -L https://github.com/sharkdp/bat/releases/download/v0.18.1/bat_0.18.1.amd64.deb -o /tmp/bat.deb && \
+    sudo dpkg -i /tmp/bat.deb
+fi
+
+sudo apt-get install -y fswatch || true
+sudo apt-get install -y zsh zsh-syntax-highlighting
+
+if [ -n $(command -v starship) ]; then
+  echo "starship already installed, skipping"
+else
+  url="https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
+  curl --silent --fail --location "$url" | tar xzvf - -C ~/bin
+fi
+
+echo "fetching iterm2 shell integration scripts"
+curl -s -L https://iterm2.com/shell_integration/bash -o ~/.iterm2_shell_integration.bash
+curl -s -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
+
+{{ end -}}
+
+# other stuff gathered from install scripts:
+if which go >/dev/null; then
+  # used by vim
+  go get -u -v github.com/jstemmer/gotags
+fi
+
+if which rustup-init >/dev/null; then
+  rustup-init -y --no-modify-path
+else
+  echo "rustup-init not found, skipping"
+fi
+
+echo "Configuring vim"
+mkdir -p ~/.vimundo
+mkdir -p ~/.vimswap
