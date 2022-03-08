@@ -3,7 +3,6 @@ install.sh
 script
 
 # for migration:
-*/install.sh
 **/*.symlink
 */*.sh
 ag
