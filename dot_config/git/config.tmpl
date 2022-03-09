@@ -60,6 +60,19 @@
 	conflicts = diff --name-only --diff-filter=U
 [core]
 	autocrlf = input
+{{- if (or (eq .chezmoi.os "darwin") .codespaces) }}
+	editor = code --wait
+{{- else }}
+	editor = vim
+{{- end }}
+{{- if (eq .chezmoi.os "darwin") }}
+[credential "https://github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+{{- end }}
 [branch]
 	autosetupmerge = true
 	autosetuprebase = remote

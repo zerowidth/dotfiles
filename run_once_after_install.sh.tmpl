@@ -1,6 +1,5 @@
 #!/bin/env -S bash
 
-
 {{ if (eq .chezmoi.os "darwin") }}
 # latest version
 latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
@@ -24,14 +23,7 @@ else
   gem install debase
   # gem install byebug
 fi
-
-git config --global credential.helper osxkeychain
-
 {{ end -}}
-
-if [ -n "$(command -v code)" ]; then
-  git config --global core.editor "code --wait"
-fi
 
 if [ -d ~/.vim/plugins ]; then
   echo "vim plugins already installed, skipping"
