@@ -85,14 +85,16 @@ autoload -Uz compinit
 compinit
 
 # plugins
-[[ -f /opt/homebrew/share/antigen/antigen.zsh ]] &&
-  source /opt/homebrew/share/antigen/antigen.zsh
-[[ -f ~/.antigen.zsh ]] &&
-  source ~/.antigen.zsh
+[[ -f /opt/homebrew/share/antigen/antigen.zsh ]] && source /opt/homebrew/share/antigen/antigen.zsh
+[[ -f ~/.local/bin/antigen.zsh ]] && source ~/.local/bin/antigen.zsh
 
-antigen bundle Aloxaf/fzf-tab
-antigen theme romkatv/powerlevel10k
-antigen apply
+if [[ -n $(command -v antigen) ]]; then
+  antigen bundle Aloxaf/fzf-tab
+  antigen theme romkatv/powerlevel10k
+  antigen apply
+else
+  echo "antigen is broken, skipping"
+fi
 
 # mac:
 [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
