@@ -5,5 +5,4 @@ script
 
 # for migration:
 *.symlink
-git
 shell

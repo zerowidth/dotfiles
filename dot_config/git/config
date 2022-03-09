@@ -59,9 +59,7 @@
 	mc = diff --name-status --diff-filter=U
 	conflicts = diff --name-only --diff-filter=U
 [core]
-	excludesfile = ~/.dotfiles/git/gitignore
 	autocrlf = input
-	attributesfile = ~/.dotfiles/git/gitattributes
 	editor = vim
 [branch]
 	autosetupmerge = true
