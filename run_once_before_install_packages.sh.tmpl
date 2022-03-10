@@ -113,7 +113,7 @@ apt-get install silversearcher-ag
 
 if ! test -f ~/.local/bin/antigen.zsh; then
   mkdir -p ~/.local/bin
-  curl -L git.io/antigen > ~/local/bin/antigen.zsh
+  curl -L git.io/antigen > ~/.local/bin/antigen.zsh
 fi
 
 if ! type bat >/dev/null; then
@@ -128,13 +128,11 @@ if [ -n $(command -v starship) ]; then
   echo "starship already installed, skipping"
 else
   url="https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
-  curl --silent --fail --location "$url" | tar xzvf - -C ~/bin
+  curl --silent --fail --location "$url" | tar xzvf - -C ~/.local/bin
 fi
 
-echo "fetching iterm2 shell integration scripts"
-curl -s -L https://iterm2.com/shell_integration/bash -o ~/.iterm2_shell_integration.bash
-curl -s -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
-
+curl -s -L https://iterm2.com/shell_integration/bash -o ~/.local/bin/iterm2_shell_integration.bash
+curl -s -L https://iterm2.com/shell_integration/zsh -o ~/.local/bin/iterm2_shell_integration.zsh
 {{ end -}}
 
 # other stuff gathered from install scripts:
@@ -149,6 +147,36 @@ else
   echo "rustup-init not found, skipping"
 fi
 
-echo "Configuring vim"
+{{ if (eq .chezmoi.os "darwin") }}
+# latest version
+latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
+if rbenv versions | grep -q $latest; then
+  echo "ruby $latest already installed, skipping"
+else
+  echo "installing latest ruby: $latest"
+  rbenv install "$latest"
+  rbenv global "$latest"
+
+  # for local scripts
+  gem install bubs
+
+  # for vim
+  gem install ripper-tags
+
+  # for vscode
+  gem install solargraph
+  gem install rubocop
+  gem install ruby-debug-ide
+  gem install debase
+  # gem install byebug
+fi
+{{ end -}}
+
 mkdir -p ~/.vimundo
 mkdir -p ~/.vimswap
+
+if [ -d ~/.vim/plugins ]; then
+  echo "vim plugins already installed, skipping"
+ else
+  vim --not-a-term +PlugInstall +qa
+fi
