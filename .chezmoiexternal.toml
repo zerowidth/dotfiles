@@ -1,0 +1,14 @@
+{{- if (eq .chezmoi.os "linux") -}}
+[".local/bin/antigen.zsh"]
+  type = "file"
+  url = "https://git.io/antigen"
+[".local/bin/starship"]
+  type = "archive"
+  url = "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
+[".local/bin/iterm2_shell_integration.bash"]
+  type = "file"
+  url = "https://iterm2.com/shell_integration/bash"
+[".local/bin/iterm2_shell_integration.zsh"]
+  type = "file"
+  url = "https://iterm2.com/shell_integration/zsh"
+{{- end -}}

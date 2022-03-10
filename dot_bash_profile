@@ -47,6 +47,7 @@ function pre_prompt(){
 }
 starship_precmd_user_func="pre_prompt"
 
+export PATH=${PATH}:~/.local/bin/starship
 [[ -n "$(command -v starship)" ]] && eval "$(starship init bash)"
 
 # after all the prompt stuff is set up, install iterm integration
