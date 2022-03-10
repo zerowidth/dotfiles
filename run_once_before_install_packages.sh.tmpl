@@ -14,11 +14,12 @@ else
   printf 'Homebrew found. Continuing...\n'
 fi
 
+{{ if (eq .chezmoi.os "darwin") }}
 brew bundle --no-lock --file=/dev/stdin <<EOF
 tap "buo/cask-upgrade"
 
 brew "chezmoi"
-brew "1password-cli"
+cask "1password-cli"
 
 brew "zsh"
 brew "antigen" # zsh plugins
@@ -57,7 +58,7 @@ brew "heroku"
 brew "go"
 
 cask "kap" # screen capturing
-cask "wireshark"
+# cask "wireshark"
 
 # brew "kubectl"
 # brew "kubectx"
@@ -151,8 +152,6 @@ else
   gem install solargraph
   gem install rubocop
   gem install ruby-debug-ide
-  gem install debase
-  # gem install byebug
 fi
 {{ end -}}
 
