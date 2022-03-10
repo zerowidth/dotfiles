@@ -28,9 +28,13 @@ Socket.udp_server_sockets(listen_ip, port) do |sockets|
         msg.split("\n").each do |line|
           metric, type, tags = line.split("|")
           name, value = metric.split(":")
-          tags = tags[1..].split(",").map { |tag| tag.split(":", 2) }
-          tags = tags.sort_by(&:first).map { |t, v| "#{t}:#{v}" }.join(" ")
-          puts "#{name.colorize(:magenta)} #{type.colorize(:green)} #{value.colorize(:blue)} #{tags}"
+          if tags
+            tags = tags[1..].split(",").map { |tag| tag.split(":", 2) }
+            tags = " #{tags.sort_by(&:first).map { |t, v| "#{t}:#{v}" }.join(" ")}"
+          else
+            tags = ""
+          end
+          puts "#{name.colorize(:magenta)} #{type.colorize(:green)} #{value.colorize(:blue)}#{tags}"
         end
       else
         puts "--- #{msg.bytesize} bytes #{msg_src} ---"
