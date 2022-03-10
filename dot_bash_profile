@@ -14,6 +14,10 @@ shopt -s histappend; # append not rewrite history
 # -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
 export LESS='-MRXFx4'
 
+source ~/.paths.sh
+source ~/.utils.sh
+source ~/.secrets.sh
+
 debug_colors() {
   echo -e \
     "${TEXT_FOREGROUND}foreground" \
