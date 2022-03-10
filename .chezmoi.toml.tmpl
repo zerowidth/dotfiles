@@ -1,4 +1,6 @@
-sourcePath = {{ .chezmoi.sourcePath }}
 {{- $codespaces:= env "CODESPACES" | not | not -}}
+
+sourceDir = {{ .chezmoi.sourceDir | quote }}
+
 [data]
   codespaces = {{ $codespaces }}
