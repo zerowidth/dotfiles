@@ -59,6 +59,6 @@ if [ -d /workspace/enterprise2 ]; then
   cd /workspace/enterprise2 || return
 fi
 
-[[ -f ~/.local/bin/fzf.bash ]] && source ~/.local/bin/fzf.bash
+[[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 
 true # last command should have a zero exit code

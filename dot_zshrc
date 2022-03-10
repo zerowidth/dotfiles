@@ -129,4 +129,4 @@ source ~/.secrets.sh
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh # local install of fzf
 
-[[ -f ~/.iterm2_shell_integration.zsh ]] && source ~/.iterm2_shell_integration.zsh
+[[ -f ~/.local/bin/iterm2_shell_integration.zsh ]] && source ~/.local/bin/iterm2_shell_integration.zsh
