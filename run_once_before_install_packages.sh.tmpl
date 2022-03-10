@@ -117,18 +117,6 @@ sudo apt-get install -y zsh zsh-syntax-highlighting
 
 {{ end -}}
 
-# other stuff gathered from install scripts:
-if which go >/dev/null; then
-  # used by vim
-  go get -u -v github.com/jstemmer/gotags
-fi
-
-if which rustup-init >/dev/null; then
-  rustup-init -y --no-modify-path
-else
-  echo "rustup-init not found, skipping"
-fi
-
 {{ if (eq .chezmoi.os "darwin") }}
 # latest version
 latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
@@ -141,9 +129,6 @@ else
 
   # for local scripts
   gem install bubs
-
-  # for vim
-  gem install ripper-tags
 
   # for vscode
   gem install solargraph
