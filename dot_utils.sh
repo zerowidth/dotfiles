@@ -70,6 +70,7 @@ function up() {
   brew cu --cleanup --no-brew-update --yes
   brew cleanup
   antigen update
+  chezmoi status
 }
 
 # Run a command, copying the command line first and then capturing the output.
