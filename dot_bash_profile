@@ -47,10 +47,10 @@ function pre_prompt(){
 }
 starship_precmd_user_func="pre_prompt"
 
-[ -n "$(command -v starship)" ] && eval "$(starship init bash)"
+[[ -n "$(command -v starship)" ]] && eval "$(starship init bash)"
 
 # after all the prompt stuff is set up, install iterm integration
-. "$HOME/.dotfiles/shell/iterm2_shell_integration.bash"
+[[ -f "$HOME/.local/bin/iterm2_shell_integration.bash" ]] && source "$HOME/.local/bin/iterm2_shell_integration.bash"
 
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
@@ -59,6 +59,6 @@ if [ -d /workspace/enterprise2 ]; then
   cd /workspace/enterprise2 || return
 fi
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[[ -f ~/.local/bin/fzf.bash ]] && source ~/.local/bin/fzf.bash
 
 true # last command should have a zero exit code
