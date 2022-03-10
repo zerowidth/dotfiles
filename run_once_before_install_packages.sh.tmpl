@@ -14,7 +14,6 @@ else
   printf 'Homebrew found. Continuing...\n'
 fi
 
-{{ if (eq .chezmoi.os "darwin") }}
 brew bundle --no-lock --file=/dev/stdin <<EOF
 tap "buo/cask-upgrade"
 
