@@ -17,32 +17,29 @@ fi
 brew bundle --no-lock --file=/dev/stdin <<EOF
 brew "fzf"
 
-brew "git"
 brew "bat"
-brew "jq"
 brew "pstree"
 brew "pv"
 brew "the_silver_searcher"
 brew "rg"
 brew "tree"
-brew "watch"
-brew "rename"
 
 brew "direnv"
 
 brew "antigen" # zsh plugins
 brew "zsh-syntax-highlighting"
 
-brew "parallel"
-brew "fswatch"
-
-brew "go"
-
 {{ if .mac }}
 tap "buo/cask-upgrade"
 
+brew "git"
+brew "jq"
+brew "watch"
+brew "fswatch"
+brew "parallel"
 brew "prettyping"
 brew "mtr"
+brew "rename" # conflicts with linux-util on linux
 
 brew "chezmoi"
 cask "1password-cli"
@@ -53,6 +50,7 @@ brew "gh"
 brew "s3cmd"
 brew "kcat"
 
+brew "go"
 brew "rbenv"
 brew "ruby-build"
 brew "node"
@@ -92,13 +90,9 @@ brew "lunchy"
 # brew "avr-libc" # doesn't exist anymore?
 # brew "avrdude"
 
-{{/* linux only */}}
-{{ else }}
-
-brew "kubectl"
-brew "kubectx"
-brew "stern" # for tailing logs
-
+# brew "kubectl"
+# brew "kubectx"
+# brew "stern" # for tailing logs
 {{ end }}
 EOF
 {{ end }}
