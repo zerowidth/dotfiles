@@ -124,9 +124,8 @@ ulimit -u 2048
 source ~/.paths.sh
 source ~/.utils.sh
 source ~/.secrets.sh
+source ~/.p10k.zsh # p10k prompt settings
 
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh # p10k prompt settings
-
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh # local install of fzf
+[[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
 [[ -f ~/.local/bin/iterm2_shell_integration.zsh ]] && source ~/.local/bin/iterm2_shell_integration.zsh

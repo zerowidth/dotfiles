@@ -1,6 +1,7 @@
-{{- $codespaces:= env "CODESPACES" | not | not -}}
-
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
-  codespaces = {{ $codespaces }}
+  mac = {{ eq .chezmoi.os "darwin" }}
+  linux = {{ eq .chezmoi.os "linux" }}
+  shared = {{ env "GH_ENV" | not | not }}
+  codespaces = {{ env "CODESPACES" | not | not }}

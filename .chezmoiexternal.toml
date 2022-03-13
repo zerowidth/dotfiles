@@ -1,4 +1,4 @@
-{{- if (eq .chezmoi.os "linux") -}}
+{{- if .linux -}}
 [".local/bin/antigen.zsh"]
   type = "file"
   url = "https://git.io/antigen"
@@ -11,4 +11,11 @@
 [".local/bin/iterm2_shell_integration.zsh"]
   type = "file"
   url = "https://iterm2.com/shell_integration/zsh"
+{{- end -}}
+
+{{- if .shared -}}
+[".local/bin/kubectx"]
+  type = "file"
+[".local/bin/stern"]
+  type = "file"
 {{- end -}}

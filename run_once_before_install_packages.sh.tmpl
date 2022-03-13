@@ -2,43 +2,24 @@
 
 set -x
 
-{{ if (eq .chezmoi.os "darwin") }}
+{{ if (or .mac (not .shared)) }}
 
 if test ! $(which brew); then
-  printf '\e[33mHomebrew not found. \e[0mInstalling Homebrew...\n'
+  echo "installing homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  {{ if (eq .chezmoi.os "linux") }}
+  {{ if .linux }}
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   {{ else }}
   eval "$(/opt/homebrew/bin/brew shellenv)"
   {{ end }}
-else
-  printf 'Homebrew found. Continuing...\n'
 fi
 
 brew bundle --no-lock --file=/dev/stdin <<EOF
-tap "buo/cask-upgrade"
-
-brew "chezmoi"
-cask "1password-cli"
-
-brew "zsh"
-brew "antigen" # zsh plugins
-brew "direnv"
-brew "zsh-syntax-highlighting"
-
-brew "shellcheck"
-brew "parallel"
-brew "fswatch"
+brew "fzf"
 
 brew "git"
-brew "git-lfs"
-brew "gh"
-
-brew "s3cmd"
-
+brew "bat"
 brew "jq"
-brew "mtr"
 brew "pstree"
 brew "pv"
 brew "the_silver_searcher"
@@ -47,30 +28,42 @@ brew "tree"
 brew "watch"
 brew "rename"
 
+brew "direnv"
+
+brew "antigen" # zsh plugins
+brew "zsh-syntax-highlighting"
+
+brew "parallel"
+brew "fswatch"
+
+brew "go"
+
+{{ if .mac }}
+tap "buo/cask-upgrade"
+
+brew "prettyping"
+brew "mtr"
+
+brew "chezmoi"
+cask "1password-cli"
+
+brew "zsh"
+
+brew "gh"
+brew "s3cmd"
+brew "kcat"
+
 brew "rbenv"
 brew "ruby-build"
 brew "node"
 brew "nodenv"
-brew "rustup-init"
 brew "flow" # for javascript
+brew "shellcheck"
 
 brew "heroku"
 
-brew "go"
-
 cask "kap" # screen capturing
 # cask "wireshark"
-
-# brew "kubectl"
-# brew "kubectx"
-# brew "stern" # for tailing logs
-
-brew "kcat"
-
-# experimental shell improvements
-brew "exa" # ls replacement
-brew "bat" # cat replacement
-brew "prettyping"
 
 # for other stuff
 tap "homebrew/cask-fonts"
@@ -81,11 +74,9 @@ cask "font-iosevka"
 # cask "font-iosevka-slab"
 
 # cask "docker"
-# brew "coreutils" # for timeout, for docker-compose builds with puppet
 
 cask "qlmarkdown" # markdown quicklook
 
-brew "fzf"
 brew "lunchy"
 
 # for flashing firmware for ergodox
@@ -100,26 +91,24 @@ brew "lunchy"
 # tap "osx-cross/avr"
 # brew "avr-libc" # doesn't exist anymore?
 # brew "avrdude"
+
+{{/* linux only */}}
+{{ else }}
+
+brew "kubectl"
+brew "kubectx"
+brew "stern" # for tailing logs
+
+{{ end }}
 EOF
+{{ end }}
 
-{{ else if (eq .chezmoi.os "linux") }}
-# FIXME: replace with ripgrep, linuxbrew?
-apt-get install silversearcher-ag
-
-[ -d ~/.fzf ] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install --all --no-update-rc
-
-if ! type bat >/dev/null; then
-  curl -s -L https://github.com/sharkdp/bat/releases/download/v0.18.1/bat_0.18.1.amd64.deb -o /tmp/bat.deb && \
-    sudo dpkg -i /tmp/bat.deb
-fi
-
-sudo apt-get install -y fswatch || true
-sudo apt-get install -y zsh zsh-syntax-highlighting
-
+{{ if .shared }}
+[[ -d ~/.local/share/fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
+~/.local/share/fzf/install --no-update-rc --keybindings --completions --xdg
 {{ end -}}
 
-{{ if (eq .chezmoi.os "darwin") }}
+{{ if .mac }}
 # latest version
 latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
 if rbenv versions | grep -q $latest; then
@@ -137,6 +126,8 @@ else
   gem install rubocop
   gem install ruby-debug-ide
 fi
+
+[[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
 {{ end -}}
 
 if [ -d ~/.vim/plugins ]; then
@@ -144,9 +135,3 @@ if [ -d ~/.vim/plugins ]; then
  else
   vim --not-a-term +PlugInstall +qa
 fi
-
-{{ if (eq .chezmoi.os "darwin") }}
-if ! [[ -d ~/.ssh ]]; then
-  ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
-fi
-{{ end }}
