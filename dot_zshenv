@@ -1,3 +1,0 @@
-for file in $(find -H "$HOME/.dotfiles" -maxdepth 2 -name 'path.sh'); do
-  source "$file"
-done
