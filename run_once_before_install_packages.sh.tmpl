@@ -6,7 +6,7 @@ set -x
 
 if test ! $(which brew); then
   echo "installing homebrew"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   {{ if .linux }}
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   {{ else }}
