@@ -12,4 +12,5 @@ if [[ -d /opt/homebrew/sbin ]]; then
   export PATH=${PATH}:/opt/homebrew/sbin
 fi
 
+[[ -d ~/.local/bin/kubectx ]] && export PATH=${PATH}:~/.local/bin/kubectx
 export PATH=$HOME/.local/bin:$PATH
