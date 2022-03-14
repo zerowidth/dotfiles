@@ -59,17 +59,17 @@ bindkey -M viins '^Y' yank
 bindkey -M viins '^U' kill-whole-line
 
 # prompt settings
-if [ -z "$LINUX" ]; then
-  function set_window_title(){
-    print -Pn "\e]1;%~\a" # tab
-    print -Pn "\e]2;%n@%m: %~\a" # window
-  }
-else
-  function set_window_title(){
-    print -Pn "\e]1;%n@%m: %~\a" # tab
-    print -Pn "\e]2;%n@%m: %~\a" # window
-  }
-fi
+{{ if .linux }}
+function set_window_title(){
+  print -Pn "\e]1;%~\a" # tab
+  print -Pn "\e]2;%n@%m: %~\a" # window
+}
+{{ else }}
+function set_window_title(){
+  print -Pn "\e]1;%n@%m: %~\a" # tab
+  print -Pn "\e]2;%n@%m: %~\a" # window
+}
+{{ end }}
 precmd_functions+=(set_window_title)
 
 if type direnv &>/dev/null; then
