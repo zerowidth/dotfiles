@@ -60,12 +60,12 @@
 	conflicts = diff --name-only --diff-filter=U
 [core]
 	autocrlf = input
-{{- if (or (eq .chezmoi.os "darwin") .codespaces) }}
+{{- if (or .mac .codespaces) }}
 	editor = code --wait
 {{- else }}
 	editor = vim
 {{- end }}
-{{- if (eq .chezmoi.os "darwin") }}
+{{- if .mac }}
 [credential "https://github.com"]
 	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential

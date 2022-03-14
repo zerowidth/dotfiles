@@ -18,10 +18,7 @@ which bat >/dev/null && {
   export BAT_THEME='base16'
 }
 
-test -x ~/kubectl && alias kubectl ~/kubectl
-test -x ~/kubectx && alias kubectl ~/kubectl
-test -x ~/stern && alias kubectl ~/kubectl
-
+{{ if .shared }}
 # configure the shell for a kube context and namespace
 kc() {
   options() {
@@ -48,19 +45,17 @@ alias k=kubectl
 alias kw='watch kubectl --context $(kubectx -c) --namespace $(kubens -c)'
 
 # run stern with the current namespace
-# binary is from https://github.com/wercker/stern
-if [ -x ~/stern_linux_amd64 ]; then
-  alias stern='./stern_linux_amd64 --namespace $(kubens -c)'
-else
-  alias stern=$(which stern)' --namespace $(kubens -c)'
-  fi
+[[ -n "$(command -v stern)" ]] && alias stern=$(which stern)' --namespace $(kubens -c)'
+{{ end }}
 
 # quickly get to the real path (e.g. go project symlinks)
 alias cdr='cd $(pwd -P)'
 
+{{ if .mac }}
 alias scan-ssh="dns-sd -B _ssh._tcp"
-
 alias awake="pmset -g assertions | grep -i sleep"
+{{ end }}
+
 
 # update homebrew
 function up() {
