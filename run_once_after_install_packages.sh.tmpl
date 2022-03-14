@@ -99,7 +99,7 @@ EOF
 
 {{ if .shared }}
 [[ -d ~/.local/share/fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
-~/.local/share/fzf/install --no-update-rc --keybindings --completions --xdg
+~/.local/share/fzf/install --no-update-rc --key-bindings --completion --xdg
 
 if ! [[ -f ~/.local/bin/kcat ]]; then
   git clone https://github.com/edenhill/kcat ~/.local/share/kcat
