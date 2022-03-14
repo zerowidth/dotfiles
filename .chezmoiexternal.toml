@@ -1,4 +1,4 @@
-{{- if .linux -}}
+{{ if .linux }}
 [".local/bin/antigen.zsh"]
   type = "file"
   url = "https://git.io/antigen"
@@ -11,13 +11,13 @@
 [".local/bin/iterm2_shell_integration.zsh"]
   type = "file"
   url = "https://iterm2.com/shell_integration/zsh"
-{{- end -}}
+{{ end }}
 
-{{- if .shared -}}
+{{ if .shared }}
 [".local/bin/kubectx"]
   type = "archive"
   url = "https://github.com/ahmetb/kubectx/releases/download/v1.9.4/kubectx_v0.9.4_linux_x86_64.tar.gz"
 [".local/bin/stern"]
   type = "file"
   url = "https://github.com/wercker/stern/releases/latest/download/stern_linux_amd64"
-{{- end -}}
+{{ end }}
