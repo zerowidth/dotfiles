@@ -131,14 +131,14 @@ fi
 [[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
 {{ end -}}
 
-{{ if .linux }}
-if ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
-  sudo chsh -s /bin/zsh $(whoami)
-fi
-{{ end }}
-
 if [ -d ~/.vim/plugins ]; then
   echo "vim plugins already installed, skipping"
  else
   vim --not-a-term +PlugInstall +qa
 fi
+
+{{ if .linux }}
+if ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
+  sudo chsh -s /bin/zsh $(whoami)
+fi
+{{ end }}
