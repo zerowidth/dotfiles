@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+
+set -x
+
+{{ if (or .mac (not .shared)) }}
+
+if test ! $(which brew); then
+  echo "installing homebrew"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  {{ if .linux }}
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  {{ else }}
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  {{ end }}
+fi
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+brew "fzf"
+
+brew "bat"
+brew "pstree"
+brew "pv"
+brew "the_silver_searcher"
+brew "rg"
+brew "tree"
+
+brew "direnv"
+
+brew "antigen" # zsh plugins
+brew "zsh-syntax-highlighting"
+
+{{ if .mac }}
+tap "buo/cask-upgrade"
+
+brew "git"
+brew "jq"
+brew "watch"
+brew "fswatch"
+brew "parallel"
+brew "prettyping"
+brew "mtr"
+brew "rename" # conflicts with linux-util on linux
+
+brew "chezmoi"
+cask "1password-cli"
+
+brew "zsh"
+
+brew "gh"
+brew "s3cmd"
+brew "kcat"
+
+brew "go"
+brew "rbenv"
+brew "ruby-build"
+brew "node"
+brew "nodenv"
+brew "flow" # for javascript
+brew "shellcheck"
+
+brew "heroku"
+
+cask "kap" # screen capturing
+# cask "wireshark"
+
+# for other stuff
+tap "homebrew/cask-fonts"
+cask "font-fira-code"
+cask "font-ia-writer-duo"
+cask "font-ia-writer-quattro"
+cask "font-iosevka"
+# cask "font-iosevka-slab"
+
+# cask "docker"
+
+cask "qlmarkdown" # markdown quicklook
+
+brew "lunchy"
+
+# for flashing firmware for ergodox
+# tap "PX4/homebrew-px4"
+# brew "dfu-util"
+# brew "gcc-arm-none-eabi-54"
+# brew "python3"
+# brew "cmake"
+
+# for AVR development:
+# cask "crosspack-avr"
+# tap "osx-cross/avr"
+# brew "avr-libc" # doesn't exist anymore?
+# brew "avrdude"
+
+# brew "kubectl"
+# brew "kubectx"
+# brew "stern" # for tailing logs
+{{ end }}
+EOF
+{{ end }}
+
+{{ if .shared }}
+[[ -d ~/.local/share/fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
+~/.local/share/fzf/install --no-update-rc --key-bindings --completion --xdg
+
+if ! [[ -f ~/.local/bin/kcat ]]; then
+  git clone https://github.com/edenhill/kcat ~/.local/share/kcat
+  cd ~/.local/share/kcat && ./bootstrap.sh
+  cp ~/.lcoal/share/kcat/kcat ~/.local/bin/kcat
+fi
+
+{{ end -}}
+
+{{ if .mac }}
+# latest version
+latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
+if rbenv versions | grep -q $latest; then
+  echo "ruby $latest already installed, skipping"
+else
+  echo "installing latest ruby: $latest"
+  rbenv install "$latest"
+  rbenv global "$latest"
+
+  # for local scripts
+  gem install bubs
+
+  # for vscode
+  gem install solargraph
+  gem install rubocop
+  gem install ruby-debug-ide
+fi
+
+[[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
+{{ end -}}
+
+if [ -d ~/.vim/plugins ]; then
+  echo "vim plugins already installed, skipping"
+ else
+  vim --not-a-term +PlugInstall +qa
+fi
+
+{{ if .linux }}
+if [[ -n "$(grep $(whoami) /etc/passwd)" ]] && ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
+  sudo chsh -s /bin/zsh $(whoami)
+fi
+{{ end }}

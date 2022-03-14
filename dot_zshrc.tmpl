@@ -1,0 +1,131 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+[[ -d /opt/homebrew/bin ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -d /home/linuxbrew/.linuxbrew/bin ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# from homebrew, for completions
+if [[ -d /opt/homebrew/share/zsh ]]; then
+  FPATH=/opt/homebrew/share/zsh/site-functions:$FPATH
+fi
+
+if [[ -d /usr/local/share/zsh ]]; then
+  FPATH=/usr/local/share/zsh/site-functions:$FPATH
+fi
+
+if [[ "$(uname)" = "Linux" ]]; then
+  export LINUX=1
+fi
+
+# zsh settings
+setopt pushd_ignore_dups # don't push the same directory twice
+setopt extendedglob # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc.
+setopt nomatch # If a pattern for filename generation has no matches, print an error,
+setopt notify # Report the status of background jobs immediately
+unsetopt autocd # don't want
+
+HISTFILE=~/.histfile
+HISTSIZE=5000
+SAVEHIST=50000
+setopt append_history # append, not rewrite
+setopt extended_history # timestamps too
+setopt hist_ignore_dups # ignore immediate duplicates
+setopt hist_ignore_all_dups # ignore all of 'em, too
+
+# these three are mutually exclusive:
+# setopt inc_append_history # append immediately
+setopt inc_append_history_time # append after elapsed
+# setopt share_history # share history, read immediately
+
+# -i case ignore | -M more verbose prompting | -R raw control chars
+# -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
+export LESS='-MRXFx4'
+
+[[ -n $(command -v /usr/libexec/java_home) ]] && export JAVA_HOME=$(/usr/libexec/java_home)
+
+# colorized grep
+# export GREP_OPTIONS='--color=auto'
+# export GREP_COLOR='1;33'
+
+# edit like vim, mostly
+bindkey -v
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey -M viins '^Y' yank
+bindkey -M viins '^U' kill-whole-line
+
+# prompt settings
+{{ if .linux }}
+function set_window_title(){
+  print -Pn "\e]1;%~\a" # tab
+  print -Pn "\e]2;%n@%m: %~\a" # window
+}
+{{ else }}
+function set_window_title(){
+  print -Pn "\e]1;%n@%m: %~\a" # tab
+  print -Pn "\e]2;%n@%m: %~\a" # window
+}
+{{ end }}
+precmd_functions+=(set_window_title)
+
+if type direnv &>/dev/null; then
+  eval "$(direnv hook zsh)"
+fi
+
+# # completions
+zstyle :compinstall filename '/Users/nathan/.zshrc'
+# # case-insensitive if there's no match
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+autoload -Uz compinit
+compinit
+
+# plugins
+[[ -f /opt/homebrew/share/antigen/antigen.zsh ]] && source /opt/homebrew/share/antigen/antigen.zsh
+[[ -f ~/.local/bin/antigen.zsh ]] && source ~/.local/bin/antigen.zsh
+
+if [[ -n $(command -v antigen) ]]; then
+  antigen bundle Aloxaf/fzf-tab
+  antigen theme romkatv/powerlevel10k
+  antigen apply
+else
+  echo "antigen is broken, skipping"
+fi
+
+# mac:
+[[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# linux
+[[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+
+# Prompt not showing in Terminal and iTerm after upgrading to MacOS Catalina
+# https://github.com/romkatv/powerlevel10k/issues/379
+# https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
+# still TODO: set these limits in launchctl too
+ulimit -n 200000
+ulimit -u 2048
+
+source ~/.paths.sh
+source ~/.utils.sh
+source ~/.secrets.sh
+source ~/.p10k.zsh # p10k prompt settings
+[[ -f ~/.local.sh ]] && source ~/.local.sh # host-specific settings/aliases
+
+[[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
+
+[[ -f ~/.local/bin/iterm2_shell_integration.zsh ]] && source ~/.local/bin/iterm2_shell_integration.zsh

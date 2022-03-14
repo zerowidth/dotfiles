@@ -1,0 +1,40 @@
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+export HISTCONTROL=ignoredups;
+export HISTSIZE=10000;
+shopt -s histappend; # append not rewrite history
+
+# -i case ignore | -M more verbose prompting | -R raw control chars
+# -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
+export LESS='-MRXFx4'
+
+source ~/.paths.sh
+source ~/.utils.sh
+source ~/.secrets.sh
+[[ -f ~/.local.sh ]] && source ~/.local.sh # host-specific settings/aliases
+
+function pre_prompt(){
+    history -a
+    echo -ne "\033]1;${PWD/${HOME@E}/\~}\007" # tab
+    echo -ne "\033]2;${USER}@${HOSTNAME%%.*}:${PWD/${HOME@E}/\~}\007" # window
+}
+starship_precmd_user_func="pre_prompt"
+
+export PATH=${PATH}:~/.local/bin/starship
+[[ -n "$(command -v starship)" ]] && eval "$(starship init bash)"
+
+# after all the prompt stuff is set up, install iterm integration
+[[ -f "$HOME/.local/bin/iterm2_shell_integration.bash" ]] && source "$HOME/.local/bin/iterm2_shell_integration.bash"
+
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+# ghes
+if [ -d /workspace/enterprise2 ]; then
+  cd /workspace/enterprise2 || return
+fi
+
+[[ -f ~/.config/fzf/fzf.bash ]] && source ~/.config/fzf/fzf.bash
+
+true # last command should have a zero exit code
