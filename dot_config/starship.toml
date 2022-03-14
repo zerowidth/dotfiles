@@ -21,6 +21,12 @@ vicmd_symbol = "[❮](green)"
 # show_milliseconds = false
 format = "[\\($duration\\)](yellow) "
 
+[container]
+disabled = true
+
+[kubernetes]
+disabled = false
+
 [line_break]
 # disabled = true
 
