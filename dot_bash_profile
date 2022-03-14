@@ -13,27 +13,6 @@ export LESS='-MRXFx4'
 source ~/.paths.sh
 source ~/.utils.sh
 source ~/.secrets.sh
-debug_colors() {
-  echo -e \
-    "${TEXT_FOREGROUND}foreground" \
-    "${TEXT_BLACK}black" \
-    "${TEXT_RED}red" \
-    "${TEXT_GREEN}green" \
-    "${TEXT_YELLOW}yellow" \
-    "${TEXT_BLUE}blue" \
-    "${TEXT_MAGENTA}magenta" \
-    "${TEXT_CYAN}cyan" \
-    "${TEXT_LIGHTGRAY}lgray" \
-    "${TEXT_DARKGRAY}dkgray" \
-    "${TEXT_LIGHTRED}lred" \
-    "${TEXT_LIGHTGREEN}lgreen" \
-    "${TEXT_LIGHTYELLOW}lyellow" \
-    "${TEXT_LIGHTBLUE}lblue" \
-    "${TEXT_LIGHTMAGENTA}lmagenta" \
-    "${TEXT_LIGHTCYAN}lcyan" \
-    "${TEXT_WHITE}white" \
-    $TEXT_RESET
-}
 [[ -f ~/.local.sh ]] && source ~/.local.sh # host-specific settings/aliases
 
 function pre_prompt(){
