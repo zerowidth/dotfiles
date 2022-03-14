@@ -20,4 +20,5 @@
 [".local/bin/stern"]
   type = "file"
   url = "https://github.com/wercker/stern/releases/latest/download/stern_linux_amd64"
+  executable = true
 {{ end }}
