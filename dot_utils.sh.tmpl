@@ -45,7 +45,7 @@ alias k=kubectl
 alias kw='watch kubectl --context $(kubectx -c) --namespace $(kubens -c)'
 
 # run stern with the current namespace
-[[ -n "$(command -v stern)" ]] && alias stern=$(which stern)' --namespace $(kubens -c)'
+[[ -n "$(which stern)" ]] && alias stern=$(which stern)' --namespace $(kubens -c)'
 {{ end }}
 
 # quickly get to the real path (e.g. go project symlinks)
