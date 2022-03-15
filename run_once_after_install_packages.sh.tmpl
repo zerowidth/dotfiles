@@ -122,6 +122,12 @@ if ! [[ -f ~/.local/bin/kcat ]]; then
   cd ~/.local/share/kcat && ./bootstrap.sh
   cp ~/.local/share/kcat/kcat ~/.local/bin/kcat
 fi
+
+if [ -d ~/.vim/plugins ]; then
+  echo "vim plugins already installed, skipping"
+ else
+  vim --not-a-term +PlugInstall +qa
+fi
 {{ else }}
 
 if ! type bat >/dev/null; then
@@ -137,9 +143,3 @@ if [[ -n "$(grep $(whoami) /etc/passwd)" ]] && ! grep -q "$(whoami).*/bin/zsh" /
   sudo chsh -s /bin/zsh $(whoami)
 fi
 {{ end }}
-
-if [ -d ~/.vim/plugins ]; then
-  echo "vim plugins already installed, skipping"
- else
-  vim --not-a-term +PlugInstall +qa
-fi
