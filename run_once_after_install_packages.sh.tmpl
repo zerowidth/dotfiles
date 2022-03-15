@@ -2,16 +2,11 @@
 
 set -x
 
-{{ if (or .mac (not .shared)) }}
-
+{{ if .mac }}
 if test ! $(which brew); then
   echo "installing homebrew"
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  {{ if .linux }}
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  {{ else }}
   eval "$(/opt/homebrew/bin/brew shellenv)"
-  {{ end }}
 fi
 
 brew bundle --no-lock --file=/dev/stdin <<EOF
@@ -29,7 +24,6 @@ brew "direnv"
 brew "antigen" # zsh plugins
 brew "zsh-syntax-highlighting"
 
-{{ if .mac }}
 tap "buo/cask-upgrade"
 
 brew "git"
@@ -93,26 +87,10 @@ brew "lunchy"
 # brew "kubectl"
 # brew "kubectx"
 # brew "stern" # for tailing logs
-{{ end }}
 EOF
-{{ end }}
 
-{{ if .shared }}
-[[ -d ~/.local/share/fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
-~/.local/share/fzf/install --no-update-rc --key-bindings --completion --xdg
-{{ else }}
 /opt/homebrew/opt/fzf/install --no-update-rc --key-bindings --completion --xdg
-{{ end }}
 
-if ! [[ -f ~/.local/bin/kcat ]]; then
-  git clone https://github.com/edenhill/kcat ~/.local/share/kcat
-  cd ~/.local/share/kcat && ./bootstrap.sh
-  cp ~/.lcoal/share/kcat/kcat ~/.local/bin/kcat
-fi
-
-{{ end -}}
-
-{{ if .mac }}
 # latest version
 latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
 if rbenv versions | grep -q $latest; then
@@ -132,16 +110,36 @@ else
 fi
 
 [[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
+{{ end }}
+
+{{ if .linux }}
+[[ -d ~/.local/share/fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
+~/.local/share/fzf/install --no-update-rc --key-bindings --completion --xdg
+
+{{ if .shared }}
+if ! [[ -f ~/.local/bin/kcat ]]; then
+  git clone https://github.com/edenhill/kcat ~/.local/share/kcat
+  cd ~/.local/share/kcat && ./bootstrap.sh
+  cp ~/.local/share/kcat/kcat ~/.local/bin/kcat
+fi
+{{ else }}
+
+if ! type bat >/dev/null; then
+  curl -s -L https://github.com/sharkdp/bat/releases/download/v0.18.1/bat_0.18.1.amd64.deb -o /tmp/bat.deb && \
+    sudo dpkg -i /tmp/bat.deb
+fi
+sudo apt-get install -y zsh zsh-syntax-highlighting
+apt-get install silversearcher-ag
+
 {{ end -}}
+
+if [[ -n "$(grep $(whoami) /etc/passwd)" ]] && ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
+  sudo chsh -s /bin/zsh $(whoami)
+fi
+{{ end }}
 
 if [ -d ~/.vim/plugins ]; then
   echo "vim plugins already installed, skipping"
  else
   vim --not-a-term +PlugInstall +qa
 fi
-
-{{ if .linux }}
-if [[ -n "$(grep $(whoami) /etc/passwd)" ]] && ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
-  sudo chsh -s /bin/zsh $(whoami)
-fi
-{{ end }}
