@@ -117,8 +117,10 @@ zstyle ':fzf-tab:*' switch-group ',' '.'
 # https://github.com/romkatv/powerlevel10k/issues/379
 # https://gist.github.com/tombigel/d503800a282fcadbee14b537735d202c
 # still TODO: set these limits in launchctl too
+{{ if .mac }}
 ulimit -n 200000
 ulimit -u 2048
+{{ end }}
 
 source ~/.paths.sh
 source ~/.utils.sh
