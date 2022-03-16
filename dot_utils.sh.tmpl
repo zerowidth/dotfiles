@@ -19,8 +19,13 @@ which bat >/dev/null && {
 }
 
 {{ if .shared }}
+vlogin() {
+  [[ -z "$VAULT_TOKEN" ]] && . vault-login
+}
+
 # configure the shell for a kube context and namespace
 kc() {
+  vlogin
   options() {
     kubectl config get-contexts -o name | parallel 2>/dev/null \
       "kubectl --context {} get ns -o name | sed 's/namespace\///' | xargs -n 1 -Ix echo x {} \({}\)"
@@ -39,13 +44,26 @@ kc() {
   kubens $ns
 }
 
-alias k=kubectl
+k() {
+  vlogin
+  kubectl "$@"
+}
 
 # run a watch command with kubectl
-alias kw='watch kubectl --context $(kubectx -c) --namespace $(kubens -c)'
+kw() {
+  vlogin
+  watch kubectl --context $(kubectx -c) --namespace $(kubens -c) "$@"
+}
 
-# run stern with the current namespace
-[[ -n "$(which stern)" ]] && alias stern=$(which stern)' --namespace $(kubens -c)'
+stern() {
+  vlogin
+  ~/.local/bin/stern --context $(kubectx -c) --namespace $(kubens -c) "$@"
+}
+
+ke() {
+  vlogin
+  gh-k8s-clusters --profile general --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
+}
 {{ end }}
 
 # quickly get to the real path (e.g. go project symlinks)
