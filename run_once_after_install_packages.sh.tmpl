@@ -99,15 +99,16 @@ else
   echo "installing latest ruby: $latest"
   rbenv install "$latest"
   rbenv global "$latest"
-
-  # for local scripts
-  gem install bubs
-
-  # for vscode
-  gem install solargraph
-  gem install rubocop
-  gem install ruby-debug-ide
 fi
+
+# for local scripts
+gem install bubs
+gem install colorize
+
+# for vscode
+gem install solargraph
+gem install rubocop
+gem install ruby-debug-ide
 
 [[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
 {{ end }}
