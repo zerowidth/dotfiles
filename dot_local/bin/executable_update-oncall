@@ -1,0 +1,150 @@
+#!/usr/bin/env ruby
+
+require "json"
+require "date"
+require "pp"
+require "shellwords"
+require "tempfile"
+
+if ARGV.include?("--help") || ARGV.include?("-h")
+  warn "update-oncall updates the data-pipelines oncall issue with the nines issues assigned to you"
+  warn ""
+  warn "usage: update-oncall [--reorder] [--dry-run|-n]"
+  warn ""
+  warn "  --reorder will reorder all nines issues in each section, overriding any manual organization"
+  warn "  --dry-run or -n will only output the diff without updating the on-call issue"
+  warn ""
+  exit
+end
+
+reorder = ARGV.include?("--reorder")
+dry_run = ARGV.include?("--dry-run") || ARGV.include?("-n")
+
+def sh(cmd, quiet: false)
+  puts "$ #{cmd}" unless quiet
+  out = `#{cmd}`
+  return out if $? == 0
+
+  warn out
+  abort
+end
+
+# split on markdown headers, return a new Section per
+def split_markdown_sections(input)
+  sections = []
+  section = []
+  input.lines.each do |line|
+    line = line.strip
+    if line.start_with?("#") && !section.empty?
+      sections << section
+      section = [line]
+    else
+      section << line
+    end
+  end
+  sections << section unless section.empty?
+  sections
+end
+
+class NinesIssue
+  def initialize(data)
+    @data = data
+  end
+
+  def title
+    @data["title"]
+  end
+
+  def service
+    title.split(" - ")[1].split("/").first
+  end
+
+  def ref
+    "github/nines##{@data["number"]}"
+  end
+
+  def severity
+    @data["body"] =~ /severity:(sev\d)/
+    $1
+  end
+end
+
+def update_section(section, issues, reorder: false)
+  header = section.take(2)
+  section = section.drop(2)
+  # ignore trailing newline
+  section = section[..-2] if section.last == ""
+  issues.sort_by { |i| [i.service, i.ref] }.each do |issue|
+    ref = "* #{issue.ref}"
+
+    if (existing = section.detect { |line| line.start_with?(ref) })
+      next unless reorder
+
+      section = section.delete_if { |line| line.start_with?(ref) }
+      section << existing
+    else
+      section << ref
+    end
+  end
+  header + section + [""] # put trailing newline back
+end
+
+puts "finding current user"
+user = JSON.parse(sh("gh api user"))["login"]
+
+# load issue body
+puts "finding oncall issue for @#{user}"
+issues = JSON.parse(sh("gh api -X GET repos/github/data-pipelines/issues -f labels=on-call -f state=open -f assignee=#{user}"))
+
+if issues.length != 1
+  warn "got multiple oncall issues:"
+  issues.each do |issue|
+    puts "  ##{issue["number"]}: #{issue["title"]}"
+  end
+  abort 
+end
+
+issue = issues.first
+puts "updating issue ##{issue["number"]}: #{issue["title"]}"
+
+
+# find nines issues assigned to me
+since = (Date.today - 7).iso8601
+puts "fetching nines alerts"
+nines = JSON.parse(sh("gh api -X GET 'repos/github/nines/issues' -f assignee=#{user} -f state=all -f per_page=100 -f direction=asc -f since=#{since}"))
+issues = nines.map { |data| NinesIssue.new(data) }.group_by(&:severity)
+raise "uh oh too many nines, need pagination" if nines.length >= 100
+
+sections = split_markdown_sections(issue["body"])
+sections = sections.map do |section|
+  case section.first
+  when /SEV1/
+    update_section section, issues.fetch("sev1", []), reorder: reorder
+  when /Alerts|SEV2/
+    update_section section, issues.fetch("sev2", []), reorder: reorder
+  else
+    section
+  end
+end
+
+body = sections.flatten.join("\n")
+
+if body == issue["body"]
+  puts "no update needed"
+else
+  before_file = Tempfile.new
+  File.open(before_file, "w") { |f| f.puts issue["body"] }
+  after_file = Tempfile.new
+  File.open(after_file, "w") { |f| f.puts body }
+
+  puts %x(git diff --color #{before_file.path} #{after_file.path})
+
+  before_file.unlink
+  after_file.unlink
+
+  unless dry_run
+    puts
+    puts "updating issue"
+    sh("gh api -X PATCH repos/github/data-pipelines/issues/#{issue["number"]} -f body=#{Shellwords.escape(body)}", quiet: true)
+  end
+end
