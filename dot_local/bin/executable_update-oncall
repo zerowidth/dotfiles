@@ -94,19 +94,24 @@ user = JSON.parse(sh("gh api user"))["login"]
 
 # load issue body
 puts "finding oncall issue for @#{user}"
-issues = JSON.parse(sh("gh api -X GET repos/github/data-pipelines/issues -f labels=on-call -f state=open -f assignee=#{user}"))
+issues = JSON.parse(sh("gh api -X GET repos/github/data-pipelines/issues -f labels=on-call -f state=open -f assignee=#{user} -f title=on-call"))
+issues = issues.select { |i| i["title"] =~ /On-call: \d{4}-\d{2}-\d{2}/ }
+
+if issues.empty?
+  warn "no oncall issue found"
+  abort
+end
 
 if issues.length != 1
   warn "got multiple oncall issues:"
   issues.each do |issue|
     puts "  ##{issue["number"]}: #{issue["title"]}"
   end
-  abort 
+  abort
 end
 
 issue = issues.first
 puts "updating issue ##{issue["number"]}: #{issue["title"]}"
-
 
 # find nines issues assigned to me
 since = (Date.today - 7).iso8601
@@ -137,7 +142,7 @@ else
   after_file = Tempfile.new
   File.open(after_file, "w") { |f| f.puts body }
 
-  puts %x(git diff --color #{before_file.path} #{after_file.path})
+  puts `git diff --color #{before_file.path} #{after_file.path}`
 
   before_file.unlink
   after_file.unlink
