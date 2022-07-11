@@ -116,9 +116,8 @@ puts "updating issue ##{issue["number"]}: #{issue["title"]}"
 # find nines issues assigned to me
 since = (Date.today - 7).iso8601
 puts "fetching nines alerts"
-nines = JSON.parse(sh("gh api -X GET 'repos/github/nines/issues' -f assignee=#{user} -f state=all -f per_page=100 -f direction=asc -f since=#{since}"))
+nines = JSON.parse(sh("gh api -X GET 'repos/github/nines/issues' -f assignee=#{user} -f state=all -f per_page=100 -f direction=asc -f since=#{since} --paginate |  jq 'reduce inputs as $i (.; . += $i)'"))
 issues = nines.map { |data| NinesIssue.new(data) }.group_by(&:severity)
-raise "uh oh too many nines, need pagination" if nines.length >= 100
 
 sections = split_markdown_sections(issue["body"])
 sections = sections.map do |section|
