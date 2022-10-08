@@ -13,6 +13,8 @@ Style/BlockComments:
   Enabled: false
 Style/StringLiterals:
   Enabled: false
+Style/WordArray:
+  Enabled: false
 Layout/ElseAlignment:
   Enabled: false
 Layout/EndAlignment:
