@@ -12,6 +12,12 @@
   type = "file"
   url = "https://iterm2.com/shell_integration/zsh"
 {{ end }}
+{{ if .mac }}
+[".local/bin/imgcat"]
+  type = "file"
+  url = "https://iterm2.com/utilities/imgcat"
+  executable = true
+{{ end }}
 
 {{ if .shared }}
 [".local/bin/kubectx"]
