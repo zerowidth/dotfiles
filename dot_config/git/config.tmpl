@@ -83,6 +83,9 @@
 	binary = true
 [diff]
 	tool = opendiff
+{{ if .mac }}
+	external = difft
+{{- end }}
 	algorithm = patience
 	renames = copies
 	mnemonicPrefix = 1
