@@ -21,6 +21,8 @@ if [[ "$(uname)" = "Linux" ]]; then
   export LINUX=1
 fi
 
+export HOMEBREW_INSTALL_FROM_API=1
+
 # zsh settings
 setopt pushd_ignore_dups # don't push the same directory twice
 setopt extendedglob # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc.
