@@ -44,13 +44,18 @@ simplefetch() {
 }
 export -f simplefetch
 
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: fetchall [--simple]"
+  echo "  --simple: no parallelization"
+  exit 0
+fi
 
-if [[ "$1" == "simple" ]]; then
+if [[ "$1" == "--simple" ]]; then
   for project in $(projects); do
     simplefetch "$project"
   done
 else
   PARALLELISM=400%
   # PARALLELISM=100%
-  projects | parallel --bar -j $PARALLELISM fetch {}
+  projects | parallel -j $PARALLELISM --bar fetch {}
 fi
