@@ -19,13 +19,8 @@ which bat >/dev/null && {
 }
 
 {{ if .shared }}
-vlogin() {
-  [[ -z "$VAULT_TOKEN" ]] && . vault-login
-}
-
 # configure the shell for a kube context and namespace
 kc() {
-  vlogin
   options() {
     kubectl config get-contexts -o name | parallel 2>/dev/null \
       "kubectl --context {} get ns -o name | sed 's/namespace\///' | xargs -n 1 -Ix echo x {} \({}\)"
@@ -45,24 +40,26 @@ kc() {
 }
 
 k() {
-  vlogin
   kubectl "$@"
 }
 
 # run a watch command with kubectl
 kw() {
-  vlogin
   watch kubectl --context $(kubectx -c) --namespace $(kubens -c) "$@"
 }
 
 stern() {
-  vlogin
   ~/.local/bin/stern --context $(kubectx -c) --namespace $(kubens -c) "$@"
 }
 
+# kubectl each
 ke() {
-  vlogin
   gh-k8s-clusters --profile general --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
+}
+
+# kubectl github each
+kge() {
+  gh-k8s-clusters --profile dotcom --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
 }
 {{ end }}
 
