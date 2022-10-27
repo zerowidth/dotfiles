@@ -14,3 +14,7 @@ fi
 
 [[ -d ~/.local/bin/kubectx ]] && export PATH=${PATH}:~/.local/bin/kubectx
 export PATH=$HOME/.local/bin:$PATH
+
+{{- if .codespaces }}
+export PATH=$PATH:./bin
+{{- end }}

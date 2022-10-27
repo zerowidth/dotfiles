@@ -1,4 +1,0 @@
-#!/bin/sh
-# codespace customization for specific repos
-
-export PATH=$PATH:./bin
