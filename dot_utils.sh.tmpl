@@ -23,7 +23,7 @@ which bat >/dev/null && {
 kc() {
   options() {
     kubectl config get-contexts -o name | parallel 2>/dev/null \
-      "kubectl --context {} get ns -o name | sed 's/namespace\///' | xargs -n 1 -Ix echo x {} \({}\)"
+      "kubectl --context {} get ns -o name | sed 's/namespace\///' | xargs -n 1 -I% echo % {} \({}\)"
   }
   if [ -n "$1" ]; then
     selected=$(options | fzf -q "$1" --nth=1,2 --with-nth=1,3)
