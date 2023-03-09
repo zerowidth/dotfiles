@@ -61,6 +61,13 @@ ke() {
 kge() {
   gh-k8s-clusters --profile dotcom --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
 }
+
+# vault login
+vl() {
+  . vault-login
+  VAULT_ADDR=$(vault-addr) vault token renew -increment=3h58m || echo "renew failed"
+}
+
 {{ end }}
 
 # quickly get to the real path (e.g. go project symlinks)
