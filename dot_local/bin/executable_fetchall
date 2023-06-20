@@ -25,8 +25,18 @@ projects() {
 fetch() {
   git -C "${1}" symbolic-ref refs/remotes/origin/HEAD > /dev/null 2>&1 || return
   outfile=$(mktemp)
-  git -C "${1}" pull --quiet --stat --all --prune --autostash 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
+  git -C "${1}" fetch --all --prune 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
+  current_branch=$(git -C "${1}" symbolic-ref --short HEAD)
+
+  # if the branch has been merged, let's clean it up
+  if ! git -C "${1}" show-ref --quiet --verify "refs/remotes/origin/$current_branch"; then
+    echo "The current branch has been deleted on the remote repository." | colorize 3 >> "${outfile}"
+    # git -C "${1}" checkout $(git -C "${1}" main-branch) 2>&1 >> "${outfile}"
+  fi
+
+  git -C "${1}" pull --quiet --stat --all --prune --autostash --show-forced-updates 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
   git -C "${1}" clean-merged-branches 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+
   if [[ -s "${outfile}" ]]; then
     echo "----- ${1} -----" | colorize 4
     cat "${outfile}"
@@ -56,6 +66,5 @@ if [[ "$1" == "--simple" ]]; then
   done
 else
   PARALLELISM=400%
-  # PARALLELISM=100%
-  projects | parallel -j $PARALLELISM --bar fetch {}
+  projects | parallel -j $PARALLELISM --eta --bar --timeout 120s fetch {}
 fi
