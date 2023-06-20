@@ -28,6 +28,7 @@ tap "buo/cask-upgrade"
 
 brew "git"
 brew "difftastic"
+brew "diffutils" # https://github.com/golangci/golangci-lint/issues/3087
 brew "jq"
 brew "watch"
 brew "fswatch"
@@ -65,6 +66,11 @@ cask "font-ia-writer-duo"
 cask "font-ia-writer-quattro"
 cask "font-iosevka"
 # cask "font-iosevka-slab"
+cask "font-alegreya"
+cask "font-alegreya-sans"
+cask "font-alegreya-sans"
+brew "svn" # seriously? lol
+cask "font-merriweather"
 
 # cask "docker"
 
@@ -110,6 +116,8 @@ gem install colorize
 gem install solargraph
 gem install rubocop
 gem install ruby-debug-ide
+
+gh extension install zerowidth/gh-md
 
 [[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Dropbox/sync/ssh
 {{ end }}
