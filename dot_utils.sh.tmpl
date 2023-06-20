@@ -49,7 +49,7 @@ kw() {
 }
 
 stern() {
-  ~/.local/bin/stern --context $(kubectx -c) --namespace $(kubens -c) "$@"
+  ~/.local/bin/stern/stern --context $(kubectx -c) --namespace $(kubens -c) "$@"
 }
 
 # kubectl each
