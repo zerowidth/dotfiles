@@ -74,10 +74,6 @@ function set_window_title(){
 {{ end }}
 precmd_functions+=(set_window_title)
 
-if type direnv &>/dev/null; then
-  eval "$(direnv hook zsh)"
-fi
-
 # # completions
 zstyle :compinstall filename '/Users/nathan/.zshrc'
 # # case-insensitive if there's no match
@@ -133,3 +129,7 @@ source ~/.p10k.zsh # p10k prompt settings
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
 [[ -f ~/.local/bin/iterm2_shell_integration.zsh ]] && source ~/.local/bin/iterm2_shell_integration.zsh
+
+if type direnv &>/dev/null; then
+  eval "$(direnv hook zsh)"
+fi
