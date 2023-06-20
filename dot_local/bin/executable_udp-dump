@@ -1,16 +1,15 @@
 #!/usr/bin/env ruby
 # Receive UDP packets bound for a port and output them
 # based on https://stackoverflow.com/questions/7696862/strange-behaviour-of-netcat-with-udp
+# SEE ALSO https://github.com/zendesk/statsd-logger
 
 $stdout.sync = true
-require "socket"
+require 'socket'
 
 statsd = false
-if ARGV.delete("--statsd")
+if ARGV.delete('--statsd')
   statsd = true
-  unless require "colorize"
-    raise "gem install colorize"
-  end
+  raise 'gem install colorize' unless require 'colorize'
 end
 
 unless ARGV.count == 2
@@ -26,13 +25,13 @@ Socket.udp_server_sockets(listen_ip, port) do |sockets|
     Socket.udp_server_recv(readable) do |msg, msg_src|
       if statsd
         msg.split("\n").each do |line|
-          metric, type, tags = line.split("|")
-          name, value = metric.split(":")
+          metric, type, tags = line.split('|')
+          name, value = metric.split(':')
           if tags
-            tags = tags[1..].split(",").map { |tag| tag.split(":", 2) }
-            tags = " #{tags.sort_by(&:first).map { |t, v| "#{t}:#{v}" }.join(" ")}"
+            tags = tags[1..].split(',').map { |tag| tag.split(':', 2) }
+            tags = " #{tags.sort_by(&:first).map { |t, v| "#{t}:#{v}" }.join(' ')}"
           else
-            tags = ""
+            tags = ''
           end
           puts "#{name.colorize(:magenta)} #{type.colorize(:green)} #{value.colorize(:blue)}#{tags}"
         end
