@@ -163,7 +163,7 @@ gem install rubocop
 gem install ruby-debug-ide
 
 gh auth status || gh auth login
-gh md 2>/dev/null || gh extension install zerowidth/gh-md
+gh md >/dev/null 2>&1 || gh extension install zerowidth/gh-md
 
 [[ -L ~/.ssh ]] || ln -s {{ .chezmoi.homeDir }}/Documents/sync/ssh ~/.ssh
 {{ end }}
