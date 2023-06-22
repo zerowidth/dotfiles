@@ -163,7 +163,8 @@ gem install solargraph
 gem install rubocop
 gem install ruby-debug-ide
 
-gh extension install zerowidth/gh-md
+gh auth status || gh auth login
+gh md 2>/dev/null || gh extension install zerowidth/gh-md
 
 [[ -d ~/.ssh ]] || ln -s ~/.ssh {{ .chezmoi.homeDir }}/Documents/sync/ssh
 {{ end }}
