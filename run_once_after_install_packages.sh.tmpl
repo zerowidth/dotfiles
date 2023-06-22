@@ -152,6 +152,8 @@ else
   rbenv global "$latest"
 fi
 
+eval "$(rbenv init - zsh)"
+
 # for local scripts
 gem install bubs
 gem install colorize
