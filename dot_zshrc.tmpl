@@ -47,7 +47,9 @@ setopt inc_append_history_time # append after elapsed
 # -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
 export LESS='-MRXFx4'
 
-[[ -n $(command -v /usr/libexec/java_home) ]] && export JAVA_HOME=$(/usr/libexec/java_home)
+[[ -n $(command -v /usr/libexec/java_home) ]] && {
+  /usr/libexec/java_home >/dev/null 2&>1 && export JAVA_HOME=$(/usr/libexec/java_home)
+}
 
 # colorized grep
 # export GREP_OPTIONS='--color=auto'
