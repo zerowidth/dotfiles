@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 set -x
+set -e
 
 {{ if .mac }}
-if test ! $(which brew); then
+if [[ ! $(which brew) ]]; then
   echo "installing homebrew"
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
