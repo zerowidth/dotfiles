@@ -48,7 +48,7 @@ setopt inc_append_history_time # append after elapsed
 export LESS='-MRXFx4'
 
 [[ -n $(command -v /usr/libexec/java_home) ]] && {
-  /usr/libexec/java_home >/dev/null 2&>1 && export JAVA_HOME=$(/usr/libexec/java_home)
+  /usr/libexec/java_home >/dev/null 2>&1 && export JAVA_HOME=$(/usr/libexec/java_home)
 }
 
 # colorized grep
