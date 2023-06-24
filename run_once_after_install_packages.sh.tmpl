@@ -155,13 +155,13 @@ fi
 eval "$(rbenv init - zsh)"
 
 # for local scripts
-gem install bubs
-gem install colorize
+gem install bubs --conservative
+gem install colorize --conservative
 
 # for vscode
-gem install solargraph
-gem install rubocop
-gem install ruby-debug-ide
+gem install solargraph --conservative
+gem install rubocop --conservative
+gem install ruby-debug-ide --conservative
 
 gh auth status || gh auth login
 gh md >/dev/null 2>&1 || gh extension install zerowidth/gh-md
