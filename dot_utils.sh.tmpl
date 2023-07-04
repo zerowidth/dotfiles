@@ -86,7 +86,7 @@ function up() {
   brew upgrade --fetch-HEAD
   brew cu --cleanup --no-brew-update --yes
   brew cleanup
-  mas upgrade
+  # mas upgrade
   antigen update
   gh extension upgrade --all
   chezmoi status
