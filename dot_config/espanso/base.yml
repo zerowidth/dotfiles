@@ -1,0 +1,50 @@
+# espanso match file https://espanso.org/docs/
+matches:
+  - trigger: "//date"
+    replace: "{{date}}"
+    vars:
+      - name: date
+        type: date
+        params:
+          format: "%F"
+  - trigger: "//day"
+    replace: "{{day}}"
+    vars:
+      - name: day
+        type: date
+        params:
+          format: "%F %a"
+  - trigger: "//time"
+    replace: "{{time}}"
+    vars:
+      - name: time
+        type: date
+        params:
+          format: "%F %T"
+  - trigger: "//md"
+    replace: "{{output}}"
+    vars:
+      - name: clipboard
+        type: clipboard
+      - name: output
+        type: shell
+        params:
+          cmd: "gh md link {{clipboard}}"
+  - trigger: "//ml"
+    replace: "{{output}}"
+    vars:
+      - name: clipboard
+        type: clipboard
+      - name: output
+        type: shell
+        params:
+          cmd: "gh md link --simple {{clipboard}}"
+  - trigger: "//ir"
+    replace: "{{output}}"
+    vars:
+      - name: clipboard
+        type: clipboard
+      - name: output
+        type: shell
+        params:
+          cmd: "gh md ref {{clipboard}}"
