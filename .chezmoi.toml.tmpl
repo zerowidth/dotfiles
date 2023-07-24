@@ -1,4 +1,7 @@
 sourceDir = {{ .chezmoi.sourceDir | quote }}
+{{ if env "GH_ENV" | not | not }}
+scriptTempDir = "~/tmp"
+{{ end }}
 
 [data]
   mac = {{ eq .chezmoi.os "darwin" }}
