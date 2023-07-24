@@ -18,7 +18,7 @@ else
 fi
 
 # for shared hosts, make sure temp dir exists
-if [ -n "$GH_ENV" ]; then
+if [ -n "$GH_ENV" ] && ! [ -d ~/tmp ]; then
   mkdir ~/tmp
 fi
 
