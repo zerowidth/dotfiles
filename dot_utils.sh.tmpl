@@ -57,6 +57,12 @@ ke() {
   gh-k8s-clusters --profile general --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
 }
 
+kpe() {
+  stamp=$1
+  shift
+  gh-k8s-clusters --status ready --stamp $stamp | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
+}
+
 # kubectl github each
 kge() {
   gh-k8s-clusters --profile dotcom --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
