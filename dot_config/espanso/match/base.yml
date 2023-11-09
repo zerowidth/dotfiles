@@ -7,6 +7,7 @@ matches:
         type: date
         params:
           format: "%F"
+    backend: Clipboard
   - trigger: "//day"
     replace: "{{day}}"
     vars:
@@ -21,6 +22,7 @@ matches:
         type: date
         params:
           format: "%F %T"
+    backend: Clipboard
   - trigger: "//md"
     replace: "{{output}}"
     vars:
@@ -30,6 +32,8 @@ matches:
         type: shell
         params:
           cmd: "gh md link {{clipboard}}"
+    backend: Clipboard
+    preserve_clipboard: false
   - trigger: "//ml"
     replace: "{{output}}"
     vars:
@@ -39,6 +43,8 @@ matches:
         type: shell
         params:
           cmd: "gh md link --simple {{clipboard}}"
+    backend: Clipboard
+    preserve_clipboard: false
   - trigger: "//ir"
     replace: "{{output}}"
     vars:
@@ -48,3 +54,7 @@ matches:
         type: shell
         params:
           cmd: "gh md ref {{clipboard}}"
+    backend: Clipboard
+    preserve_clipboard: false
+  - trigger: "aqq"
+    replace: "aqueduct"
