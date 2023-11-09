@@ -50,8 +50,8 @@ brew "s3cmd"
 brew "kcat"
 
 brew "go"
+brew "ruby"
 brew "rbenv"
-brew "ruby-build"
 brew "node"
 brew "nodenv"
 brew "flow" # for javascript
@@ -143,17 +143,16 @@ mas install 419330170   # Moom
 
 /opt/homebrew/opt/fzf/install --no-update-rc --key-bindings --completion --xdg
 
-# latest version
+eval "$(rbenv init - zsh)"
+# set ruby to the latest version
+brew rbenv-sync -v
 latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
 if rbenv versions | grep -q $latest; then
-  echo "ruby $latest already installed, skipping"
+  echo "ruby $latest already set as default, skipping"
 else
-  echo "installing latest ruby: $latest"
-  rbenv install "$latest"
+  echo "setting latest ruby $latest as global default"
   rbenv global "$latest"
 fi
-
-eval "$(rbenv init - zsh)"
 
 # for local scripts
 gem install bubs --conservative
