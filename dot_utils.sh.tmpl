@@ -230,7 +230,11 @@ export MYSQL_PS1="\u@\h \d> "
 alias mdformat='ruby -lne '\''x, y = $_.split(/\s+/,2); puts "* #{x} `#{y}`"'\'''
 
 type nodenv &> /dev/null && eval "$(nodenv init -)"
-type rbenv &> /dev/null && eval "$(rbenv init -)"
+if [ -x ~/.rbenv/bin ]; then
+  eval "$(~/.rbenv/bin/rbenv init - bash)"
+else
+  type rbenv &> /dev/null && eval "$(rbenv init -)"
+fi
 
 function bo() {
   local bundle="bundle" gems gem
