@@ -83,7 +83,8 @@
 [diff]
 	tool = opendiff
 {{ if .mac }}
-	# external = difft # 2023-11-01 broken?
+	# 2023-11-01 broken? 2024-01-05 fixed?
+	external = difft
 {{- end }}
 	algorithm = patience
 	renames = copies

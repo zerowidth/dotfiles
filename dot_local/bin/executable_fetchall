@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 github_projects() {
+  test -d ~/github || return
   for dir in $(find ~/github -type d -maxdepth 2 -name .git); do
     remote=$(git -C "$dir" remote show)
     if [ -n "$remote" ] && git -C "$dir" symbolic-ref -q HEAD >/dev/null; then
@@ -10,6 +11,7 @@ github_projects() {
 }
 
 golang_projects() {
+  test -d ~/go/src/github.com || return
   for org in $(find ~/go/src/github.com -type d -mindepth 1 -maxdepth 1); do
     org=$(basename $org)
     for dir in $(find ~/go/src/github.com/$org -type d -maxdepth 2 -name .git); do
