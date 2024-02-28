@@ -1,0 +1,2 @@
+def obj_from_array: . as $list | reduce range(0, length / 2) as $i ({}; . + {($list[$i*2]): ($list[$i*2+1])});
+def to_h: obj_from_array;
