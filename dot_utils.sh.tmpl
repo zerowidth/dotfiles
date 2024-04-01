@@ -72,6 +72,7 @@ kge() {
 vl() {
   . vault-login
   VAULT_ADDR=$(vault-addr) vault token renew -increment=3h58m >/dev/null || echo "renew failed"
+  export AUTH_TOKEN=$(vault-secret -a hydro-tools -k AUTH_TOKEN)
 }
 
 alias ht="hydro-tools"
