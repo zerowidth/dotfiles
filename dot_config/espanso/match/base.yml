@@ -31,7 +31,7 @@ matches:
       - name: output
         type: shell
         params:
-          cmd: "gh md link {{clipboard}}"
+          cmd: "gh md link '{{clipboard}}'"
     backend: Clipboard
     preserve_clipboard: false
   - trigger: "//ml"
@@ -42,7 +42,7 @@ matches:
       - name: output
         type: shell
         params:
-          cmd: "gh md link --simple {{clipboard}}"
+          cmd: "gh md link --simple '{{clipboard}}'"
     backend: Clipboard
     preserve_clipboard: false
   - trigger: "//ir"
@@ -53,7 +53,7 @@ matches:
       - name: output
         type: shell
         params:
-          cmd: "gh md ref {{clipboard}}"
+          cmd: "gh md ref '{{clipboard}}'"
     backend: Clipboard
     preserve_clipboard: false
   - trigger: "aqq"
