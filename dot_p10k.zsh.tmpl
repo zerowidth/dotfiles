@@ -11,6 +11,15 @@
 #
 #   for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done
 
+# custom: show red text if a go workspace is active
+prompt_my_go_work() {
+  local work=""
+  if [[ -f "go.work" ]]; then
+    work="go.work"
+  fi
+  p10k segment -f red -t "${work}"
+}
+
 # Temporarily change options.
 'builtin' 'local' '-a' 'p10k_config_opts'
 [[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
