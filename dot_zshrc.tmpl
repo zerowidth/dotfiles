@@ -128,6 +128,14 @@ ulimit -u 2048
 source ~/.paths.sh
 source ~/.utils.sh
 source ~/.secrets.sh
+
+func prompt_my_go_work() {
+  local work=""
+  if [[ -f "go.work" ]]; then
+    work="go.work"
+  fi
+  p10k segment -f red -t "${work}"
+}
 source ~/.p10k.zsh # p10k prompt settings
 [[ -f ~/.local.sh ]] && source ~/.local.sh # host-specific settings/aliases
 
