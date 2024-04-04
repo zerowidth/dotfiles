@@ -185,14 +185,15 @@ class AlertIssue
   end
 
   def severity
-    @data["body"] =~ /severity:(sev\d)/
-    ::Regexp.last_match(1)
+    @data["body"] =~ /\[P(\d)\]/
+    "sev" + ::Regexp.last_match(1)
   end
 end
 
 class CLI
   def self.run
     dry_run = ARGV.include?("--dry-run") || ARGV.include?("-n")
+    verbose = ARGV.include?("--verbose") || ARGV.include?("-v")
 
     puts "finding current user"
     user = JSON.parse(sh("gh api user"))["login"]
@@ -246,6 +247,14 @@ class CLI
     end.sort_by(&:date).group_by { |a| a.date.localtime.strftime("%F") }
 
     alerts_by_date.sort_by(&:first).each do |date, alerts|
+
+      if verbose
+          puts "alerts for #{date}"
+          alerts.each do |alert|
+          puts "  #{alert.severity} #{alert.monitor} #{alert.ref}"
+        end
+      end
+
       comment = comments[date] ||= Comment.for_date(date)
       comment.update_alerts(alerts)
     end
