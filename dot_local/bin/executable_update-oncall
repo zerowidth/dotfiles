@@ -185,8 +185,13 @@ class AlertIssue
   end
 
   def severity
-    @data["body"] =~ /\[P(\d)\]/
-    "sev" + ::Regexp.last_match(1)
+    if @data["body"] =~ /\[P(\d)\]/
+      "sev" + ::Regexp.last_match(1)
+    elsif @data["body"] =~ /severity:(sev\d)/
+      ::Regexp.last_match(1)
+    else
+      raise "unknown severity for #{ref}"
+    end
   end
 end
 
