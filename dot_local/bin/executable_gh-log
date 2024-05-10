@@ -86,7 +86,8 @@ function formatted_issues() {
 
   echo "searching: $q" > /dev/stderr
   gh api "search/issues?sort=created&order=asc&q=$q" --paginate --cache 10m | \
-    jq  -r '.items[] | "> * [\(.repository_url | split("/") | .[-2:] | join("/"))#\(.number) \(.title)](\(.html_url)) \(.comments) comments"'
+    jq  -r '.items[] | "> * [\(.repository_url | split("/") | .[-2:] | join("/"))#\(.number): \(.title)](\(.html_url)) \(.comments) comments"' | \
+    sort
 }
 
 formatted_issues "author:$GH_LOGIN+is:merged+is:pr" > "$merged_prs"
