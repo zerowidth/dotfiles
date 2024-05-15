@@ -1,7 +1,8 @@
 ---
-:benchmark: false
-gem: --no-ri --no-rdoc --no-user-install
-:update_sources: true
 :backtrace: false
 :bulk_threshold: 1000
+:update_sources: true
 :verbose: true
+:concurrent_downloads: 8
+benchmark: false
+gem: "--no-ri --no-rdoc --no-user-install"
