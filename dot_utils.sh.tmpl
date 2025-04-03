@@ -198,24 +198,20 @@ fkill() {
 }
 
 if [ -n "$(command -v code)" ]; then
-  export EDITOR="code"
+  if [ -n "$(command -v cursor)" ]; then
+    export EDITOR="cursor"
+  else
+    export EDITOR="code"
+  fi
   function e() {
     if [ -n "$1" ]; then
       if [ -d "$1" ]; then
-        # local dir
-        # dir=${1%/} # strip trailing slash so vim stays happy
-        # $SHELL -l -c "cd \"$dir\" && mvim +Refresh ."
-        code -n $1
+        $EDITOR -n $1
       else
-        # local file dir
-        # file=$(basename "$1")
-        # dir=$(dirname "$1")
-        # $SHELL -l -c "cd \"$dir\" && mvim +Refresh \"$file\""
-        code -n $1
+        $EDITOR -n $1
       fi
     else
-      # mvim "$@"
-      code -n . "$@"
+      $EDITOR -n . "$@"
     fi
   }
 elif [ -n "$(command -v vim)" ]; then
