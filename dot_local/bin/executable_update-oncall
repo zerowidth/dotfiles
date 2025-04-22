@@ -264,6 +264,9 @@ class CLI
       comment.update_alerts(alerts)
     end
 
+    # ignore comments from users
+    comments.filter! { |date, comment| !date.nil? }
+
     comments.sort_by(&:first).each do |_date, comment|
       if dry_run
         if comment.new?
@@ -299,3 +302,4 @@ class CLI
 end
 
 CLI.run if __FILE__ == $PROGRAM_NAME
+
