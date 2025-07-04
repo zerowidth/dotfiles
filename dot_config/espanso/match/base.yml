@@ -23,6 +23,14 @@ matches:
         params:
           format: "%F %T"
     backend: Clipboard
+  - trigger: "//ts"
+    replace: "`{{time}}`"
+    vars:
+      - name: time
+        type: shell
+        params:
+          cmd: "date -u +'%F %T %Z'"
+    backend: Clipboard
   - trigger: "//md"
     replace: "{{output}}"
     vars:
@@ -33,7 +41,7 @@ matches:
         params:
           cmd: "gh md link '{{clipboard}}'"
     backend: Clipboard
-    preserve_clipboard: false
+    preserve_clipboard: true
   - trigger: "//ml"
     replace: "{{output}}"
     vars:
