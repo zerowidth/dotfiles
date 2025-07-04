@@ -4,7 +4,7 @@ github_projects() {
   test -d ~/github || return
   for dir in $(find ~/github -type d -maxdepth 2 -name .git); do
     remote=$(git -C "$dir" remote show)
-    if [ -n "$remote" ] && git -C "$dir" symbolic-ref -q HEAD >/dev/null; then
+    if [ -n "$remote" ] && (git -C "$dir" symbolic-ref -q HEAD >/dev/null || test -d "$dir/../.jj"); then
       echo $(dirname $dir)
     fi
   done
@@ -25,19 +25,23 @@ projects() {
   golang_projects
 }
 fetch() {
-  git -C "${1}" symbolic-ref refs/remotes/origin/HEAD > /dev/null 2>&1 || return
   outfile=$(mktemp)
-  git -C "${1}" fetch --all --prune 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
-  current_branch=$(git -C "${1}" symbolic-ref --short HEAD)
 
-  # if the branch has been merged, let's clean it up
-  if ! git -C "${1}" show-ref --quiet --verify "refs/remotes/origin/$current_branch"; then
-    echo "The current branch has been deleted on the remote repository." | colorize 3 >> "${outfile}"
-    # git -C "${1}" checkout $(git -C "${1}" main-branch) 2>&1 >> "${outfile}"
+  if [[ -d "${1}/.jj" ]]; then
+    jj -R "${1}" --color always git fetch 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+  else
+    git -C "${1}" fetch --all --prune 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
+    current_branch=$(git -C "${1}" symbolic-ref --short HEAD)
+
+    # if the branch has been merged, let's clean it up
+    if ! git -C "${1}" show-ref --quiet --verify "refs/remotes/origin/$current_branch"; then
+      echo "The current branch has been deleted on the remote repository." | colorize 3 >> "${outfile}"
+      # git -C "${1}" checkout $(git -C "${1}" main-branch) 2>&1 >> "${outfile}"
+    fi
+
+    git -C "${1}" pull --quiet --stat --all --prune --autostash --show-forced-updates 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
+    git -C "${1}" clean-merged-branches 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
   fi
-
-  git -C "${1}" pull --quiet --stat --all --prune --autostash --show-forced-updates 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
-  git -C "${1}" clean-merged-branches 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
 
   if [[ -s "${outfile}" ]]; then
     echo "----- ${1} -----" | colorize 4
@@ -50,9 +54,12 @@ export -f fetch
 simplefetch() {
   echo "----- ${1} -----" | colorize 4
   set -x
-  git -C "${1}" symbolic-ref refs/remotes/origin/HEAD > /dev/null 2>&1 || (echo "not a repo" && return)
-  git -C "${1}" pull --quiet --stat --all --prune --autostash 2> >(grep -v autostash | colorize 1) | grep -v autostash
-  git -C "${1}" clean-merged-branches 2> >(colorize 1)
+  if [[ -d "${1}/.jj" ]]; then
+    jj -R "${1}" --color always git fetch 2> >(colorize 1)
+  else
+    git -C "${1}" pull --all --prune --autostash 2> >(grep -v autostash | colorize 1) | grep -v autostash
+    git -C "${1}" clean-merged-branches 2> >(colorize 1)
+  fi
 }
 export -f simplefetch
 
@@ -63,10 +70,10 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 if [[ "$1" == "--simple" ]]; then
-  for project in $(projects); do
+  for project in $(projects | sort); do
     simplefetch "$project"
   done
 else
   PARALLELISM=400%
-  projects | parallel -j $PARALLELISM --eta --bar --timeout 120s fetch {}
+  projects | sort | parallel -j $PARALLELISM --eta --bar --timeout 1800s fetch {}
 fi

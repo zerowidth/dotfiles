@@ -4,6 +4,7 @@ require "pathname"
 class RandomEditor
   def initialize
     @files = Pathname.new(".").entries.select(&:file?).map(&:to_s)
+    @use_jj = Pathname.new(".jj").exist?
   end
 
   def run(iterations = 1, commit = false)
@@ -38,10 +39,15 @@ class RandomEditor
 
   def commit_changes
     puts "-" * 40
-    `git add .`
-    puts `git status`
     message = (1 + rand(3)).times.map { next_word }.join(" ")
-    puts `git commit -m "#{message}"`
+    if @use_jj
+      puts `jj status`
+      puts `jj commit -m "#{message}"`
+    else
+      `git add .`
+      puts `git status`
+      puts `git commit -m "#{message}"`
+    end
     puts
   end
 

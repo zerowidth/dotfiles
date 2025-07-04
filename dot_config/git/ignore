@@ -10,3 +10,4 @@ ruby/bundle.symlink/cache
 .agignore
 __pycache__
 .envrc
+.jj
