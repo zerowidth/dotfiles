@@ -6,10 +6,14 @@ email = "nathan@zerowidth.com"
 
 [ui]
 diff-editor = "gitpatch"
+diff-formatter = "difft"
+default-command = "log"
+bookmark-list-sort-keys = ["committer-date-", "name"]
 
-[ui.diff]
-tool = "difft"
-format = "git"
+[git]
+push-new-bookmarks = true
+auto-local-bookmark = true
+write-change-id-header = true
 
 # via @dubi steinkek in the jj discord
 [merge-tools.gitpatch]
@@ -46,3 +50,59 @@ concat(
   diff.git(),
 )
 '''
+
+[template-aliases]
+'format_short_change_id(id)' = 'id.shortest(3)'
+'format_short_commit_id(id)' = 'id.shortest(3)'
+# relative timestamps:
+'format_timestamp(timestamp)' = 'timestamp.ago()'
+
+[revsets]
+'log' = 'default()'
+# show main branch on left:
+'log-graph-prioritize' = 'coalesce(trunk(), present(@))'
+
+[revset-aliases]
+'default()' = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
+'more()' = 'default() | ancestors(visible_heads(), 2)'
+
+# set all remote bookmarks (and implicitly commits on branches) to be immutable
+# github doesn't play nicely with rebase+force push
+'immutable_heads()' = "builtin_immutable_heads() | remote_bookmarks()"
+
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
+'unmerged()' = 'bookmarks() & ~(trunk():: | trunk())'
+'recent()' = 'committer_date(after:"1 months ago")'
+'recent(revset)' = 'revset & recent()'
+
+[aliases]
+bl = ["bookmark", "list"]
+blr = ["bookmark", "list", "--revisions", "recent()"]
+c = ["commit"]
+ci = ["commit", "--interactive"] # commit interactive
+dp = ["describe", "@-"] # describe previous
+e = ["edit"]
+pull = ["git", "fetch"]
+push = ["git", "push"]
+gf = ["git", "fetch"] # git fetchq
+gi = ["git", "init", "--colocate"]
+gp = ["git", "push"] # git push
+i = ["git", "init", "--colocate"]
+l = ["log", "-r", "more()"]
+
+nb = ["bookmark", "create", "-r @-"] # new bookmark (for creating bookmark to push)
+nc = ["new", "-B", "@", "--no-edit"] # new change before
+r = ["rebase"]
+rm = ["rebase", "-d", "main"] # "re-main"
+s = ["show"]
+si = ["squash", "--interactive"]
+sp = ["show", "@-"]
+up = ["util", "exec", "--", "sh", "-c", """
+if [ "x$1" = "x" ]; then
+  jj bookmark move --from "closest_bookmark(@)" --to "closest_pushable(@)"
+else
+  jj bookmark move --to "closest_pushable(@)" "$@"
+fi
+""", ""]
+upp = ["util", "exec", "--", "sh", "-c", "jj up && jj git push", ""]
