@@ -1,0 +1,4 @@
+[ui]
+  # flexoki, ui color
+  highlight_light = "#E6E4D9"
+  highlight_dark = "#282726"
