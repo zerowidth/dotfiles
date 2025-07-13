@@ -10,13 +10,12 @@ if [[ ! $(which brew) ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --file=- <<EOF
 brew "fzf"
 
 brew "bat"
 brew "pstree"
 brew "pv"
-brew "the_silver_searcher"
 brew "rg"
 brew "tree"
 
@@ -29,8 +28,8 @@ tap "buo/cask-upgrade"
 
 brew "git"
 brew "difftastic"
-brew "diffutils" # https://github.com/golangci/golangci-lint/issues/3087
 brew "jq"
+brew "yq"
 brew "watch"
 brew "fswatch"
 brew "entr"
@@ -40,8 +39,6 @@ brew "mtr"
 brew "rename" # conflicts with linux-util on linux
 
 brew "chezmoi"
-cask "1password-cli"
-cask "arq"
 
 brew "zsh"
 
@@ -54,8 +51,11 @@ brew "ruby"
 brew "rbenv"
 brew "node"
 brew "nodenv"
-brew "flow" # for javascript
+brew "flow" # for javascript typechecking
 brew "shellcheck"
+
+brew "rust"
+brew "cargo-binstall"
 
 brew "flyctl"
 
@@ -63,19 +63,18 @@ cask "kap" # screen capturing
 # cask "wireshark"
 
 # for other stuff
-tap "homebrew/cask-fonts"
 cask "font-fira-code"
 cask "font-ia-writer-duo"
 cask "font-ia-writer-quattro"
 cask "font-iosevka"
-# cask "font-iosevka-slab"
 cask "font-alegreya"
 cask "font-alegreya-sans"
-cask "font-alegreya-sans"
-brew "svn" # seriously? lol
 cask "font-merriweather"
+cask "font-bricolage-grotesque"
+cask "font-vollkorn"
+cask "font-vollkorn-sc"
 
-cask "docker"
+cask "docker-desktop"
 
 cask "qlmarkdown" # markdown quicklook
 
@@ -84,68 +83,52 @@ brew "lunchy"
 # applications
 brew "mas"
 
+cask "arq"
 cask "raycast"
 cask "hammerspoon"
 cask "iterm2"
 cask "1password"
+cask "1password-cli"
 cask "visual-studio-code"
-cask "bartender"
 cask "obsidian"
 cask "istat-menus"
 cask "slack"
 cask "discord"
 cask "google-chrome"
-cask "marked"
-
-# for flashing firmware for ergodox
-# tap "PX4/homebrew-px4"
-# brew "dfu-util"
-# brew "gcc-arm-none-eabi-54"
-# brew "python3"
-# brew "cmake"
-
-# for AVR development:
-# cask "crosspack-avr"
-# tap "osx-cross/avr"
-# brew "avr-libc" # doesn't exist anymore?
-# brew "avrdude"
-
-# brew "kubectl"
-# brew "kubectx"
-# brew "stern" # for tailing logs
+cask "moom"
+cask "jordanbaird-ice"
 EOF
 
 # app store apps
+mas install 1440147259  # AdGuard for Safari
 mas install 1451552749  # Open In Webmail
 mas install 1351639930  # Gifski
 mas install 1528890965  # TextSniper
 mas install 1491071483  # Tot
 mas install 1547121417  # HomeControl
-mas install 635758264   # Calca
 mas install 1544668450  # Simplify for Gmail
 mas install 1569813296  # 1Password for Safari
 mas install 451640037   # Classic Color Meter
-mas install 904280696   # Things
-mas install 1432731683  # Adblock Plus
 mas install 411643860   # DaisyDisk
-mas install 290986013   # Deliveries
-mas install 6444602274  # Ivory
 mas install 497799835   # Xcode
 mas install 1459809092  # Accelerate
-mas install 1090488118  # Gemini 2
 mas install 775737590   # iA Writer
-# mas install 1081413713  # GIF Brewery 3
-mas install 1502839586  # Hand Mirror
-mas install 432027450   # RadarScope
-mas install 1666139593  # Homecoming for Mastodon
 mas install 1640236961  # Save to Reader
-mas install 1421915518  # PiPer
-mas install 419330170   # Moom
 mas install 1475387142  # Tailscale
+{{ if .duncan }}
+mas install 639968404   # Parcel
+mas install 6444602274  # Ivory
+mas install 1666139593  # Homecoming for Mastodon
+mas install 1090488118  # Gemini 2
+mas install 1529448980  # Reeder
+mas install 6478481082  # openterface
+{{ end }}
 
 /opt/homebrew/opt/fzf/install --no-update-rc --key-bindings --completion --xdg
 
+set +e # this fails sometimes?
 eval "$(rbenv init - zsh)"
+set -e
 # set ruby to the latest version
 brew rbenv-sync -v
 latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
@@ -163,10 +146,10 @@ gem install colorize --conservative
 # for vscode
 gem install solargraph --conservative
 gem install rubocop --conservative
-gem install ruby-debug-ide --conservative
 
 gh auth status || gh auth login
 gh md >/dev/null 2>&1 || gh extension install zerowidth/gh-md
+gh extension install rneatherway/gh-slack
 
 [[ -L ~/.ssh ]] || ln -s {{ .chezmoi.homeDir }}/Documents/sync/ssh ~/.ssh
 {{ end }}
@@ -189,15 +172,11 @@ if [ -d ~/.vim/plugins ]; then
 fi
 {{ else }}
 
-if ! type bat >/dev/null; then
-  curl -s -L https://github.com/sharkdp/bat/releases/download/v0.20.0/bat_0.20.0_amd64.deb -o /tmp/bat.deb && \
-    sudo dpkg -i /tmp/bat.deb
-fi
 sudo apt-get install -y \
   zsh zsh-syntax-highlighting \
-  silversearcher-ag \
+  shellcheck \
+  bat \
   ripgrep
-
 {{ end -}}
 
 if [[ -n "$(grep $(whoami) /etc/passwd)" ]] && ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
