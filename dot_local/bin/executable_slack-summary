@@ -1,0 +1,65 @@
+#!/bin/bash
+# for use in espanso
+
+set -e
+set -o pipefail
+
+blockquote() {
+  # Formats markdown blockquotes:
+  # - Preserves lines starting with "> **"
+  # - Prevents duplicate blank blockquote lines
+  # - Adds one level of nesting to existing blockquotes
+  # - Converts empty lines to blockquote lines
+  # - Adds "> " prefix to regular text lines
+  awk '
+    /^> \*\*/ { print; next }
+    /^>$/ {
+      if (p != $0) print
+      p = $0
+      next
+    }
+    /^>/ {
+      print "> " $0
+      next
+    }
+    /^$/ { print ">" }
+    {
+      p = $0
+      if (!/^>/) {
+        print "> " $0
+        next
+      }
+    }
+  '
+}
+
+url=$1
+
+if [ -z "$url" ]; then
+  echo "Error: No Slack URL provided"
+  exit 1
+fi
+
+if ! echo "$url" | grep -q "slack.com"; then
+  echo "Error: Not a valid Slack URL"
+  exit 1
+fi
+
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
+if ! gh slack read -l 200 "$url" > "$tmpfile" 2>/dev/null; then
+  echo "Error retrieving Slack thread"
+  exit 1
+fi
+
+echo "> [!note]- [Slack transcript]($url)"
+echo ">"
+blockquote < "$tmpfile"
+echo
+echo "> [!summary] Summary"
+
+if ! gh capi slack < "$tmpfile" | blockquote; then
+  echo "Error summarizing Slack thread"
+  exit 1
+fi

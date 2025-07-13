@@ -62,6 +62,15 @@ matches:
         type: shell
         params:
           cmd: "gh md ref '{{clipboard}}'"
+  - trigger: "//slack"
+    replace: "{{output}}"
+    vars:
+      - name: clipboard
+        type: clipboard
+      - name: output
+        type: shell
+        params:
+          cmd: "slack-summary '{{clipboard}}'"
     backend: Clipboard
     preserve_clipboard: false
   - trigger: "aqq"
