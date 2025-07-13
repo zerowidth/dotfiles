@@ -12,7 +12,6 @@ bookmark-list-sort-keys = ["committer-date-", "name"]
 
 [git]
 push-new-bookmarks = true
-auto-local-bookmark = true
 write-change-id-header = true
 
 # via @dubi steinkek in the jj discord
@@ -54,21 +53,20 @@ concat(
 [template-aliases]
 'format_short_change_id(id)' = 'id.shortest(3)'
 'format_short_commit_id(id)' = 'id.shortest(3)'
-# relative timestamps:
 'format_timestamp(timestamp)' = 'timestamp.ago()'
 
 [revsets]
-'log' = 'default()'
-# show main branch on left:
-'log-graph-prioritize' = 'coalesce(trunk(), present(@))'
+'log' = 'branch'
 
 [revset-aliases]
-'default()' = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
-'more()' = 'default() | ancestors(visible_heads(), 2)'
+# show everything in the current set of branches off of trunk():
+branch = '(coalesce(trunk(),root())..@)- | (coalesce(trunk(),root())..@)::'
+log = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
+more = 'log | ancestors(visible_heads(), 2)'
 
 # set all remote bookmarks (and implicitly commits on branches) to be immutable
 # github doesn't play nicely with rebase+force push
-'immutable_heads()' = "builtin_immutable_heads() | remote_bookmarks()"
+# 'immutable_heads()' = "builtin_immutable_heads() | remote_bookmarks()"
 
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
