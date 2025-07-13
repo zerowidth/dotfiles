@@ -5,6 +5,7 @@ scriptTempDir = "~/tmp"
 
 [data]
   mac = {{ eq .chezmoi.os "darwin" }}
+  duncan = {{ output "scutil" "--get" "ComputerName" | trim | eq "duncan" }}
   linux = {{ eq .chezmoi.os "linux" }}
   shared = {{ env "GH_ENV" | not | not }}
   codespaces = {{ env "CODESPACES" | not | not }}
