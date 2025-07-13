@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+if [ $# -eq 0 ]; then
+  for color in {0..15}; do
+    echo -e "$(tput setaf $color)Example text in color $color$(tput sgr0)"
+  done
+  exit 0
+fi
+
 color=${1:-1}
 while read line; do
   echo -e "$(tput setaf $color)$line$(tput sgr0)"
