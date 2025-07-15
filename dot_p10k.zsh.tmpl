@@ -24,12 +24,12 @@ prompt_my_go_work() {
 prompt_my_jj() {
   if [[ -d ".jj" ]]; then
     local action bookmark revision
-
+    
     local bookmark_output
     bookmark_output=$(jj log --ignore-working-copy --no-graph --color never \
       -r "latest(ancestors(@) & bookmarks())" \
       -T 'bookmarks.join(" ")' 2>/dev/null)
-
+    
     if [[ -n "$bookmark_output" ]]; then
       bookmark="$bookmark_output"
     fi
@@ -38,7 +38,7 @@ prompt_my_jj() {
     local revision_output
     revision_output=$(jj log --ignore-working-copy -n 1 --no-graph --color never -r "@" \
       -T 'separate("\t", change_id.shortest(), if(conflict, "conflict", ""), if(empty, "empty", ""), if(description == "", "no_description", ""))' 2>/dev/null)
-
+    
     if [[ -n "$revision_output" ]]; then
       local parts
       IFS=$'\t' read -rA parts <<< "$revision_output"
@@ -469,8 +469,8 @@ prompt_my_jj() {
 
     # Display the current Git commit if there is no branch and no tag.
     # Tip: To always display the current Git commit, delete the next line.
-    [[ -z $VCS_STATUS_LOCAL_BRANCH && -z $VCS_STATUS_TAG ]] &&  # <-- this line
-      res+="${meta}@${clean}${VCS_STATUS_COMMIT[1,8]}"
+    # [[ -z $VCS_STATUS_LOCAL_BRANCH && -z $VCS_STATUS_TAG ]] &&  # <-- this line
+    #   res+="${meta}@${clean}${VCS_STATUS_COMMIT[1,8]}"
 
     # Show tracking branch name if it differs from local branch.
     if [[ -n ${VCS_STATUS_REMOTE_BRANCH:#$VCS_STATUS_LOCAL_BRANCH} ]]; then
