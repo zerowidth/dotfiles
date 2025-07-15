@@ -1,15 +1,11 @@
 alias ls='ls -FG'
 alias ll='ls -lah'
-# alias ll='exa -lah'
 alias mv='mv -nv'
-alias unlock="security unlock-keychain ~/Library/Keychains/login.keychain"
 alias rehash='hash -r'
 alias p4="ping 4.2.2.2"
 which prettyping >/dev/null && alias ping="prettyping"
 alias ia="open -a 'IA Writer' "
 alias cz=chezmoi
-
-alias gdiff="git diff --no-index"
 
 alias kcatss="kcat -X security.protocol=ssl -X enable.ssl.certificate.verification=false"
 
@@ -57,6 +53,7 @@ ke() {
   gh-k8s-clusters --profile general --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
 }
 
+# kubectl proxima each
 kpe() {
   stamp=$1
   shift
@@ -76,7 +73,7 @@ vl() {
 }
 
 alias ht="hydro-tools"
-alias at="./aqueduct-tools"
+alias at="aqueduct-tools"
 {{ end }}
 
 # quickly get to the real path (e.g. go project symlinks)
@@ -95,7 +92,6 @@ function up() {
   brew upgrade --fetch-HEAD
   brew cu --cleanup --no-brew-update --yes
   brew cleanup
-  # mas upgrade
   antigen update
   gh extension upgrade --all
   chezmoi status
@@ -153,22 +149,7 @@ function sc() {
   fi
 }
 alias sb='script/bootstrap'
-# alias sv='script/vendor'
 alias st='script/test'
-alias cst='clear; script/test'
-
-function ssh-setup() {
-  ssh $1 'mkdir .ssh; chmod 700 .ssh; touch .ssh/authorized_keys; chmod 600 .ssh/authorized_keys'
-  cat ~/.ssh/id_rsa.pub | ssh $1 'cat - >> ~/.ssh/authorized_keys'
-}
-
-# p() {
-# if [ -n "$1" ]; then
-# ps -O ppid -U $USER | grep -i "$1" | grep -v grep
-# else
-# ps -O ppid -U $USER
-# fi
-# }
 
 alias dc="docker compose"
 function docker-cleanup() {
@@ -178,9 +159,7 @@ function docker-cleanup() {
   docker images -q --filter dangling=true | xargs docker rmi
   docker system prune --volumes -f
   docker volume prune -f
-  # https://github.com/docker/for-mac/issues/371
-  # docker run --rm -it --privileged --pid=host walkerlee/nsenter -t 1 -m -u -i -n fstrim /var/lib/docker
-  # set +x
+  set +x
 }
 
 # from https://github.com/junegunn/fzf/wiki/examples
@@ -198,18 +177,11 @@ fkill() {
 }
 
 if [ -n "$(command -v code)" ]; then
-  if [ -n "$(command -v cursor)" ]; then
-    export EDITOR="cursor"
-  else
-    export EDITOR="code"
-  fi
+  export EDITOR="code"
+  export JJ_EDITOR="code -w"
   function e() {
     if [ -n "$1" ]; then
-      if [ -d "$1" ]; then
         $EDITOR -n $1
-      else
-        $EDITOR -n $1
-      fi
     else
       $EDITOR -n . "$@"
     fi
@@ -281,6 +253,9 @@ alias gd="git diff"
 alias gi="git di"
 alias gdi="git di"
 
+alias js="jj status"
+alias ju="jjui"
+
 function gp() {
   git pull --stat --all --prune --progress --autostash &&
     git clean-merged-branches
@@ -297,3 +272,5 @@ function main-branch() {
   git branch -m master main
   git branch -u origin/main main
 }
+
+[[ -f ~/.claude/local/claude ]] && alias claude="~/.claude/local/claude"
