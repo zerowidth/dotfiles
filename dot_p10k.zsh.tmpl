@@ -24,35 +24,34 @@ prompt_my_go_work() {
 prompt_my_jj() {
   if [[ -d ".jj" ]]; then
     local revision_display
-    local bookmark_display
+    # local bookmark_name distance bookmark_display
 
     revision_display=$(jj log --ignore-working-copy --no-graph --color always \
-      -r "@" -T prompt 2>/dev/null)
+      -r "@" -T 'prompt' 2>/dev/null)
 
-    # Get nearest bookmark with distance from git_head
-    local bookmark_name distance
-    bookmark_name=$(jj log --ignore-working-copy --no-graph --color always \
-      -r "latest(ancestors(git_head()) & bookmarks())" \
-      -T 'bookmarks.join(" ")' 2>/dev/null)
-    distance=$(jj log --ignore-working-copy --no-graph \
-      -r "latest(ancestors(git_head()) & bookmarks())::git_head() ~ latest(ancestors(git_head()) & bookmarks())" \
-      -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
+    # bookmark_name=$(jj log --ignore-working-copy --no-graph --color always \
+    #   -r "latest(ancestors(git_head()) & bookmarks())" \
+    #   -T 'bookmarks.join(" ")' 2>/dev/null)
+    # distance=$(jj log --ignore-working-copy --no-graph \
+    #   -r "latest(ancestors(git_head()) & bookmarks())::git_head() ~ latest(ancestors(git_head()) & bookmarks())" \
+    #   -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
     
-    if [[ -n "$bookmark_name" && "$distance" -gt 0 ]]; then
-      bookmark_display="${bookmark_name}+${distance}"
-    elif [[ -n "$bookmark_name" ]]; then
-      bookmark_display="$bookmark_name"
-    fi
+    # if [[ -n "$bookmark_name" && "$distance" -gt 0 ]]; then
+    #   bookmark_display="${bookmark_name}+${distance}"
+    # elif [[ -n "$bookmark_name" ]]; then
+    #   bookmark_display="$bookmark_name"
+    # fi
 
-    # Build the display string
     local display=""
     if [[ -n "$revision_display" ]]; then
-      display+="@${revision_display}"
+      display+="${revision_display}"
     fi
-    if [[ -n "$bookmark_display" ]]; then
-      display+=" ${bookmark_display}"
-    fi
+    # if [[ -n "$bookmark_display" ]]; then
+    #   display+=" ${bookmark_display}"
+    # fi
 
+    # Wrap ANSI escape sequences for proper width calculation
+    display=$(echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g')
     p10k segment -t "${display}"
   fi
 }
@@ -437,6 +436,11 @@ prompt_my_jj() {
 
     local res
 
+    # Add "on " prefix unless we're in a jj repo (where jj segment provides context)
+    if [[ ! -d .jj ]]; then
+      res="${meta}on "
+    fi
+
     if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
       local branch=${(V)VCS_STATUS_LOCAL_BRANCH}
       # If local branch name is at most 32 characters long, show it in full.
@@ -461,8 +465,9 @@ prompt_my_jj() {
 
     # Display the current Git commit if there is no branch and no tag.
     # Tip: To always display the current Git commit, delete the next line.
-    # [[ -z $VCS_STATUS_LOCAL_BRANCH && -z $VCS_STATUS_TAG ]] &&  # <-- this line
-    #   res+="${meta}@${clean}${VCS_STATUS_COMMIT[1,8]}"
+    # Hide commit hash in jj repos (since jj segment shows the revision)
+    [[ -z $VCS_STATUS_LOCAL_BRANCH && -z $VCS_STATUS_TAG && ! -d .jj ]] &&  # <-- this line
+      res+="${meta}@${clean}${VCS_STATUS_COMMIT[1,8]}"
 
     # Show tracking branch name if it differs from local branch.
     if [[ -n ${VCS_STATUS_REMOTE_BRANCH:#$VCS_STATUS_LOCAL_BRANCH} ]]; then
@@ -494,17 +499,17 @@ prompt_my_jj() {
     # disable stashes:
     # (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
     # 'merge' if the repo is in an unusual state.
-    [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
+    [[ -n $VCS_STATUS_ACTION     ]] && res+="${res:+ }${conflicted}${VCS_STATUS_ACTION}"
     # ~42 if have merge conflicts.
-    (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
+    (( VCS_STATUS_NUM_CONFLICTED )) && res+="${res:+ }${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
     # +42 if have staged changes.
-    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
+    (( VCS_STATUS_NUM_STAGED     )) && res+="${res:+ }${modified}+${VCS_STATUS_NUM_STAGED}"
     # !42 if have unstaged changes.
-    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
+    (( VCS_STATUS_NUM_UNSTAGED   )) && res+="${res:+ }${modified}!${VCS_STATUS_NUM_UNSTAGED}"
     # ?42 if have untracked files. It's really a question mark, your font isn't broken.
     # See POWERLEVEL9K_VCS_UNTRACKED_ICON above if you want to use a different icon.
     # Remove the next line if you don't want to see untracked files at all.
-    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
+    (( VCS_STATUS_NUM_UNTRACKED  )) && res+="${res:+ }${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
     # "─" if the number of unstaged files is unknown. This can happen due to
     # POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY (see below) being set to a non-negative number lower
     # than the number of files in the Git index, or due to bash.showDirtyState being set to false
@@ -528,7 +533,7 @@ prompt_my_jj() {
   # Don't show Git status in prompt for repositories whose workdir matches this pattern.
   # For example, if set to '~', the Git repository at $HOME/.git will be ignored.
   # Multiple patterns can be combined with '|': '~(|/foo)|/bar/baz/*'.
-  typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN='~'
+  typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN='~|*/.jj(|/*)'
 
   # Disable the default Git status formatting.
   typeset -g POWERLEVEL9K_VCS_DISABLE_GITSTATUS_FORMATTING=true
@@ -543,8 +548,17 @@ prompt_my_jj() {
   typeset -g POWERLEVEL9K_VCS_LOADING_VISUAL_IDENTIFIER_COLOR=
   # Custom icon.
   typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_EXPANSION=
-  # Custom prefix.
-  typeset -g POWERLEVEL9K_VCS_PREFIX='%fon '
+  # Custom prefix and separator settings
+  typeset -g POWERLEVEL9K_VCS_PREFIX=''
+  # Remove left separator to eliminate extra space
+  typeset -g POWERLEVEL9K_VCS_LEFT_SEPARATOR=''
+
+  ####################################[ my_jj: jj status ]####################################
+  # No prefix/suffix for jj segment
+  typeset -g POWERLEVEL9K_MY_JJ_PREFIX=''
+  typeset -g POWERLEVEL9K_MY_JJ_SUFFIX=''
+  # Remove left separator for my_jj to eliminate space after dir segment
+  typeset -g POWERLEVEL9K_MY_JJ_LEFT_SEPARATOR=''
 
   # Show status of repositories of these types. You can add svn and/or hg if you are
   # using them. If you do, your prompt may become slow even when your current directory
