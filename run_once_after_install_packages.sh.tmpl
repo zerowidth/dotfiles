@@ -74,7 +74,7 @@ cask "font-bricolage-grotesque"
 cask "font-vollkorn"
 cask "font-vollkorn-sc"
 
-cask "docker"
+cask "docker-desktop"
 
 cask "qlmarkdown" # markdown quicklook
 
@@ -169,8 +169,14 @@ if [ -d ~/.vim/plugins ]; then
  else
   vim --not-a-term +PlugInstall +qa
 fi
+
+# TODO: install ruby here too.
 {{ else }}
 
+# if ! type bat >/dev/null; then
+#   curl -s -L https://github.com/sharkdp/bat/releases/download/v0.25.0/bat_0.25.0_amd64.deb -o /tmp/bat.deb && \
+#     sudo dpkg -i /tmp/bat.deb
+# fi
 sudo apt-get install -y \
   zsh zsh-syntax-highlighting \
   shellcheck \
