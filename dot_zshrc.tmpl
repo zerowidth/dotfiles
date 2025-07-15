@@ -17,15 +17,9 @@ if [[ -d /usr/local/share/zsh ]]; then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
 fi
 
-if [[ "$(uname)" = "Linux" ]]; then
-  export LINUX=1
-fi
-
-export HOMEBREW_INSTALL_FROM_API=1
-
 # zsh settings
 setopt pushd_ignore_dups # don't push the same directory twice
-setopt extendedglob # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc.
+setopt extendedglob # Treat the '#' '~' and '^' characters as part of patterns for filename generation, etc.
 setopt nomatch # If a pattern for filename generation has no matches, print an error,
 setopt notify # Report the status of background jobs immediately
 unsetopt autocd # don't want
@@ -43,9 +37,13 @@ setopt hist_ignore_all_dups # ignore all of 'em, too
 setopt inc_append_history_time # append after elapsed
 # setopt share_history # share history, read immediately
 
+# this enables proper color support in jjui, at least.
+export COLORTERM=truecolor
+
 # -i case ignore | -M more verbose prompting | -R raw control chars
 # -X don't reinit term | -F quit if less than one screen | -x4 tabstop of 4
-export LESS='-MRXFx4'
+export LESS='-MRFx4'
+export PAGER=less
 
 if [[ -n $(command -v /usr/libexec/java_home) ]] && /usr/libexec/java_home >/dev/null 2>&1; then
    export JAVA_HOME=$(/usr/libexec/java_home)
@@ -66,17 +64,10 @@ bindkey -M viins '^Y' yank
 bindkey -M viins '^U' kill-whole-line
 
 # prompt settings
-{{ if .linux }}
 function set_window_title(){
   print -Pn "\e]1;%~\a" # tab
   print -Pn "\e]2;%n@%m: %~\a" # window
 }
-{{ else }}
-function set_window_title(){
-  print -Pn "\e]1;%n@%m: %~\a" # tab
-  print -Pn "\e]2;%n@%m: %~\a" # window
-}
-{{ end }}
 precmd_functions+=(set_window_title)
 
 # # completions
@@ -98,12 +89,6 @@ else
   echo "antigen is broken, skipping"
 fi
 
-# mac:
-[[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
-  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# linux
-[[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
-  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
@@ -129,10 +114,9 @@ source ~/.paths.sh
 source ~/.utils.sh
 source ~/.secrets.sh
 source ~/.p10k.zsh # p10k prompt settings
+
 [[ -f ~/.local.sh ]] && source ~/.local.sh # host-specific settings/aliases
-
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
-
 [[ -f ~/.local/bin/iterm2_shell_integration.zsh ]] && source ~/.local/bin/iterm2_shell_integration.zsh
 
 if type direnv &>/dev/null; then
@@ -142,3 +126,12 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+type jj &>/dev/null && source <(COMPLETE=zsh jj)
+
+# mac:
+[[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# linux
+[[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
