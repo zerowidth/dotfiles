@@ -6,7 +6,8 @@ email = "nathan@zerowidth.com"
 
 [ui]
 diff-editor = "gitpatch"
-diff-formatter = "difft"
+diff-formatter = ["difft", "--color=always", "--display=inline", "$left", "$right"]
+# FIXME: show recent remote tracking branches, and any local branches that are mine
 default-command = "log"
 bookmark-list-sort-keys = ["committer-date-", "name"]
 
