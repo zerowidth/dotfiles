@@ -149,6 +149,7 @@ gem install rubocop --conservative
 
 gh auth status || gh auth login
 gh md >/dev/null 2>&1 || gh extension install zerowidth/gh-md
+gh extension install rneatherway/gh-slack
 
 [[ -L ~/.ssh ]] || ln -s {{ .chezmoi.homeDir }}/Documents/sync/ssh ~/.ssh
 {{ end }}
