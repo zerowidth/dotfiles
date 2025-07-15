@@ -20,6 +20,48 @@ prompt_my_go_work() {
   p10k segment -f red -t "${work}"
 }
 
+# custom: show jj workspace status
+prompt_my_jj() {
+  if command -v jj >/dev/null 2>&1 && jj workspace root >/dev/null 2>&1; then
+    local action bookmark revision
+
+    local bookmark_output
+    bookmark_output=$(jj log --ignore-working-copy --no-graph --color never \
+      -r "latest(ancestors(@) & bookmarks())" \
+      -T 'bookmarks.join(" ")' 2>/dev/null)
+
+    if [[ -n "$bookmark_output" ]]; then
+      bookmark="$bookmark_output"
+    fi
+
+    local revision_output
+    revision_output=$(jj log --ignore-working-copy -n 1 --no-graph --color never -r "@" \
+      -T 'separate("\t", change_id.shortest(), if(conflict, "conflict", ""), if(empty, "empty", ""), if(description == "", "no_description", ""))' 2>/dev/null)
+
+    if [[ -n "$revision_output" ]]; then
+      local parts
+      IFS=$'\t' read -rA parts <<< "$revision_output"
+      revision="${parts[1]}"
+      [[ "${parts[2]}" == "conflict" ]] && action="conflict"
+      [[ "${parts[3]}" == "empty" ]] && action="${action:+$action }empty"
+      [[ "${parts[4]}" == "no_description" ]] && action="${action:+$action }no description"
+    fi
+
+    local display=""
+    if [[ -n "$revision" ]]; then
+      display+="%F{6}@${revision}%f"
+    fi
+    if [[ -n "$bookmark" ]]; then
+      display+=" %F{2}${bookmark}%f"
+    fi
+    if [[ -n "$action" ]]; then
+      display+=" %F{3}(${action})%f"
+    fi
+
+    p10k segment -t "${display}"
+  fi
+}
+
 # Temporarily change options.
 'builtin' 'local' '-a' 'p10k_config_opts'
 [[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
@@ -44,6 +86,7 @@ prompt_my_go_work() {
     context                 # user@hostname
     dir                     # current directory
     vcs                     # git status
+    my_jj                   # jj version control status
     # =========================[ Line #2 ]=========================
     newline                 # \n
     prompt_char             # prompt symbol
