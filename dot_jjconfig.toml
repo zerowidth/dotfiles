@@ -61,6 +61,13 @@ concat(
 'format_short_change_id(id)' = 'id.shortest(3)'
 'format_short_commit_id(id)' = 'id.shortest(3)'
 'format_timestamp(timestamp)' = 'timestamp.ago()'
+# see dot_p10k.zsh.tmpl for usage
+prompt = '''
+format_short_change_id_with_hidden_and_divergent_info(self) ++
+if(empty, " " ++ label("empty", "(empty)"), "") ++
+if(description == "", " " ++ label("description placeholder", "(no description set)"), "") ++
+if(conflict, " " ++ label("conflict", "(conflict)"), "")
+'''
 
 [revsets]
 'log' = 'branch'
