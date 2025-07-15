@@ -23,41 +23,37 @@ prompt_my_go_work() {
 # custom: show jj workspace status
 prompt_my_jj() {
   if command -v jj >/dev/null 2>&1 && jj workspace root >/dev/null 2>&1; then
-    local action bookmark revision
+    local revision_display
+    local bookmark_display
 
-    local bookmark_output
-    bookmark_output=$(jj log --ignore-working-copy --no-graph --color never \
-      -r "latest(ancestors(@) & bookmarks())" \
+    revision_display=$(jj log --ignore-working-copy --no-graph --color always \
+      -r "@" -T 'prompt' -n 1 2>/dev/null)
+
+    # Get nearest bookmark with distance from git_head
+    local bookmark_name distance
+    bookmark_name=$(jj log --ignore-working-copy --no-graph --color always \
+      -r "latest(ancestors(git_head()) & bookmarks())" \
       -T 'bookmarks.join(" ")' 2>/dev/null)
-
-    if [[ -n "$bookmark_output" ]]; then
-      bookmark="$bookmark_output"
-    fi
-
-    local revision_output
-    revision_output=$(jj log --ignore-working-copy -n 1 --no-graph --color never -r "@" \
-      -T 'separate("\t", change_id.shortest(), if(conflict, "conflict", ""), if(empty, "empty", ""), if(description == "", "no_description", ""))' 2>/dev/null)
-
-    if [[ -n "$revision_output" ]]; then
-      local parts
-      IFS=$'\t' read -rA parts <<< "$revision_output"
-      revision="${parts[1]}"
-      [[ "${parts[2]}" == "conflict" ]] && action="conflict"
-      [[ "${parts[3]}" == "empty" ]] && action="${action:+$action }empty"
-      [[ "${parts[4]}" == "no_description" ]] && action="${action:+$action }no description"
+    distance=$(jj log --ignore-working-copy --no-graph \
+      -r "latest(ancestors(git_head()) & bookmarks())::git_head() ~ latest(ancestors(git_head()) & bookmarks())" \
+      -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
+    
+    if [[ -n "$bookmark_name" && "$distance" -gt 0 ]]; then
+      bookmark_display="${bookmark_name}+${distance}"
+    elif [[ -n "$bookmark_name" ]]; then
+      bookmark_display="$bookmark_name"
     fi
 
     local display=""
-    if [[ -n "$revision" ]]; then
-      display+="%F{6}@${revision}%f"
+    if [[ -n "$revision_display" ]]; then
+      display+="@${revision_display}"
     fi
-    if [[ -n "$bookmark" ]]; then
-      display+=" %F{2}${bookmark}%f"
-    fi
-    if [[ -n "$action" ]]; then
-      display+=" %F{3}(${action})%f"
+    if [[ -n "$bookmark_display" ]]; then
+      display+=" ${bookmark_display}"
     fi
 
+    # Wrap ANSI escape sequences for proper width calculation
+    display=$(echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g')
     p10k segment -t "${display}"
   fi
 }

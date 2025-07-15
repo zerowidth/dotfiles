@@ -10,6 +10,13 @@ diff-formatter = "difft"
 default-command = "log"
 bookmark-list-sort-keys = ["committer-date-", "name"]
 
+[colors]
+# extra labels for the prompt
+mega = "magenta"
+wip = "yellow"
+todo = "blue"
+vibe = "cyan"
+
 [git]
 push-new-bookmarks = true
 write-change-id-header = true
@@ -52,6 +59,19 @@ concat(
 'format_short_change_id(id)' = 'id.shortest(3)'
 'format_short_commit_id(id)' = 'id.shortest(3)'
 'format_timestamp(timestamp)' = 'timestamp.ago()'
+# see dot_p10k.zsh.tmpl for usage
+prompt = '''
+separate(" ",
+  "@"++format_short_change_id_with_hidden_and_divergent_info(self),
+  if(empty, label("empty", "(empty)"), ""),
+  if(description == "", label("description placeholder", "(no description)"), ""),
+  if(description.contains("megamerge"), label("mega", "(mega)"), ""),
+  if(description.starts_with("wip"), label("wip", "(wip)"), ""),
+  if(description.starts_with("todo"), label("todo", "(todo)"), ""),
+  if(description.starts_with("vibe"), label("vibe", "(vibe)"), ""),
+  if(conflict, label("conflict", "(conflict)"), "")
+)
+'''
 
 [revsets]
 'log' = 'branch'
