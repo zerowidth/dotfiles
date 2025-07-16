@@ -13,6 +13,7 @@ bookmark-list-sort-keys = ["committer-date-", "name"]
 [git]
 push-new-bookmarks = true
 write-change-id-header = true
+private-commits = "description(regex-i:'^wip.*') | description(regex-i:'^todo.*')"
 
 # via @dubi steinkek in the jj discord
 [merge-tools.gitpatch]
