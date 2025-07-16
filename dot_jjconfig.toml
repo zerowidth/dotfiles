@@ -10,9 +10,15 @@ diff-formatter = "difft"
 default-command = "log"
 bookmark-list-sort-keys = ["committer-date-", "name"]
 
+[colors]
+wip = "yellow"
+todo = "blue"
+vibe = "cyan"
+
 [git]
 push-new-bookmarks = true
 write-change-id-header = true
+private-commits = "description(regex-i:'^wip.*') | description(regex-i:'^todo.*')"
 
 # via @dubi steinkek in the jj discord
 [merge-tools.gitpatch]
