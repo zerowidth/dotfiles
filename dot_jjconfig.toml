@@ -59,10 +59,10 @@ concat(
 'format_short_change_id(id)' = 'id.shortest(3)'
 'format_short_commit_id(id)' = 'id.shortest(3)'
 'format_timestamp(timestamp)' = 'timestamp.ago()'
-# see dot_p10k.zsh.tmpl for usage
+# see dot_p10k.zsh.tmpl for usage, this is a p10k prompt output
 prompt = '''
 separate(" ",
-  "@"++format_short_change_id_with_hidden_and_divergent_info(self),
+  format_short_change_id_with_hidden_and_divergent_info(self),
   if(empty, label("empty", "(empty)"), ""),
   if(description == "", label("description placeholder", "(no description)"), ""),
   if(description.contains("megamerge"), label("mega", "(mega)"), ""),

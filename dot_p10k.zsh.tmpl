@@ -20,41 +20,44 @@ prompt_my_go_work() {
   p10k segment -f red -t "${work}"
 }
 
-# custom: show jj workspace status
+typeset -g _my_jj_output=""
+function _my_jj_async() {
+  local work_dir=$1
+  local revision bookmark distance display
+
+  revision=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph --color always -n 1 \
+    -r "@" -T 'prompt' 2>/dev/null)
+
+  bookmark=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph --color always -n 1 \
+    -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null)
+  distance=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph \
+    -r "closest_bookmark(@)..@" \
+    -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
+
+  if [[ -n "$revision" ]]; then
+    display+="${revision}"
+  fi
+  if [[ -n "$bookmark" ]]; then
+    display+=" $bookmark"
+    if [[ "$distance" -gt 0 ]]; then
+      display+=" %7F⇡${distance}"
+    fi
+  fi
+
+  # Wrap ANSI escape sequences for zsh prompt
+  echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g'
+}
+
+function _my_jj_callback() {
+  _my_jj_output=$3
+  p10k display -r
+}
+
+# for async reference: https://github.com/romkatv/powerlevel10k/issues/609
 prompt_my_jj() {
   if command -v jj >/dev/null 2>&1 && jj workspace root >/dev/null 2>&1; then
-    local revision_display
-    local bookmark_display
-
-    revision_display=$(jj log --ignore-working-copy --no-graph --color always \
-      -r "@" -T 'prompt' -n 1 2>/dev/null)
-
-    # Get nearest bookmark with distance from git_head
-    local bookmark_name distance
-    bookmark_name=$(jj log --ignore-working-copy --no-graph --color always \
-      -r "latest(ancestors(git_head()) & bookmarks())" \
-      -T 'bookmarks.join(" ")' 2>/dev/null)
-    distance=$(jj log --ignore-working-copy --no-graph \
-      -r "latest(ancestors(git_head()) & bookmarks())::git_head() ~ latest(ancestors(git_head()) & bookmarks())" \
-      -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
-    
-    if [[ -n "$bookmark_name" && "$distance" -gt 0 ]]; then
-      bookmark_display="${bookmark_name}+${distance}"
-    elif [[ -n "$bookmark_name" ]]; then
-      bookmark_display="$bookmark_name"
-    fi
-
-    local display=""
-    if [[ -n "$revision_display" ]]; then
-      display+="@${revision_display}"
-    fi
-    if [[ -n "$bookmark_display" ]]; then
-      display+=" ${bookmark_display}"
-    fi
-
-    # Wrap ANSI escape sequences for proper width calculation
-    display=$(echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g')
-    p10k segment -t "${display}"
+    async_job _p10k_my_jj_worker _my_jj_async "$PWD"
+    p10k segment -t '$_my_jj_output' -e
   fi
 }
 
@@ -1757,6 +1760,14 @@ prompt_my_jj() {
   # can slow down prompt by 1-2 milliseconds, so it's better to keep it turned off unless you
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
+
+  # Initialize async worker for my_jj segment
+  # unregistering/stopping first to support dynamic reload
+  async_init
+  async_stop_worker _p10k_my_jj_worker 2>/dev/null
+  async_start_worker _p10k_my_jj_worker -n
+  async_unregister_callback _p10k_my_jj_worker 2>/dev/null
+  async_register_callback _p10k_my_jj_worker _my_jj_callback
 
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
