@@ -24,13 +24,11 @@ edit-args = ["-c", '''
   git -C "$left" add -A
   git -C "$left" commit -q -m baseline --allow-empty
   mv "$left/.git" "$right"
-  git -C "$right" add --intent-to-add -A
+  git -C "$right" add --intent-to-add --ignore-removal . # tell git to include new files in interactive patch mode
   git -C "$right" add -p
   git -C "$right" diff-index --quiet --cached HEAD && { echo "No changes done, aborting split."; exit 1; }
   git -C "$right" commit -q -m split
-  git -C "$right" restore . # undo changes in modified files
-  git -C "$right" reset .   # undo --intent-to-add
-  git -C "$right" clean -q -df # remove untracked files
+  git -C "$right" reset -q --hard # undo changes in modified files, remove added files
 ''',
 ]
 merge-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
