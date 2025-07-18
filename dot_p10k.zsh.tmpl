@@ -23,16 +23,30 @@ prompt_my_go_work() {
 typeset -g _my_jj_output=""
 function _my_jj_async() {
   local work_dir=$1
-  local revision bookmark distance display
+  local revision bookmark distance display file_status
 
   revision=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph --color always -n 1 \
     -r "@" -T 'prompt' 2>/dev/null)
 
   bookmark=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph --color always -n 1 \
     -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null)
+
   distance=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph \
     -r "closest_bookmark(@)..@" \
     -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
+
+  file_status_parts=()
+  while read count file_state; do
+    case $file_state in
+      modified) file_status_parts+=("%F{cyan}±${count}%f") ;;
+      added) file_status_parts+=("%F{green}+${count}%f") ;;
+      removed) file_status_parts+=("%F{red}-${count}%f") ;;
+      copied) file_status_parts+=("%F{yellow}⧉${count}%f") ;;
+      renamed) file_status_parts+=("%F{magenta}↻${count}%f") ;;
+    esac
+  done < <(jj log --repository "$work_dir" --ignore-working-copy --no-graph \
+    -T 'self.diff().files().map(|f| f.status()).join("\n")' -r @ 2>/dev/null | sort | uniq -c)
+  file_status=$(IFS=' '; echo "${file_status_parts[*]}")
 
   if [[ -n "$revision" ]]; then
     display+="${revision}"
@@ -43,6 +57,10 @@ function _my_jj_async() {
       display+=" %7F⇡${distance}"
     fi
   fi
+  if [[ -n "$file_status" ]]; then
+    display+=" ${file_status}"
+  fi
+
 
   # Wrap ANSI escape sequences for zsh prompt
   echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g'
