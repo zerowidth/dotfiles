@@ -23,6 +23,36 @@ prompt_my_go_work() {
 typeset -g _my_jj_output=""
 typeset -g _my_jj_current_workspace=""
 
+typeset -g _p10k_last_vcs_state=""
+typeset -g _p10k_last_my_jj_state=""
+function _p10k_toggle_vcs_for_my_jj() {
+  local in_jj_repo
+  if command -v jj >/dev/null 2>&1 && jj workspace root >/dev/null 2>&1; then
+    in_jj_repo=1
+  else
+    in_jj_repo=0
+  fi
+
+  local current_vcs_state current_my_jj_state
+  if (( in_jj_repo )); then
+    current_vcs_state="hide"
+    current_my_jj_state="show"
+  else
+    current_vcs_state="show"
+    current_my_jj_state="hide"
+  fi
+
+  if [[ "$current_vcs_state" != "$_p10k_last_vcs_state" ]]; then
+    p10k display "*/vcs=$current_vcs_state"
+    _p10k_last_vcs_state="$current_vcs_state"
+  fi
+
+  if [[ "$current_my_jj_state" != "$_p10k_last_my_jj_state" ]]; then
+    p10k display "*/jj=$current_my_jj_state"
+    _p10k_last_my_jj_state="$current_my_jj_state"
+  fi
+}
+
 function _my_jj_async() {
   local work_dir=$1
   local revision bookmark distance display file_status
@@ -63,7 +93,6 @@ function _my_jj_async() {
     display+=" ${file_status}"
   fi
 
-
   # Wrap ANSI escape sequences for zsh prompt
   echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g'
 }
@@ -73,7 +102,7 @@ function _my_jj_callback() {
   if [[ $exit_code == 0 ]]; then
     _my_jj_output=$output
   else
-    _my_jj_output=""
+    _my_jj_output="$output %F{red}$stderr%f"
   fi
   p10k display -r
 }
@@ -1805,6 +1834,19 @@ prompt_my_jj() {
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
   (( ! $+functions[p10k] )) || p10k reload
+
+  typeset -g -a chpwd_functions
+  chpwd_functions=("${(@)chpwd_functions:#_p10k_toggle_vcs_for_my_jj}")
+  chpwd_functions+=(_p10k_toggle_vcs_for_my_jj)
+
+  typeset -g -a precmd_functions
+  # one-time setup for initial shell
+  function _p10k_initial_vcs_setup() {
+    _p10k_toggle_vcs_for_my_jj
+    precmd_functions=("${(@)precmd_functions:#_p10k_initial_vcs_setup}")
+  }
+  precmd_functions=("${(@)precmd_functions:#_p10k_initial_vcs_setup}")
+  precmd_functions+=(_p10k_initial_vcs_setup)
 }
 
 # Tell `p10k configure` which file it should overwrite.

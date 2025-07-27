@@ -63,6 +63,7 @@ concat(
 prompt = '''
 separate(" ",
   format_short_change_id_with_hidden_and_divergent_info(self),
+  format_short_commit_id(commit_id),
   if(empty, label("empty", "(empty)"), ""),
   if(description == "", label("description placeholder", "(no description)"), ""),
   if(description.contains("megamerge"), label("mega", "(mega)"), ""),
