@@ -176,7 +176,11 @@ fkill() {
   fi
 }
 
+{{- if .mac }}
 if [ -n "$(command -v code)" ]; then
+{{- else }}
+if [ -n "$(command -v code)" ] && [ "$TERM_PROGRAM" = "vscode" ]; then
+{{- end }}
   export EDITOR="code"
   export JJ_EDITOR="code -w"
   function e() {
@@ -188,8 +192,10 @@ if [ -n "$(command -v code)" ]; then
   }
 elif [ -n "$(command -v vim)" ]; then
   export EDITOR="vim"
+  export JJ_EDITOR="vim"
 elif [ -n "$(command -v vi)" ]; then
   export EDITOR="vi"
+  export JJ_EDITOR="vi"
 fi
 
 # mysql
