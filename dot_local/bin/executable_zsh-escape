@@ -1,0 +1,181 @@
+#!/usr/bin/env ruby
+# Convert ANSI escape codes to zsh-specific escaping.
+# Reads from STDIN and writes to STDOUT.
+
+def convert_ansi_to_zsh(text)
+  # Color mapping: ANSI codes to zsh color names/numbers
+  color_map = {
+    '30' => 'black',   '40' => 'black',
+    '31' => 'red',     '41' => 'red', 
+    '32' => 'green',   '42' => 'green',
+    '33' => 'yellow',  '43' => 'yellow',
+    '34' => 'blue',    '44' => 'blue',
+    '35' => 'magenta', '45' => 'magenta',
+    '36' => 'cyan',    '46' => 'cyan',
+    '37' => 'white',   '47' => 'white'
+  }
+  
+  # Track current state
+  state = {
+    fg_color: nil,
+    bg_color: nil,
+    bold: false,
+    underline: false
+  }
+  
+  # Pattern to match ANSI escape sequences (including RGB colors with colons)
+  ansi_pattern = /\e\[([0-9;:]*)m/
+  
+  text.gsub(ansi_pattern) do |match|
+    codes = $1.split(';')
+    
+    # Handle empty codes (just \e[m) - reset everything
+    if codes.empty? || codes == ['']
+      result = generate_reset(state)
+      reset_state(state)
+      next result
+    end
+    
+    # Process codes and update state
+    new_state = state.dup
+    has_reset = codes.include?('0')
+    i = 0
+    while i < codes.length
+      code = codes[i]
+      case code
+      when '0'
+        reset_state(new_state)
+      when '1'
+        new_state[:bold] = true
+      when '22'
+        new_state[:bold] = false
+      when '4'
+        new_state[:underline] = true
+      when '24'
+        new_state[:underline] = false
+      when /^3[0-7]$/     # Foreground colors 30-37
+        new_state[:fg_color] = color_map[code]
+      when /^4[0-7]$/     # Background colors 40-47
+        new_state[:bg_color] = color_map[code]
+      when /^9[0-7]$/     # Bright foreground colors 90-97
+        color_num = code.to_i - 82  # Convert 90-97 to 8-15
+        new_state[:fg_color] = color_num.to_s
+      when /^10[0-7]$/    # Bright background colors 100-107
+        color_num = code.to_i - 92  # Convert 100-107 to 8-15
+        new_state[:bg_color] = color_num.to_s
+      when '38'           # 24-bit foreground color
+        if i + 4 < codes.length && codes[i + 1] == '2'
+          r, g, b = codes[i + 2], codes[i + 3], codes[i + 4]
+          new_state[:fg_color] = "#%02x%02x%02x" % [r.to_i, g.to_i, b.to_i]
+          i += 4  # Skip the next 4 elements (2, R, G, B)
+        end
+      when '48'           # 24-bit background color
+        if i + 4 < codes.length && codes[i + 1] == '2'
+          r, g, b = codes[i + 2], codes[i + 3], codes[i + 4]
+          new_state[:bg_color] = "#%02x%02x%02x" % [r.to_i, g.to_i, b.to_i]
+          i += 4  # Skip the next 4 elements (2, R, G, B)
+        end
+      when /^38:2:(\d+):(\d+):(\d+)/  # 24-bit foreground (colon format) - skip first number
+        rgb_parts = code.split(':')
+        if rgb_parts.length >= 5  # 38:2:skip:r:g:b
+          r, g, b = rgb_parts[3], rgb_parts[4], rgb_parts[5]
+          new_state[:fg_color] = "#%02x%02x%02x" % [r.to_i, g.to_i, b.to_i]
+        end
+      when /^48:2:(\d+):(\d+):(\d+)/  # 24-bit background (colon format) - skip first number  
+        rgb_parts = code.split(':')
+        if rgb_parts.length >= 5  # 48:2:skip:r:g:b
+          r, g, b = rgb_parts[3], rgb_parts[4], rgb_parts[5]
+          new_state[:bg_color] = "#%02x%02x%02x" % [r.to_i, g.to_i, b.to_i]
+        end
+      end
+      i += 1
+    end
+    
+    # Generate only the changes needed
+    result = generate_state_changes(state, new_state, has_reset)
+    state.replace(new_state)
+    result
+  end
+end
+
+def reset_state(state)
+  state[:fg_color] = nil
+  state[:bg_color] = nil
+  state[:bold] = false
+  state[:underline] = false
+end
+
+def generate_reset(state)
+  result = ''
+  result += '%f' if state[:fg_color]
+  result += '%k' if state[:bg_color]
+  result += '%b' if state[:bold]
+  result += '%u' if state[:underline]
+  result.empty? ? '' : result
+end
+
+def generate_state_changes(old_state, new_state, has_reset = false)
+  result = ''
+  
+  # If there was a reset, we need to reset everything from old state first
+  if has_reset
+    # Reset everything that was previously set
+    result += '%f' if old_state[:fg_color]
+    result += '%k' if old_state[:bg_color]  
+    result += '%b' if old_state[:bold]
+    result += '%u' if old_state[:underline]
+    
+    # Then output all new settings
+    result += "%F{#{new_state[:fg_color]}}" if new_state[:fg_color]
+    result += "%K{#{new_state[:bg_color]}}" if new_state[:bg_color]
+    result += '%B' if new_state[:bold]
+    result += '%U' if new_state[:underline]
+  else
+    # Normal change detection
+    # Handle resets first
+    if new_state[:fg_color].nil? && old_state[:fg_color]
+      result += '%f'
+    end
+    if new_state[:bg_color].nil? && old_state[:bg_color]
+      result += '%k'
+    end
+    if !new_state[:bold] && old_state[:bold]
+      result += '%b'
+    end
+    if !new_state[:underline] && old_state[:underline]
+      result += '%u'
+    end
+    
+    # Handle new settings (only if changed)
+    if new_state[:fg_color] && new_state[:fg_color] != old_state[:fg_color]
+      result += "%F{#{new_state[:fg_color]}}"
+    end
+    if new_state[:bg_color] && new_state[:bg_color] != old_state[:bg_color]
+      result += "%K{#{new_state[:bg_color]}}"
+    end
+    if new_state[:bold] && !old_state[:bold]
+      result += '%B'
+    end
+    if new_state[:underline] && !old_state[:underline]
+      result += '%U'
+    end
+  end
+  
+  result
+end
+
+begin
+  # Read all input from STDIN
+  input_text = STDIN.read
+  
+  # Convert ANSI codes to zsh format
+  output_text = convert_ansi_to_zsh(input_text)
+  
+  # Write to STDOUT
+  print output_text
+rescue Interrupt
+  exit 1
+rescue => e
+  STDERR.puts "Error: #{e}"
+  exit 1
+end

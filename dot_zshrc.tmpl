@@ -84,7 +84,11 @@ compinit
 [[ -f ~/.local/bin/antigen.zsh ]] && source ~/.local/bin/antigen.zsh
 
 if [[ -n $(command -v antigen) ]]; then
+  export NVM_COMPLETION=true
+  export NVM_LAZY_LOAD=true
+  antigen bundle lukechilds/zsh-nvm
   antigen bundle Aloxaf/fzf-tab
+  antigen bundle mafredri/zsh-async@main
   antigen theme romkatv/powerlevel10k
   antigen apply
 else
@@ -125,10 +129,6 @@ if type direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 type jj &>/dev/null && source <(COMPLETE=zsh jj)
 
 # mac:
@@ -137,3 +137,6 @@ type jj &>/dev/null && source <(COMPLETE=zsh jj)
 # linux
 [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
   source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# last command returns true so prompt status is green to start
+true
