@@ -84,6 +84,9 @@ compinit
 [[ -f ~/.local/bin/antigen.zsh ]] && source ~/.local/bin/antigen.zsh
 
 if [[ -n $(command -v antigen) ]]; then
+  export NVM_COMPLETION=true
+  export NVM_LAZY_LOAD=true
+  antigen bundle lukechilds/zsh-nvm
   antigen bundle Aloxaf/fzf-tab
   antigen theme romkatv/powerlevel10k
   antigen apply
@@ -124,10 +127,6 @@ source ~/.p10k.zsh # p10k prompt settings
 if type direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
 fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 type jj &>/dev/null && source <(COMPLETE=zsh jj)
 
