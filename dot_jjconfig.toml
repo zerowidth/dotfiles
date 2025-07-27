@@ -7,7 +7,7 @@ email = "nathan@zerowidth.com"
 [ui]
 diff-editor = "gitpatch"
 diff-formatter = "difft"
-default-command = "log"
+default-command = "status"
 bookmark-list-sort-keys = ["committer-date-", "name"]
 
 [colors]
@@ -31,13 +31,14 @@ edit-args = ["-c", '''
   git -C "$left" add -A
   git -C "$left" commit -q -m baseline --allow-empty
   mv "$left/.git" "$right"
-  git -C "$right" add --intent-to-add --ignore-removal . # tell git to include new files in interactive patch mode
+  git -C "$right" add --intent-to-add --ignore-removal .
   git -C "$right" add -p
   git -C "$right" diff-index --quiet --cached HEAD && { echo "No changes done, aborting split."; exit 1; }
   git -C "$right" commit -q -m split
-  git -C "$right" reset -q --hard # undo changes in modified files, remove added files
+  git -C "$right" reset -q --hard
 ''',
 ]
+
 merge-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
 diff-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
 
@@ -79,8 +80,11 @@ separate(" ",
 
 [revset-aliases]
 # show everything in the current set of branches off of trunk():
-branch = '(coalesce(trunk(),root())..@)- | (coalesce(trunk(),root())..@)::'
-log = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
+# heads(::@ & immutable()) shows the latest immutable parent of @
+# ::mutable() combines it with all mutable branches off that immutable commit
+branch = 'heads(::@ & immutable())::mutable()'
+log = 'ancestors(reachable(@, trunk()..), 2) | trunk()'
+# log = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
 more = 'log | ancestors(visible_heads(), 2)'
 
 # set all remote bookmarks (and implicitly commits on branches) to be immutable
