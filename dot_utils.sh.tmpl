@@ -87,12 +87,16 @@ alias awake="pmset -g assertions | grep -i sleep"
 
 # update homebrew
 function up() {
+  if ! [ -d "$(chezmoi source-path)/.jj" ]; then
+    chezmoi update --verbose
+  fi
   brew update
-  brew outdated
   brew upgrade --fetch-HEAD
-  brew cu --cleanup --no-brew-update --yes
+  # brew cu --cleanup --no-brew-update --yes
   brew cleanup
-  antigen update
+  if command -v gup >/dev/null; then
+    gup update
+  fi
   gh extension upgrade --all
   chezmoi status
 }
