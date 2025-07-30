@@ -58,14 +58,13 @@ concat(
 '''
 
 [template-aliases]
-'format_short_change_id(id)' = 'id.shortest(3)'
-'format_short_commit_id(id)' = 'id.shortest(3)'
+'format_short_change_id(id)' = 'id.shortest(4)'
+'format_short_commit_id(id)' = 'id.shortest(4)'
 'format_timestamp(timestamp)' = 'timestamp.ago()'
 # see dot_p10k.zsh.tmpl for usage, this is a p10k prompt output
 prompt = '''
 separate(" ",
   format_short_change_id_with_hidden_and_divergent_info(self),
-  format_short_commit_id(commit_id),
   if(empty, label("empty", "(empty)"), ""),
   if(description == "", label("description placeholder", "(no description)"), ""),
   if(description.contains("megamerge"), label("mega", "(mega)"), ""),
@@ -84,9 +83,11 @@ separate(" ",
 # heads(::@ & immutable()) shows the latest immutable parent of @
 # ::mutable() combines it with all mutable branches off that immutable commit
 branch = 'heads(::@ & immutable())::mutable()'
+mine = 'heads(::@ & immutable())::mine(mutable())'
 log = 'ancestors(reachable(@, trunk()..), 2) | trunk()'
 # log = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
 more = 'log | ancestors(visible_heads(), 2)'
+"/" = 'trunk()'
 
 # set all remote bookmarks (and implicitly commits on branches) to be immutable
 # github doesn't play nicely with rebase+force push
@@ -116,7 +117,7 @@ l = ["log", "-r", "more()"]
 nb = ["bookmark", "create", "-r @-"] # new bookmark (for creating bookmark to push)
 nc = ["new", "-B", "@", "--no-edit"] # new change before
 r = ["rebase"]
-rm = ["rebase", "-d", "main"] # "re-main"
+rm = ["rebase", "-d", "/"] # "re-main"
 s = ["show"]
 si = ["squash", "--interactive"]
 sp = ["show", "@-"]
