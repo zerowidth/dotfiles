@@ -25,6 +25,7 @@ brew "antigen" # zsh plugins
 brew "zsh-syntax-highlighting"
 
 tap "buo/cask-upgrade"
+brew "nao1215/tap/gup"
 
 brew "git"
 brew "difftastic"
@@ -60,19 +61,13 @@ brew "cargo-binstall"
 brew "flyctl"
 
 cask "kap" # screen capturing
-# cask "wireshark"
+# cask "wireshark-app"
 
 # for other stuff
-cask "font-fira-code"
-cask "font-ia-writer-duo"
 cask "font-ia-writer-quattro"
-cask "font-iosevka"
-cask "font-alegreya"
-cask "font-alegreya-sans"
 cask "font-merriweather"
 cask "font-bricolage-grotesque"
-cask "font-vollkorn"
-cask "font-vollkorn-sc"
+cask "font-inter"
 
 cask "docker-desktop"
 
@@ -172,8 +167,12 @@ if [ -d ~/.vim/plugins ]; then
 fi
 {{ else }}
 
+if ! command -v zsh >/dev/null 2>&1; then
+  sudo apt-get update
+  sudo apt-get install -y zsh
+fi
+
 sudo apt-get install -y \
-  zsh zsh-syntax-highlighting \
   shellcheck \
   bat \
   ripgrep
