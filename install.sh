@@ -17,10 +17,18 @@ else
   chezmoi=chezmoi
 fi
 
+git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+git fetch --all --unshallow
+if git show-ref --verify --quiet refs/remotes/origin/wip; then
+  git switch -c wip origin/wip
+fi
+
+{{- if .shared }}
 # for shared hosts, make sure temp dir exists
-if [ -n "$GH_ENV" ] && ! [ -d ~/tmp ]; then
+if ! [ -d ~/tmp ]; then
   mkdir ~/tmp
 fi
+{{- endif }}
 
 # POSIX way to get script's dir: https://stackoverflow.com/a/29834779/12156188
 script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
