@@ -61,6 +61,7 @@ concat(
 'format_short_change_id(id)' = 'id.shortest(4)'
 'format_short_commit_id(id)' = 'id.shortest(4)'
 'format_timestamp(timestamp)' = 'timestamp.ago()'
+
 # see dot_p10k.zsh.tmpl for usage, this is a p10k prompt output
 prompt = '''
 separate(" ",
