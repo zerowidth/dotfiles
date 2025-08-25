@@ -18,7 +18,15 @@ prompt_my_jj() {
   local workspace
   
   command -v jj >/dev/null 2>&1 || return
-  workspace=$(jj workspace root 2>/dev/null) || return
+
+  if workspace=$(jj workspace root 2>/dev/null); then
+    p10k display "*/jj=show"
+    p10k display "*/vcs=hide"
+  else
+    p10k display "*/jj=hide"
+    p10k display "*/vcs=show"
+    return
+  fi
 
   # track current workspace for the async worker
   if [[ $_my_jj_workspace != "$workspace" ]]; then
@@ -37,15 +45,46 @@ prompt_my_jj() {
 # of calculating the jj status. 
 _my_jj_async() {
   local workspace=$1
-  local revision
+  local display revision bookmark distance
 
   revision=$(jj log --repository "$workspace" --ignore-working-copy \
     --no-graph --limit 1 --color always \
-    --revisions @ -T 'change_id.shortest(3)')
+    --revisions @ -T 'prompt')
 
-  # FIXME NEXT REPLACE ALL THIS WITH THE REAL STUFF
+  bookmark=$(jj log --repository "$workspace" --ignore-working-copy \
+    --no-graph --limit 1 --color always \
+    -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null)
 
-  echo "$revision" | sed 's/\x1b\[[0-9;]*m/%{&%}/g'
+  distance=$(jj log --repository "$workspace" --ignore-working-copy \
+    --no-graph --color never \
+    -r "closest_bookmark(@)..@" \
+    -T 'change_id ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
+
+  file_status=$(jj log --repository "$workspace" --ignore-working-copy \
+    --no-graph --color never --revisions @ \
+    -T 'self.diff().files().map(|f| f.status()).join("\n")' 2>/dev/null | \
+    sort | uniq -c | awk '
+      /modified/ { parts[++i] = "%F{cyan}±" $1 "%f" }
+      /added/ { parts[++i] = "%F{green}+" $1 "%f" }
+      /removed/ { parts[++i] = "%F{red}-" $1 "%f" }
+      /copied/ { parts[++i] = "%F{yellow}⧉" $1 "%f" }
+      /renamed/ { parts[++i] = "%F{magenta}↻" $1 "%f" }
+      END { for (j=1; j<=i; j++) printf "%s%s", parts[j], (j<i ? " " : "") }
+    ')
+
+  display=$revision
+
+  if [[ -n "$bookmark" ]]; then
+    display+=" $bookmark"
+    if [[ "$distance" -gt 0 ]]; then
+      display+=" %7F⇡${distance}"
+    fi
+  fi
+  if [[ -n "$file_status" ]]; then
+    display+=" ${file_status}"
+  fi
+
+  echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g'
 }
 
 _my_jj_callback() {
@@ -74,9 +113,6 @@ prompt_my_go_work() {
   fi
   p10k segment -f red -t "${work}"
 }
-
-# typeset -g _my_jj_output=""
-# typeset -g _my_jj_workspace=""
 
 typeset -g _p10k_last_vcs_state=""
 typeset -g _p10k_last_my_jj_state=""
@@ -107,76 +143,6 @@ function _p10k_toggle_vcs_for_my_jj() {
     _p10k_last_my_jj_state="$current_my_jj_state"
   fi
 }
-
-# function _my_jj_async() {
-#   local work_dir=$1
-#   local revision bookmark distance display file_status
-
-#   revision=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph --color always -n 1 \
-#     -r "@" -T 'prompt' 2>/dev/null)
-
-#   bookmark=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph --color always -n 1 \
-#     -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null)
-
-#   distance=$(jj log --repository "$work_dir" --ignore-working-copy --no-graph \
-#     -r "closest_bookmark(@)..@" \
-#     -T 'change_id.shortest() ++ "\n"' 2>/dev/null | wc -l | tr -d ' ')
-
-#   file_status_parts=()
-#   while read count file_state; do
-#     case $file_state in
-#       modified) file_status_parts+=("%F{cyan}±${count}%f") ;;
-#       added) file_status_parts+=("%F{green}+${count}%f") ;;
-#       removed) file_status_parts+=("%F{red}-${count}%f") ;;
-#       copied) file_status_parts+=("%F{yellow}⧉${count}%f") ;;
-#       renamed) file_status_parts+=("%F{magenta}↻${count}%f") ;;
-#     esac
-#   done < <(jj log --repository "$work_dir" --ignore-working-copy --no-graph \
-#     -T 'self.diff().files().map(|f| f.status()).join("\n")' -r @ 2>/dev/null | sort | uniq -c)
-#   file_status=$(IFS=' '; echo "${file_status_parts[*]}")
-
-#   if [[ -n "$revision" ]]; then
-#     display+="${revision}"
-#   fi
-#   if [[ -n "$bookmark" ]]; then
-#     display+=" $bookmark"
-#     if [[ "$distance" -gt 0 ]]; then
-#       display+=" %7F⇡${distance}"
-#     fi
-#   fi
-#   if [[ -n "$file_status" ]]; then
-#     display+=" ${file_status}"
-#   fi
-
-#   # Wrap ANSI escape sequences for zsh prompt
-#   echo "$display" | sed 's/\x1b\[[0-9;]*m/%{&%}/g'
-# }
-
-# function _my_jj_callback() {
-#   local job_name=$1 exit_code=$2 output=$3 execution_time=$4 stderr=$5 next_pending=$6
-#   if [[ $exit_code == 0 ]]; then
-#     _my_jj_output=$output
-#   else
-#     _my_jj_output="oh noes %F{red}ERROR%f"
-#   fi
-#   p10k display -r
-# }
-
-# for async reference: https://github.com/romkatv/powerlevel10k/issues/609
-# xprompt_my_jj() {
-#   if command -v jj >/dev/null 2>&1 && jj workspace root >/dev/null 2>&1; then
-#     local current_workspace
-#     current_workspace=$(jj workspace root 2>/dev/null)
-
-#     if [[ "$current_workspace" != "$_my_jj_workspace" ]]; then
-#       _my_jj_output="loading"
-#       _my_jj_workspace="$current_workspace"
-#     fi
-
-#     async_job _p10k_my_jj_worker _my_jj_async "$current_workspace"
-#     p10k segment -t '$_my_jj_output' -e
-#   fi
-# }
 
 # Temporarily change options.
 'builtin' 'local' '-a' 'p10k_config_opts'
@@ -213,76 +179,76 @@ function _p10k_toggle_vcs_for_my_jj() {
   # automatically hidden when the input line reaches it. Right prompt above the
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-#    # =========================[ Line #1 ]=========================
-#    status                  # exit code of the last command
-#    command_execution_time  # duration of the last command
-#    background_jobs         # presence of background jobs
-#    # direnv                  # direnv status (https://direnv.net/)
-#    asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
-#    virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
-#    anaconda                # conda environment (https://conda.io/)
-#    pyenv                   # python environment (https://github.com/pyenv/pyenv)
-#    goenv                   # go environment (https://github.com/syndbg/goenv)
-#    nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
-#    nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
-#    nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
-#    # node_version          # node.js version
-#    # go_version            # go version (https://golang.org)
-#    my_go_work
-#    # rust_version          # rustc version (https://www.rust-lang.org)
-#    # dotnet_version        # .NET version (https://dotnet.microsoft.com)
-#    # php_version           # php version (https://www.php.net/)
-#    # laravel_version       # laravel php framework version (https://laravel.com/)
-#    # java_version          # java version (https://www.java.com/)
-#    # package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
-#    rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
-#    # rvm                     # ruby version from rvm (https://rvm.io)
-#    fvm                     # flutter version management (https://github.com/leoafarias/fvm)
-#    luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)
-#    jenv                    # java version from jenv (https://github.com/jenv/jenv)
-#    plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)
-#    perlbrew                # perl version from perlbrew (https://github.com/gugod/App-perlbrew)
-#    phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)
-#    scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)
-#    haskell_stack           # haskell version from stack (https://haskellstack.org/)
-#    kubecontext             # current kubernetes context (https://kubernetes.io/)
-#    terraform               # terraform workspace (https://www.terraform.io)
-#    # terraform_version     # terraform version (https://www.terraform.io)
-#    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
-#    aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
-#    azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
-#    gcloud                  # google cloud cli account and project (https://cloud.google.com/)
-#    google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
-#    toolbox                 # toolbox name (https://github.com/containers/toolbox)
-#    nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
-#    ranger                  # ranger shell (https://github.com/ranger/ranger)
-#    yazi                    # yazi shell (https://github.com/sxyazi/yazi)
-#    nnn                     # nnn shell (https://github.com/jarun/nnn)
-#    lf                      # lf shell (https://github.com/gokcehan/lf)
-#    xplr                    # xplr shell (https://github.com/sayanarijit/xplr)
-#    vim_shell               # vim shell indicator (:sh)
-#    midnight_commander      # midnight commander shell (https://midnight-commander.org/)
-#    nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
-#    chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
-#    # vpn_ip                # virtual private network indicator
-#    # load                  # CPU load
-#    # disk_usage            # disk usage
-#    # ram                   # free RAM
-#    # swap                  # used swap
-#    todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
-#    timewarrior             # timewarrior tracking status (https://timewarrior.net/)
-#    taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
-#    per_directory_history   # Oh My Zsh per-directory-history local/global indicator
-#    # cpu_arch              # CPU architecture
-#    time                    # current time
-#    # =========================[ Line #2 ]=========================
-#    newline                 # \n
-#    # ip                    # ip address and bandwidth usage for a specified network interface
-#    # public_ip             # public IP address
-#    # proxy                 # system-wide http/https/ftp proxy
-#    # battery               # internal battery
-#    # wifi                  # wifi speed
-#    # example               # example user-defined segment (see prompt_example function below)
+    # =========================[ Line #1 ]=========================
+    status                  # exit code of the last command
+    command_execution_time  # duration of the last command
+    background_jobs         # presence of background jobs
+    # direnv                  # direnv status (https://direnv.net/)
+    asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
+    virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
+    anaconda                # conda environment (https://conda.io/)
+    pyenv                   # python environment (https://github.com/pyenv/pyenv)
+    goenv                   # go environment (https://github.com/syndbg/goenv)
+    nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
+    nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
+    nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
+    # node_version          # node.js version
+    # go_version            # go version (https://golang.org)
+    my_go_work
+    # rust_version          # rustc version (https://www.rust-lang.org)
+    # dotnet_version        # .NET version (https://dotnet.microsoft.com)
+    # php_version           # php version (https://www.php.net/)
+    # laravel_version       # laravel php framework version (https://laravel.com/)
+    # java_version          # java version (https://www.java.com/)
+    # package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
+    rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
+    # rvm                     # ruby version from rvm (https://rvm.io)
+    fvm                     # flutter version management (https://github.com/leoafarias/fvm)
+    luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)
+    jenv                    # java version from jenv (https://github.com/jenv/jenv)
+    plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)
+    perlbrew                # perl version from perlbrew (https://github.com/gugod/App-perlbrew)
+    phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)
+    scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)
+    haskell_stack           # haskell version from stack (https://haskellstack.org/)
+    kubecontext             # current kubernetes context (https://kubernetes.io/)
+    terraform               # terraform workspace (https://www.terraform.io)
+    # terraform_version     # terraform version (https://www.terraform.io)
+    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
+    aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
+    azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
+    gcloud                  # google cloud cli account and project (https://cloud.google.com/)
+    google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
+    toolbox                 # toolbox name (https://github.com/containers/toolbox)
+    nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
+    ranger                  # ranger shell (https://github.com/ranger/ranger)
+    yazi                    # yazi shell (https://github.com/sxyazi/yazi)
+    nnn                     # nnn shell (https://github.com/jarun/nnn)
+    lf                      # lf shell (https://github.com/gokcehan/lf)
+    xplr                    # xplr shell (https://github.com/sayanarijit/xplr)
+    vim_shell               # vim shell indicator (:sh)
+    midnight_commander      # midnight commander shell (https://midnight-commander.org/)
+    nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
+    chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
+    # vpn_ip                # virtual private network indicator
+    # load                  # CPU load
+    # disk_usage            # disk usage
+    # ram                   # free RAM
+    # swap                  # used swap
+    todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
+    timewarrior             # timewarrior tracking status (https://timewarrior.net/)
+    taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
+    per_directory_history   # Oh My Zsh per-directory-history local/global indicator
+    # cpu_arch              # CPU architecture
+    time                    # current time
+    # =========================[ Line #2 ]=========================
+    newline                 # \n
+    # ip                    # ip address and bandwidth usage for a specified network interface
+    # public_ip             # public IP address
+    # proxy                 # system-wide http/https/ftp proxy
+    # battery               # internal battery
+    # wifi                  # wifi speed
+    # example               # example user-defined segment (see prompt_example function below)
   )
 
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
@@ -1879,30 +1845,9 @@ function _p10k_toggle_vcs_for_my_jj() {
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
 
-  # Initialize async worker for my_jj segment
-  # unregistering/stopping first to support dynamic reload
-  # async_init
-  # async_stop_worker _p10k_my_jj_worker 2>/dev/null
-  # async_start_worker _p10k_my_jj_worker -n
-  # async_unregister_callback _p10k_my_jj_worker 2>/dev/null
-  # async_register_callback _p10k_my_jj_worker _my_jj_callback
-
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
   (( ! $+functions[p10k] )) || p10k reload
-
-  # typeset -g -a chpwd_functions
-  # chpwd_functions=("${(@)chpwd_functions:#_p10k_toggle_vcs_for_my_jj}")
-  # chpwd_functions+=(_p10k_toggle_vcs_for_my_jj)
-
-  # typeset -g -a precmd_functions
-  # # one-time setup for initial shell
-  # function _p10k_initial_vcs_setup() {
-  #   _p10k_toggle_vcs_for_my_jj
-  #   precmd_functions=("${(@)precmd_functions:#_p10k_initial_vcs_setup}")
-  # }
-  # precmd_functions=("${(@)precmd_functions:#_p10k_initial_vcs_setup}")
-  # precmd_functions+=(_p10k_initial_vcs_setup)
 }
 
 # Tell `p10k configure` which file it should overwrite.
