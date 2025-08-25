@@ -12,7 +12,7 @@ bookmark-list-sort-keys = ["committer-date-", "name"]
 
 [colors]
 # extra labels for the prompt
-mega = "magenta"
+mega = "red"
 wip = "yellow"
 todo = "blue"
 vibe = "cyan"
@@ -22,7 +22,6 @@ push-new-bookmarks = true
 write-change-id-header = true
 private-commits = "description(regex-i:'^wip.*') | description(regex-i:'^todo.*')"
 
-# via @dubi steinkek in the jj discord
 [merge-tools.gitpatch]
 program = "sh"
 edit-args = ["-c", '''
@@ -66,6 +65,7 @@ concat(
 prompt = '''
 separate(" ",
   format_short_change_id_with_hidden_and_divergent_info(self),
+  format_short_commit_id(commit_id),
   if(empty, label("empty", "(empty)"), ""),
   if(description == "", label("description placeholder", "(no description)"), ""),
   if(description.contains("megamerge"), label("mega", "(mega)"), ""),
@@ -100,6 +100,14 @@ more = 'log | ancestors(visible_heads(), 2)'
 'recent()' = 'committer_date(after:"1 months ago")'
 'recent(revset)' = 'revset & recent()'
 
+'stack()' = 'stack(@)'
+'stack(x)' = 'stack(x, 2)'
+'stack(x, n)' = 'ancestors(reachable(x, mutable()), n)'
+# `stack(x)` shows the entire stack of work for some commit `x` so `stack(@)` is
+# often good. I currently use `stack(mine() | @) | trunk() | @` as my global
+# default as of recently, which I don't hate. but `stack(@)` is a good default,
+# IMO
+
 [aliases]
 bl = ["bookmark", "list"]
 blr = ["bookmark", "list", "--revisions", "recent()"]
@@ -118,7 +126,8 @@ l = ["log", "-r", "more()"]
 nb = ["bookmark", "create", "-r @-"] # new bookmark (for creating bookmark to push)
 nc = ["new", "-B", "@", "--no-edit"] # new change before
 r = ["rebase"]
-rm = ["rebase", "-d", "/"] # "re-main"
+rm = ["rebase", "-d", "trunk()"] # "re-main"
+rma = ["rebase", "-s", "roots(trunk()..) & mutable() & mine()", "-d", "trunk()"] # "re-main all"
 s = ["show"]
 si = ["squash", "--interactive"]
 sp = ["show", "@-"]
@@ -130,3 +139,10 @@ else
 fi
 """, ""]
 upp = ["util", "exec", "--", "sh", "-c", "jj up && jj git push", ""]
+colocate = ["util", "exec", "--", "zsh", "-c", """
+  echo '/*' > .jj/.gitignore && \
+  mv .jj/repo/store/git .git && \
+  echo '../../../.git' > .jj/repo/store/git_target &&
+  git config --unset core.bare && \
+  jj new && jj undo
+  """]

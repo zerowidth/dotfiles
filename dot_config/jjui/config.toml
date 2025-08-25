@@ -9,6 +9,9 @@ experimental_log_batching_enabled = false
 enabled = true
 
 [custom_commands."new change after"]
-key = ["N"]
 args = ["new", "--no-edit", "--after", "$change_id"]
 description = "Insert a new change after the selected one"
+
+[custom_commands."new change before"]
+args = ["new", "--no-edit", "--before", "$change_id"]
+description = "Insert a new change before the selected one"
