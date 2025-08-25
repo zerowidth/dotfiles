@@ -76,14 +76,10 @@ alias ht="hydro-tools"
 alias at="aqueduct-tools"
 {{ end }}
 
-# quickly get to the real path (e.g. go project symlinks)
-alias cdr='cd $(pwd -P)'
-
 {{ if .mac }}
 alias scan-ssh="dns-sd -B _ssh._tcp"
 alias awake="pmset -g assertions | grep -i sleep"
 {{ end }}
-
 
 # update homebrew
 function up() {

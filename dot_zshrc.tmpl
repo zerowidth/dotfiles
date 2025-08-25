@@ -76,17 +76,20 @@ precmd_functions+=(set_window_title)
 zstyle :compinstall filename '/Users/nathan/.zshrc'
 # # case-insensitive if there's no match
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+# Run compaudit security check only if dump file is >24hrs old
+# This caches completions for faster startup while still checking daily for security
 autoload -Uz compinit
-compinit
+if [[ -n ${HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 # plugins
 [[ -f /opt/homebrew/share/antigen/antigen.zsh ]] && source /opt/homebrew/share/antigen/antigen.zsh
 [[ -f ~/.local/bin/antigen.zsh ]] && source ~/.local/bin/antigen.zsh
 
 if [[ -n $(command -v antigen) ]]; then
-  export NVM_COMPLETION=true
-  export NVM_LAZY_LOAD=true
-  antigen bundle lukechilds/zsh-nvm
   antigen bundle Aloxaf/fzf-tab
   antigen bundle mafredri/zsh-async@main
   antigen theme romkatv/powerlevel10k
