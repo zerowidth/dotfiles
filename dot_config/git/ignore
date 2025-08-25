@@ -6,10 +6,9 @@ tags.new
 .bundle
 ruby/bundle.symlink/cache
 ./tags
-.envrc
+.envrc*
 .agignore
 __pycache__
-.envrc
 .jj
 
 **/.claude/settings.local.json
