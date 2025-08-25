@@ -24,7 +24,11 @@ control_handler = function(evt)
     control_key_timer:start()
   else
     if send_escape then
-      keyUpDown({}, 'escape')
+      if last_mods["shift"] then
+        keyUpDown({'shift'}, 'escape')
+      else
+        keyUpDown({}, 'escape')
+      end
     end
     last_mods = new_mods
     control_key_timer:stop()
