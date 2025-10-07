@@ -14,11 +14,8 @@
 {{ end }}
 
 {{ if .shared }}
-[".local/bin/kubectx"]
-  type = "archive"
-  url = "https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_linux_x86_64.tar.gz"
 [".local/bin/stern"]
   type = "archive"
-  url = "https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_linux_amd64.tar.gz"
+  url = "https://github.com/stern/stern/releases/download/v1.33.0/stern_1.33.0_linux_amd64.tar.gz"
   executable = true
 {{ end }}
