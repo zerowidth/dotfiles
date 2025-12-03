@@ -1,0 +1,4 @@
+--when.repositories = ["~/180-studios"]
+
+[user]
+email = "nathan@180studios.com"
