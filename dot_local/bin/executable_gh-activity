@@ -7,15 +7,14 @@ if ARGV.include?("-h") || ARGV.include?("--help") || ARGV.length < 4
   STDERR.puts
   STDERR.puts "Requires `gh-creds` https://github.com/TwP/dotfiles/blob/master/bin/gh-creds"
   STDERR.puts "and defaults to `gh-creds user`."
-  STDERR.puts "Uses a local memcached to keep request data around, and requires the memcached gem."
+  STDERR.puts "Uses a local redis to keep request data around, and requires the redis gem."
   exit
 end
-
 
 require "bundler/inline"
 gemfile do
   source 'https://rubygems.org'
-  gem "memcached"
+  gem "redis"
 end
 
 require "digest/md5"
@@ -25,10 +24,13 @@ require "time"
 require "uri"
 
 begin
-  require "memcached"
+  require "redis"
 rescue LoadError
-  abort "memcached gem not found: `gem install memcached`"
+  abort "redis gem not found: `gem install redis`"
 end
+
+# Workaround for SSL CRL verification issues
+OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:verify_mode] = OpenSSL::SSL::VERIFY_PEER
 
 if %x(which gh-creds) && $? != 0
   abort "gh-creds not found! get it"
@@ -36,7 +38,7 @@ end
 
 ENDPOINT = URI("https://api.github.com/graphql")
 TOKEN = %x(gh-creds token)
-CACHE = Memcached.new("localhost:11211")
+CACHE = Redis.new(host: "localhost", port: 6379)
 TTL = 60 * 60 * 48
 
 ACTIVITY = <<~GRAPHQL
@@ -132,7 +134,18 @@ class Fetcher
     cached(query, variables) do
       headers = { "Authorization" => "bearer #{@token}" }
       body = { "query" => query, "variables" => variables }.to_json
-      res = Net::HTTP.post(@endpoint, body, headers)
+      
+      # Configure SSL context to handle OpenSSL 3.6.0 strict CRL validation
+      http = Net::HTTP.new(@endpoint.host, @endpoint.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      http.cert_store = OpenSSL::X509::Store.new
+      http.cert_store.set_default_paths
+      # Don't set CRL check flags to avoid CRL verification issues with OpenSSL 3.6.0
+      
+      request = Net::HTTP::Post.new(@endpoint.request_uri, headers)
+      request.body = body
+      res = http.request(request)
       if res.code == "200"
         data = JSON.parse(res.body)
         if data["errors"]
@@ -147,15 +160,15 @@ class Fetcher
 
   def cached(query, args)
     key = Digest::MD5.hexdigest(query + args.to_json)
-    if (value = CACHE.get(key))
+    if (cached_value = CACHE.get(key))
       STDERR.puts "cached: #{args.inspect}"
+      JSON.parse(cached_value)
+    else
+      STDERR.puts "fetching: #{args.inspect}"
+      value = yield
+      CACHE.setex(key, TTL, value.to_json)
       value
     end
-  rescue Memcached::NotFound
-    STDERR.puts "fetching: #{args.inspect}"
-    value = yield
-    CACHE.set(key, value, TTL)
-    return value
   end
 end
 
