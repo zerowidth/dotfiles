@@ -7,33 +7,38 @@ class RandomEditor
     @use_jj = Pathname.new(".jj").exist?
   end
 
-  def run(iterations = 1, commit = false)
+  def run(iterations = 1, commit: false, edit_only: false)
     iterations.times do
       if @files.empty?
         create_new_file
+      elsif edit_only
+        edit @files.sample
       else
         case rand
         when 0..0.3
           if @files.length > 5 && rand < 0.3
-            delete_file @files.shuffle.first
+            delete_file @files.sample
           else
             create_new_file
           end
         else
-          file = @files.shuffle.first
-          if rand < 0.5
-            edit_file file
-            puts "edited #{file}"
-          else
-            insert_content file
-            puts "appended to #{file}"
-          end
+          edit @files.sample
         end
         if commit
           commit_changes
           sleep 0.5
         end
       end
+    end
+  end
+
+  def edit(file)
+    if rand < 0.5
+      edit_file file
+      puts "edited #{file}"
+    else
+      insert_content file
+      puts "appended to #{file}"
     end
   end
 
@@ -107,7 +112,7 @@ end
 
 if ARGV.include?("-h") || ARGV.include?("--help")
   puts <<~HELP
-    do-stuff [iterations] [--commit|-c]
+    do-stuff [iterations] [--commit|-c] [--edit-only|-e]
 
     do-stuff simulates git activity. --commit automatically commits changes.
   HELP
@@ -115,5 +120,6 @@ if ARGV.include?("-h") || ARGV.include?("--help")
 end
 
 commit = ARGV.delete("-c") || ARGV.delete("--commit")
+edit_only = ARGV.delete("-e") || ARGV.delete("--edit-only")
 iterations = ARGV[0] ? ARGV[0].to_i : 1
-RandomEditor.new.run(iterations, commit)
+RandomEditor.new.run(iterations, commit: commit, edit_only: edit_only)
