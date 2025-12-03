@@ -16,11 +16,11 @@ mega = "red"
 wip = "yellow"
 todo = "blue"
 vibe = "cyan"
+private = "magenta"
 
 [git]
-push-new-bookmarks = true
 write-change-id-header = true
-private-commits = "description(regex-i:'^wip.*') | description(regex-i:'^todo.*')"
+private-commits = "description(regex-i:'^(wip|todo|private).*')"
 
 [merge-tools.gitpatch]
 program = "sh"
@@ -72,12 +72,13 @@ separate(" ",
   if(description.starts_with("wip"), label("wip", "(wip)"), ""),
   if(description.starts_with("todo"), label("todo", "(todo)"), ""),
   if(description.starts_with("vibe"), label("vibe", "(vibe)"), ""),
+  if(description.starts_with("private"), label("private", "(private)"), ""),
   if(conflict, label("conflict", "(conflict)"), "")
 )
 '''
 
 [revsets]
-'log' = 'branch'
+'log' = 'wip'
 
 [revset-aliases]
 # show everything in the current set of branches off of trunk():
@@ -85,6 +86,7 @@ separate(" ",
 # ::mutable() combines it with all mutable branches off that immutable commit
 branch = 'heads(::@ & immutable())::mutable()'
 mine = 'heads(::@ & immutable())::mine(mutable())'
+wip = 'stack(mutable() & recent(), 2) | trunk()'
 log = 'ancestors(reachable(@, trunk()..), 2) | trunk()'
 # log = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
 more = 'log | ancestors(visible_heads(), 2)'
@@ -97,7 +99,7 @@ more = 'log | ancestors(visible_heads(), 2)'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
 'unmerged()' = 'bookmarks() & ~(trunk():: | trunk())'
-'recent()' = 'committer_date(after:"1 months ago")'
+'recent()' = 'committer_date(after:"3 months ago")'
 'recent(revset)' = 'revset & recent()'
 
 'stack()' = 'stack(@)'
@@ -146,3 +148,25 @@ colocate = ["util", "exec", "--", "zsh", "-c", """
   git config --unset core.bare && \
   jj new && jj undo
   """]
+branch = ["util", "exec", "--", "sh", "-c", """
+jj log --no-graph --limit 1 -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}'
+""", ""]
+merge = ["util", "exec", "--", "sh", "-c", """
+if [ "x$1" = "x" ]; then
+  echo "Usage: jj merge <branch>"
+  exit 1
+fi
+target=$(jj log --no-graph --limit 1 -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}')
+if [ "x$target" = "x" ]; then
+  jj new @ "$1" -m "Merge branch '$1'"
+else
+  jj new @ "$1" -m "Merge branch '$1' into $target"
+fi
+""", ""]
+watch = ["util", "exec", "--", "sh", "-c", """
+target=$(jj log --no-graph --limit 1 -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}')
+gh pr checks $target --watch --required
+""", ""]
+
+[remotes.origin]
+auto-track-bookmarks = "main|master"
