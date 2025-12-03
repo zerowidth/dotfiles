@@ -4,13 +4,19 @@ set -x
 set -e
 
 {{ if .mac }}
-if [[ ! $(which brew) ]]; then
+if [[ ! -d /opt/homebrew ]]; then
   echo "installing homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-brew bundle --file=- <<EOF
+if ! command -v brew >/dev/null 2>&1; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+brew bundle -v --file=- <<EOF
+brew "mise"
+
 brew "fzf"
 
 brew "bat"
@@ -21,10 +27,8 @@ brew "tree"
 
 brew "direnv"
 
-brew "antigen" # zsh plugins
-brew "zsh-syntax-highlighting"
-
 tap "buo/cask-upgrade"
+tap "nao1215/tap"
 brew "nao1215/tap/gup"
 
 brew "git"
@@ -33,7 +37,6 @@ brew "jq"
 brew "yq"
 brew "watch"
 brew "fswatch"
-brew "entr"
 brew "parallel"
 brew "prettyping"
 brew "mtr"
@@ -42,26 +45,29 @@ brew "rename" # conflicts with linux-util on linux
 brew "chezmoi"
 
 brew "zsh"
+brew "antigen" # zsh plugins
+brew "zsh-syntax-highlighting"
 
-brew "gh"
 brew "s3cmd"
-brew "kcat"
+tap "peak/tap"
+brew "peak/tap/s5cmd"
 
 brew "go"
-brew "ruby"
 brew "rbenv"
 brew "node"
 brew "nodenv"
 brew "flow" # for javascript typechecking
 brew "shellcheck"
+brew "rsync"
 
-brew "rust"
-brew "cargo-binstall"
+brew "jj"
+brew "jjui"
+brew "gh"
+brew "mergiraf" # jj merge conflicts
+brew "watchman" # for zed ruby
+brew "libyaml" # for ruby psych compilation
 
-brew "flyctl"
-
-cask "kap" # screen capturing
-# cask "wireshark-app"
+brew "lunchy"
 
 # for other stuff
 cask "font-ia-writer-quattro"
@@ -69,33 +75,42 @@ cask "font-merriweather"
 cask "font-bricolage-grotesque"
 cask "font-inter"
 
-cask "docker-desktop"
-
-cask "qlmarkdown" # markdown quicklook
-
-brew "lunchy"
-
-# applications
-brew "mas"
-
+cask "kap" # screen capturing
+# cask "wireshark-app"
 cask "arq"
 cask "raycast"
 cask "hammerspoon"
+cask "espanso"
 cask "iterm2"
 cask "1password"
 cask "1password-cli"
 cask "visual-studio-code"
+cask "zed"
 cask "obsidian"
 cask "istat-menus"
 cask "slack"
 cask "discord"
 cask "google-chrome"
 cask "moom"
-cask "jordanbaird-ice"
+cask "jordanbaird-ice@beta"
+cask "soundsource"
+cask "docker-desktop"
+cask "qlmarkdown" # markdown quicklook
+
+{{ if .duncan }}
+brew "flyctl" # launched, etc.
+brew "goaccess" # for access logs
+cask "tailscale-app"
+
+tap "hashicorp/tap"
+brew "hashicorp/tap/terraform"
+{{ end }}
+
+# applications
+brew "mas"
 EOF
 
 # app store apps
-mas install 1440147259  # AdGuard for Safari
 mas install 1451552749  # Open In Webmail
 mas install 1351639930  # Gifski
 mas install 1528890965  # TextSniper
@@ -103,14 +118,10 @@ mas install 1491071483  # Tot
 mas install 1547121417  # HomeControl
 mas install 1544668450  # Simplify for Gmail
 mas install 1569813296  # 1Password for Safari
-mas install 451640037   # Classic Color Meter
 mas install 411643860   # DaisyDisk
-mas install 497799835   # Xcode
-mas install 1459809092  # Accelerate
 mas install 775737590   # iA Writer
-mas install 1640236961  # Save to Reader
-mas install 1475387142  # Tailscale
 {{ if .duncan }}
+# mas install 1640236961  # Save to Reader
 mas install 639968404   # Parcel
 mas install 6444602274  # Ivory
 mas install 1666139593  # Homecoming for Mastodon
@@ -121,32 +132,25 @@ mas install 6478481082  # openterface
 
 /opt/homebrew/opt/fzf/install --no-update-rc --key-bindings --completion --xdg
 
+mkdir -p ~/go # for binaries
+
 set +e # this fails sometimes?
 eval "$(rbenv init - zsh)"
 set -e
 # set ruby to the latest version
+brew install ruby
 brew rbenv-sync -v
-latest=$(rbenv install -l 2>/dev/null | grep -E '^\d' | grep -v '-' | tail -1)
-if rbenv versions | grep -q $latest; then
-  echo "ruby $latest already set as default, skipping"
-else
-  echo "setting latest ruby $latest as global default"
-  rbenv global "$latest"
-fi
-
-# for local scripts
-gem install bubs --conservative
-gem install colorize --conservative
-
-# for vscode
-gem install solargraph --conservative
-gem install rubocop --conservative
-
-gh auth status || gh auth login
-gh md >/dev/null 2>&1 || gh extension install zerowidth/gh-md
-gh extension install rneatherway/gh-slack
+latest=$(rbenv versions --bare | sort -V | tail -n 1)
+[ "$(rbenv global)" != "$latest" ] && rbenv global "$latest"
 
 [[ -L ~/.ssh ]] || ln -s {{ .chezmoi.homeDir }}/Documents/sync/ssh ~/.ssh
+
+if ! gh auth status -h github.com; then
+  echo "gh auth login, cannot continue"
+  exit 1
+fi
+gh md >/dev/null 2>&1 || gh extension install zerowidth/gh-md
+gh extension install rneatherway/gh-slack
 {{ end }}
 
 {{ if .linux }}

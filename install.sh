@@ -2,9 +2,9 @@
 
 set -e
 
-if [ ! "$(command -v chezmoi)" ]; then
-  bin_dir="$HOME/.local/bin"
-  chezmoi="$bin_dir/chezmoi"
+bin_dir="$HOME/.local/bin"
+chezmoi="$bin_dir/chezmoi"
+if [ ! -x "$chezmoi" ]; then
   if [ "$(command -v curl)" ]; then
     sh -c "$(curl -fsLS https://chezmoi.io/get)" -- -b "$bin_dir"
   elif [ "$(command -v wget)" ]; then
@@ -13,22 +13,22 @@ if [ ! "$(command -v chezmoi)" ]; then
     echo "To install chezmoi, you must have curl or wget installed." >&2
     exit 1
   fi
-else
-  chezmoi=chezmoi
 fi
 
-git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-git fetch --all --unshallow
-if git show-ref --verify --quiet refs/remotes/origin/wip; then
-  git switch -c wip origin/wip
+if [ -n "$CODESPACES" ]; then
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  git fetch --all --unshallow
+  if git show-ref --verify --quiet refs/remotes/origin/wip; then
+    git switch -c wip origin/wip
+  fi
 fi
 
-{{- if .shared }}
-# for shared hosts, make sure temp dir exists
-if ! [ -d ~/tmp ]; then
-  mkdir ~/tmp
+if [ -n "$GH_ENV" ]; then # shared host
+  if ! [ -d ~/tmp ]; then
+    mkdir ~/tmp
+    export TMPDIR=~/tmp
+  fi
 fi
-{{- endif }}
 
 # POSIX way to get script's dir: https://stackoverflow.com/a/29834779/12156188
 script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
