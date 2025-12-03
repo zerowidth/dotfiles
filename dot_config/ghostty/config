@@ -1,0 +1,7 @@
+theme = dark:Flexoki Dark,light:Flexoki Light
+font-family = Mono Lisa
+font-feature =-liga,-dlig,-calt
+font-thicken = true
+font-thicken-strength = 0
+shell-integration-features = no-cursor
+window-show-tab-bar = always
