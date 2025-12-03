@@ -23,13 +23,6 @@ if [ -n "$CODESPACES" ]; then
   fi
 fi
 
-if [ -n "$GH_ENV" ]; then # shared host
-  if ! [ -d ~/tmp ]; then
-    mkdir ~/tmp
-    export TMPDIR=~/tmp
-  fi
-fi
-
 # POSIX way to get script's dir: https://stackoverflow.com/a/29834779/12156188
 script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
 # exec: replace current process with chezmoi init

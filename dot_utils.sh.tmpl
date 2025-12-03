@@ -14,68 +14,6 @@ which bat >/dev/null && {
   export BAT_THEME='base16'
 }
 
-{{ if .shared }}
-# configure the shell for a kube context and namespace
-kc() {
-  options() {
-    kubectl config get-contexts -o name | parallel -i -- \
-      "kubectl --context {} get ns -o name | sed 's/namespace\///' | xargs -n 1 -I% echo % {} \({}\)"
-  }
-  if [ -n "$1" ]; then
-    selected=$(options | fzf -q "$1" --nth=1,2 --with-nth=1,3)
-  else
-    selected=$(options | fzf --nth=1,2 --with-nth=1,3)
-  fi
-  if [ -z "$selected" ]; then
-    return
-  fi
-  ns=$(echo "$selected" | awk '{print $1}')
-  context=$(echo "$selected" | awk '{print $2}')
-  kubectx $context
-  kubens $ns
-}
-
-k() {
-  kubectl "$@"
-}
-
-# run a watch command with kubectl
-kw() {
-  watch kubectl --context $(kubectx -c) --namespace $(kubens -c) "$@"
-}
-
-stern() {
-  ~/.local/bin/stern/stern --context $(kubectx -c) --namespace $(kubens -c) "$@"
-}
-
-# kubectl each
-ke() {
-  gh-k8s-clusters --profile general --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
-}
-
-# kubectl proxima each
-kpe() {
-  stamp=$1
-  shift
-  gh-k8s-clusters --status ready --stamp $stamp | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
-}
-
-# kubectl github each
-kge() {
-  gh-k8s-clusters --profile dotcom --status ready | xargs -t -I % kubectl --context % --namespace $(kubens -c) "$@"
-}
-
-# vault login
-vl() {
-  . vault-login
-  VAULT_ADDR=$(vault-addr) vault token renew -increment=3h58m >/dev/null || echo "renew failed"
-  export AUTH_TOKEN=$(vault-secret -a hydro-tools -e production -k AUTH_TOKEN)
-}
-
-alias ht="hydro-tools"
-alias at="aqueduct-tools"
-{{ end }}
-
 {{ if .mac }}
 alias scan-ssh="dns-sd -B _ssh._tcp"
 alias awake="pmset -g assertions | grep -i sleep"
@@ -210,12 +148,13 @@ export MYSQL_PS1="\u@\h \d> "
 # format ag output for markdown
 alias mdformat='ruby -lne '\''x, y = $_.split(/\s+/,2); puts "* #{x} `#{y}`"'\'''
 
-type nodenv &> /dev/null && eval "$(nodenv init -)"
-if [ -x ~/.rbenv/bin ]; then
-  eval "$(~/.rbenv/bin/rbenv init - bash)"
-else
-  type rbenv &> /dev/null && eval "$(rbenv init -)"
-fi
+# type nodenv &> /dev/null && eval "$(nodenv init -)"
+# if [ -x ~/.rbenv/bin ]; then
+#   eval "$(~/.rbenv/bin/rbenv init - bash)"
+# else
+#   type rbenv &> /dev/null && eval "$(rbenv init -)"
+# fi
+command -v mise &> /dev/null && eval "$(mise activate zsh)"
 
 function bo() {
   local bundle="bundle" gems gem
@@ -284,5 +223,3 @@ function main-branch() {
   git branch -m master main
   git branch -u origin/main main
 }
-
-[[ -f ~/.claude/local/claude ]] && alias claude="~/.claude/local/claude"

@@ -12,10 +12,3 @@
   url = "https://iterm2.com/utilities/imgcat"
   executable = true
 {{ end }}
-
-{{ if .shared }}
-[".local/bin/stern"]
-  type = "archive"
-  url = "https://github.com/stern/stern/releases/download/v1.33.0/stern_1.33.0_linux_amd64.tar.gz"
-  executable = true
-{{ end }}

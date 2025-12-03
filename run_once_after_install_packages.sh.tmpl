@@ -157,20 +157,6 @@ gh extension install rneatherway/gh-slack
 [[ -d ~/.local/share/fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
 ~/.local/share/fzf/install --no-update-rc --key-bindings --completion --xdg
 
-{{ if .shared }}
-if ! [[ -f ~/.local/bin/kcat ]]; then
-  git clone https://github.com/edenhill/kcat ~/.local/share/kcat
-  cd ~/.local/share/kcat && ./bootstrap.sh
-  cp ~/.local/share/kcat/kcat ~/.local/bin/kcat
-fi
-
-if [ -d ~/.vim/plugins ]; then
-  echo "vim plugins already installed, skipping"
- else
-  vim --not-a-term +PlugInstall +qa
-fi
-{{ else }}
-
 if ! command -v zsh >/dev/null 2>&1; then
   sudo apt-get update
   sudo apt-get install -y zsh
@@ -180,7 +166,6 @@ sudo apt-get install -y \
   shellcheck \
   bat \
   ripgrep
-{{ end -}}
 
 if [[ -n "$(grep $(whoami) /etc/passwd)" ]] && ! grep -q "$(whoami).*/bin/zsh" /etc/passwd; then
   sudo chsh -s /bin/zsh $(whoami)
