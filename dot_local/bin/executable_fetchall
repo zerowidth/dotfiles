@@ -25,10 +25,14 @@ projects() {
   golang_projects
 }
 fetch() {
+  local gc=${2:-0}
   outfile=$(mktemp)
 
   if [[ -d "${1}/.jj" ]]; then
     jj -R "${1}" --color always git fetch 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+    if (( $gc )); then
+      jj -R "${1}" util gc 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+    fi
   else
     git -C "${1}" fetch --all --prune 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
     current_branch=$(git -C "${1}" symbolic-ref --short HEAD)
@@ -41,6 +45,10 @@ fetch() {
 
     git -C "${1}" pull --quiet --stat --all --prune --autostash --show-forced-updates 2> >(grep -v autostash | colorize 1 > "${outfile}") | grep -v autostash > "${outfile}"
     git -C "${1}" clean-merged-branches 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+
+    if (( $gc )); then
+      git -C "${1}" gc --auto 2> >(colorize 1 >> "${outfile}") >> "${outfile}"
+    fi
   fi
 
   if [[ -s "${outfile}" ]]; then
@@ -69,11 +77,20 @@ if [[ "$1" == "--help" ]]; then
   exit 0
 fi
 
+gc=0
+if [[ "$1" == "--gc" ]]; then
+  gc=1
+  shift
+fi
+
 if [[ "$1" == "--simple" ]]; then
   for project in $(projects | sort); do
     simplefetch "$project"
   done
 else
   PARALLELISM=400%
-  projects | sort | parallel -j $PARALLELISM --eta --bar --timeout 1800s fetch {}
+  if (( $gc )); then
+    echo "using gc"
+  fi
+  projects | sort | parallel -j $PARALLELISM --eta --bar --timeout 1800s fetch {} "$gc"
 fi
