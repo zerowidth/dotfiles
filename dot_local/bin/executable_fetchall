@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-github_projects() {
-  test -d ~/github || return
-  for dir in $(find ~/github -type d -maxdepth 2 -name .git); do
+180_projects() {
+  test -d ~/180-studios || return
+  for dir in $(find ~/180-studios -type d -maxdepth 2 -name .git); do
     remote=$(git -C "$dir" remote show)
     if [ -n "$remote" ] && (git -C "$dir" symbolic-ref -q HEAD >/dev/null || test -d "$dir/../.jj"); then
       echo $(dirname $dir)
@@ -21,7 +21,7 @@ golang_projects() {
 }
 
 projects() {
-  github_projects
+  180_projects
   golang_projects
 }
 fetch() {
