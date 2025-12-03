@@ -7,6 +7,14 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "sticky_scroll": {
+    "enabled": true
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "agent_buffer_font_size": 13.0,
+  "format_on_save": "on",
   "edit_predictions": {
     "disabled_globs": [".envrc"],
     "mode": "eager",
@@ -18,7 +26,7 @@
     "enabled_in_text_threads": false
   },
   "agent": {
-    "always_allow_tool_actions": false,
+    "always_allow_tool_actions": true,
     "default_profile": "write",
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -26,7 +34,7 @@
     },
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4"
+      "model": "gpt-5.2"
     }
   },
   "autosave": "on_window_change",
@@ -40,7 +48,7 @@
     "use_system_clipboard": "never"
   },
   "vim_mode": true,
-  "relative_line_numbers": true,
+  "relative_line_numbers": "enabled",
   "tab_size": 2,
   "ui_font_size": 16,
   "buffer_font_family": "MonoLisa Variable",
@@ -68,7 +76,8 @@
       ]
     },
     "YAML": {
-      "format_on_save": []
+      "code_actions_on_format": {}
+      // "format_on_save": "on"
     }
   },
   "lsp": {
