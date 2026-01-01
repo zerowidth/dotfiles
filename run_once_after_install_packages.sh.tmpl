@@ -19,22 +19,13 @@ brew "mise"
 
 brew "fzf"
 
-brew "bat"
 brew "pstree"
 brew "pv"
-brew "rg"
 brew "tree"
 
-brew "direnv"
-
 tap "buo/cask-upgrade"
-tap "nao1215/tap"
-brew "nao1215/tap/gup"
 
 brew "git"
-brew "difftastic"
-brew "jq"
-brew "yq"
 brew "watch"
 brew "fswatch"
 brew "parallel"
@@ -49,19 +40,10 @@ brew "antigen" # zsh plugins
 brew "zsh-syntax-highlighting"
 
 brew "s3cmd"
-tap "peak/tap"
-brew "peak/tap/s5cmd"
 
-brew "go"
-brew "rbenv"
-brew "node"
-brew "nodenv"
 brew "flow" # for javascript typechecking
-brew "shellcheck"
 brew "rsync"
 
-brew "jj"
-brew "jjui"
 brew "gh"
 brew "mergiraf" # jj merge conflicts
 brew "watchman" # for zed ruby
@@ -98,7 +80,6 @@ cask "docker-desktop"
 cask "qlmarkdown" # markdown quicklook
 
 {{ if .duncan }}
-brew "flyctl" # launched, etc.
 brew "goaccess" # for access logs
 cask "tailscale-app"
 
@@ -133,15 +114,6 @@ mas install 6478481082  # openterface
 /opt/homebrew/opt/fzf/install --no-update-rc --key-bindings --completion --xdg
 
 mkdir -p ~/go # for binaries
-
-set +e # this fails sometimes?
-eval "$(rbenv init - zsh)"
-set -e
-# set ruby to the latest version
-brew install ruby
-brew rbenv-sync -v
-latest=$(rbenv versions --bare | sort -V | tail -n 1)
-[ "$(rbenv global)" != "$latest" ] && rbenv global "$latest"
 
 [[ -L ~/.ssh ]] || ln -s {{ .chezmoi.homeDir }}/Documents/sync/ssh ~/.ssh
 

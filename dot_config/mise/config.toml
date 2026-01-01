@@ -1,0 +1,23 @@
+[tools]
+bat = "latest"
+difftastic = "latest"
+direnv = "latest"
+go = "latest"
+jj = "latest"
+jq = "latest"
+ripgrep = "latest"
+ruby = "latest"
+yq = "latest"
+jjui = "latest"
+shellcheck = "latest"
+
+"go:github.com/rakyll/gotest" = "latest"
+"go:golang.org/x/tools/cmd/goimports" = "latest"
+"gem:bubs" = "latest"
+"gem:colorize" = "latest"
+
+[settings]
+# for precompiled ruby, ref https://github.com/jdx/mise/pull/7263
+experimental = true
+ruby.compile = false
+idiomatic_version_file_enable_tools = ["ruby", "go"]

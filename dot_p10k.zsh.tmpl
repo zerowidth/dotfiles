@@ -16,7 +16,7 @@ typeset -g _my_jj_workspace=""
 
 prompt_my_jj() {
   local workspace
-  
+
   command -v jj >/dev/null 2>&1 || return
 
   if workspace=$(jj workspace root 2>/dev/null); then
@@ -42,7 +42,7 @@ prompt_my_jj() {
 }
 
 # this function is called by the async worker, and does the work
-# of calculating the jj status. 
+# of calculating the jj status.
 _my_jj_async() {
   local workspace=$1
   local display revision bookmark distance

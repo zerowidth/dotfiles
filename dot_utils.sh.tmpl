@@ -32,6 +32,9 @@ function up() {
     gup update
   fi
   gh extension upgrade --all
+  if command -v mise >/dev/null; then
+    mise up
+  fi
   chezmoi status
 }
 
@@ -147,14 +150,6 @@ export MYSQL_PS1="\u@\h \d> "
 
 # format ag output for markdown
 alias mdformat='ruby -lne '\''x, y = $_.split(/\s+/,2); puts "* #{x} `#{y}`"'\'''
-
-# type nodenv &> /dev/null && eval "$(nodenv init -)"
-# if [ -x ~/.rbenv/bin ]; then
-#   eval "$(~/.rbenv/bin/rbenv init - bash)"
-# else
-#   type rbenv &> /dev/null && eval "$(rbenv init -)"
-# fi
-command -v mise &> /dev/null && eval "$(mise activate zsh)"
 
 function bo() {
   local bundle="bundle" gems gem

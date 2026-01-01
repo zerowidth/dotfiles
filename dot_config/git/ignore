@@ -10,5 +10,6 @@ ruby/bundle.symlink/cache
 .agignore
 __pycache__
 .jj
+mise.local.toml
 
 **/.claude/settings.local.json
