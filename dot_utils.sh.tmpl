@@ -4,7 +4,8 @@ alias mv='mv -nv'
 alias rehash='hash -r'
 alias p4="ping 4.2.2.2"
 which prettyping >/dev/null && alias ping="prettyping"
-alias ia="open -a 'IA Writer' "
+alias ia="open -a 'IA Writer'"
+alias marked="open -a 'Marked 2'"
 alias cz=chezmoi
 
 alias kcatss="kcat -X security.protocol=ssl -X enable.ssl.certificate.verification=false"
@@ -116,8 +117,6 @@ fkill() {
     echo $pid | xargs kill -${1:-9}
   fi
 }
-
-{{- if .mac }}
 if [ -n "$(command -v zed)" ]; then
   export EDITOR="zed"
   export JJ_EDITOR="zed -w"
@@ -132,18 +131,6 @@ function e() {
     $EDITOR -n . "$@"
   fi
 }
-{{- else }}
-if [ -n "$(command -v code)" ] && [ "$TERM_PROGRAM" = "vscode" ]; then
-  export EDITOR="code"
-  export JJ_EDITOR="code -w"
-elif [ -n "$(command -v vim)" ]; then
-  export EDITOR="vim"
-  export JJ_EDITOR="vim"
-elif [ -n "$(command -v vi)" ]; then
-  export EDITOR="vi"
-  export JJ_EDITOR="vi"
-fi
-{{- end }}
 
 # mysql
 export MYSQL_PS1="\u@\h \d> "
@@ -218,3 +205,58 @@ function main-branch() {
   git branch -m master main
   git branch -u origin/main main
 }
+
+# ref: https://github.com/anomalyco/opencode/issues/14561
+ocs() {
+  local limit=${1:-50}
+  local db="$HOME/.local/share/opencode/opencode.db"
+  local selected
+
+  # Each line: "<sid>|<ts>|<shortdir>|<title>"  — sid is field 1 (hidden)
+  selected=$(
+    sqlite3 "$db" \
+      "SELECT s.id,
+              strftime('%Y-%m-%d %H:%M', datetime(s.time_updated/1000, 'unixepoch', 'localtime')),
+              s.directory,
+              s.title
+         FROM session s
+        WHERE s.parent_id IS NULL
+        ORDER BY s.time_updated DESC
+        LIMIT $limit;" \
+    | while IFS='|' read -r sid ts dir title; do
+        printf '%s\t%s  %-35s  %s\n' "$sid" "$ts" "${dir/#$HOME/~}" "$title"
+      done \
+    | fzf \
+        --delimiter=$'\t' \
+        --with-nth=2 \
+        --ansi \
+        --no-sort \
+        --preview "
+          sid=\$(echo {} | cut -f1)
+          sqlite3 '$db' \"
+            SELECT
+              CASE json_extract(m.data, '$.role')
+                WHEN 'user'      THEN '>> '
+                WHEN 'assistant' THEN '   '
+                ELSE                  '   '
+              END || json_extract(p.data, '$.text')
+            FROM part p
+            JOIN message m ON p.message_id = m.id
+            WHERE p.session_id = '\$sid'
+              AND json_extract(p.data, '$.type') = 'text'
+            ORDER BY p.time_created ASC;
+          \" | tail -20 | awk '/^>> /{print \"\"; print; next} {print}'
+        " \
+        --preview-window=bottom:60%:wrap:follow
+  )
+
+  [ -z "$selected" ] && return
+
+  local sid dir
+  sid=$(printf '%s' "$selected" | cut -f1)
+  dir=$(sqlite3 "$db" "SELECT directory FROM session WHERE id='$sid';")
+
+  cd "$dir" && opencode -s "$sid"
+}
+
+alias oc=opencode
