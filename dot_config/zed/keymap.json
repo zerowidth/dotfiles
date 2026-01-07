@@ -8,7 +8,7 @@
 [
   {
     "context": "Workspace",
-    "bindings": {}
+    "bindings": {},
   },
   {
     "context": "VimControl || !Editor && !Terminal",
@@ -16,20 +16,20 @@
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-j": "workspace::ActivatePaneDown",
       "ctrl-k": "workspace::ActivatePaneUp",
-      "ctrl-l": "workspace::ActivatePaneRight"
-    }
+      "ctrl-l": "workspace::ActivatePaneRight",
+    },
   },
   {
     "context": "Editor && vim_mode == insert && !menu",
     "bindings": {
       // "j k": "vim::SwitchToNormalMode"
-    }
+    },
   },
   {
     "context": "Editor && vim_mode == visual",
     "bindings": {
-      "shift-s": "vim::PushAddSurrounds"
-    }
+      "shift-s": "vim::PushAddSurrounds",
+    },
   },
   {
     "context": "(VimControl && !menu)",
@@ -37,10 +37,10 @@
       "j": [
         "vim::Down",
         {
-          "display_lines": true
-        }
-      ]
-    }
+          "display_lines": true,
+        },
+      ],
+    },
   },
   {
     "context": "(VimControl && !menu)",
@@ -48,10 +48,10 @@
       "k": [
         "vim::Up",
         {
-          "display_lines": true
-        }
-      ]
-    }
+          "display_lines": true,
+        },
+      ],
+    },
   },
   {
     "context": "Workspace",
@@ -64,8 +64,8 @@
       "ctrl-6": ["workspace::ActivatePane", 5],
       "ctrl-7": ["workspace::ActivatePane", 6],
       "ctrl-8": ["workspace::ActivatePane", 7],
-      "ctrl-9": ["workspace::ActivatePane", 8]
-    }
+      "ctrl-9": ["workspace::ActivatePane", 8],
+    },
   },
   {
     "context": "Pane",
@@ -79,7 +79,7 @@
       "cmd-7": ["pane::ActivateItem", 6],
       "cmd-8": ["pane::ActivateItem", 7],
       "cmd-9": ["pane::ActivateItem", 8],
-      "cmd-0": "pane::ActivateLastItem"
-    }
-  }
+      "cmd-0": "pane::ActivateLastItem",
+    },
+  },
 ]

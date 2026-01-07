@@ -7,89 +7,141 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true
+    }
+  },
+  "project_panel": {
+    "auto_reveal_entries": false,
+    "starts_open": false,
+    "git_status_indicator": true,
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "button": true,
+    "dock": "left"
+  },
+  "lsp_document_colors": "inlay",
+  "inlay_hints": {
+    "enabled": true,
+    "show_background": false,
+    "show_other_hints": true,
+    "show_type_hints": true,
+    "show_value_hints": true,
+    "show_parameter_hints": false,
+  },
   "sticky_scroll": {
-    "enabled": true
+    "enabled": true,
+  },
+  "which_key": {
+    "enabled": true,
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "agent_buffer_font_size": 13.0,
   "format_on_save": "on",
   "edit_predictions": {
+    "provider": "copilot",
     "disabled_globs": [".envrc"],
     "mode": "eager",
     "copilot": {
       "proxy": null,
       "proxy_no_verify": null,
-      "enterprise_uri": null
+      "enterprise_uri": null,
     },
-    "enabled_in_text_threads": false
+    "enabled_in_text_threads": false,
   },
   "agent": {
-    "always_allow_tool_actions": true,
+    "dock": "right",
+    "tool_permissions": {
+      "default": "allow",
+    },
     "default_profile": "write",
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "claude-opus-41"
+      "model": "claude-opus-41",
     },
     "default_model": {
+      "effort": "high",
+      "enable_thinking": true,
       "provider": "copilot_chat",
-      "model": "gpt-5.2"
-    }
+      "model": "claude-sonnet-4.6",
+    },
   },
   "autosave": "on_window_change",
-  "features": {
-    "edit_prediction_provider": "zed"
-  },
   "indent_guides": {
-    "coloring": "indent_aware"
+    "coloring": "indent_aware",
   },
   "vim": {
-    "use_system_clipboard": "never"
+    "use_system_clipboard": "never",
   },
   "vim_mode": true,
   "relative_line_numbers": "enabled",
   "tab_size": 2,
-  "ui_font_size": 16,
+  "ui_font_size": 16.0,
   "buffer_font_family": "MonoLisa Variable",
   "buffer_font_size": 13,
   "buffer_font_features": { "calt": false, "dlig": true, "liga": false },
   "terminal": {
-    "font_features": { "calt": false, "dlig": true, "liga": false }
+    "font_features": { "calt": false, "dlig": true, "liga": false },
   },
   "theme": {
     "mode": "system",
     "light": "Flexoki Light",
-    "dark": "Flexoki Dark"
+    "dark": "Flexoki Dark",
   },
   "languages": {
+    "Go": {
+      "inlay_hints": {
+        "enabled": true,
+      },
+    },
     "Rust": {
-      "tab_size": 4
+      "tab_size": 4,
     },
     "Ruby": {
       "language_servers": [
         "ruby-lsp",
         "rubocop",
         "!solargraph",
+        "!sorbet",
         "!steep",
-        "..."
-      ]
+        "!kanayago",
+        "...",
+      ],
     },
     "YAML": {
-      "code_actions_on_format": {}
+      "code_actions_on_format": {},
       // "format_on_save": "on"
-    }
+    },
   },
   "lsp": {
     "ruby-lsp": {
       "settings": {
-        "use_bundler": false
-      }
+        "use_bundler": false,
+      },
     },
     "rubocop": {
       "settings": {
-        "use_bundler": false
-      }
-    }
-  }
+        "use_bundler": false,
+      },
+    },
+    "golangci-lint": {
+      "initialization_options": {
+        "command": [
+          "golangci-lint",
+          "run",
+          "--output.json.path",
+          "stdout",
+          "--show-stats=false",
+          "--output.text.path=",
+        ],
+      },
+    },
+  },
 }
