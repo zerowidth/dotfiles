@@ -8,10 +8,79 @@ experimental_log_batching_enabled = false
 [ui.tracer]
 enabled = true
 
-[custom_commands."new change after"]
-args = ["new", "--no-edit", "--after", "$change_id"]
-description = "Insert a new change after the selected one"
+[[actions]]
+name = "new change after"
+lua = '''
+jj("new", "--no-edit", "--after", context.change_id())
+revisions.refresh()
+'''
 
-[custom_commands."new change before"]
-args = ["new", "--no-edit", "--before", "$change_id"]
-description = "Insert a new change before the selected one"
+[[actions]]
+name = "new change before"
+lua = '''
+jj("new", "--no-edit", "--before", context.change_id())
+revisions.refresh()
+'''
+
+[[actions]]
+name = "push into megamerge"
+lua = '''
+local ids = context.checked_change_ids()
+if #ids == 0 then ids = {context.change_id()} end
+jj("rebase", "--revisions", table.concat(ids, "|"), "--insert-after", "trunk()", "--insert-before", "mega")
+revisions.refresh()
+'''
+
+[[actions]]
+name = "workspace update stale"
+lua = '''
+jj("workspace", "update-stale")
+revisions.refresh()
+'''
+
+[[bindings]]
+action = "new change after"
+scope = "revisions"
+seq = ["x", "a"]
+
+[[bindings]]
+action = "new change before"
+scope = "revisions"
+seq = ["x", "b"]
+
+[[bindings]]
+action = "push into megamerge"
+scope = "revisions"
+seq = ["x", "m"]
+
+[[bindings]]
+action = "workspace update stale"
+scope = "ui"
+seq = ["x", "u"]
+
+[[actions]]
+name = "append-ancestors-to-revset"
+desc = "append ancestors of current revision to revset"
+lua = '''
+local change_id = revisions.current()
+if not change_id then return end
+
+local current = revset.current()
+local bumped = false
+local updated = current:gsub("ancestors%(" .. change_id .. "%s*,%s*(%d+)%)", function(n)
+  bumped = true
+  return "ancestors(" .. change_id .. ", " .. (tonumber(n) + 1) .. ")"
+end, 1)
+
+if not bumped then
+  updated = current .. " | ancestors(" .. change_id .. ", 2)"
+end
+
+revset.set(updated)
+'''
+
+[[bindings]]
+action = "append-ancestors-to-revset"
+key = "+"
+scope = "revisions"
+desc = "append ancestors to revset"

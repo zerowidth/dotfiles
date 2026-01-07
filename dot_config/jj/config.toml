@@ -120,7 +120,7 @@ separate(" ",
 # ::mutable() combines it with all mutable branches off that immutable commit
 branch = 'heads(::@ & immutable())::mutable()'
 mine = 'heads(::@ & immutable())::mine(mutable())'
-wip = 'stack(mutable() & recent(), 2) | trunk()'
+wip = 'stack(mutable() & recent(), 2) | trunk() | recent(untracked_remote_bookmarks())'
 log = 'ancestors(reachable(@, trunk()..), 2) | trunk()'
 # log = 'heads(coalesce(trunk(), root()))..present(@) | ancestors(recent(visible_heads()), 2) | present(trunk())'
 more = 'log | ancestors(visible_heads(), 2)'
@@ -144,6 +144,12 @@ more = 'log | ancestors(visible_heads(), 2)'
 # default as of recently, which I don't hate. but `stack(@)` is a good default,
 # IMO
 
+# skalnik
+"in_merge(merge)" = "merge- ~ ::trunk()"
+"mega" = 'exactly((mine() & description(glob:"mega*")) ~ ::trunk(), 1)'
+"megamerge" = 'exactly((mine() & merges() & description(glob:"mega*")) ~ ::trunk(), 1)'
+"in_megamerge" = "in_merge(megamerge)"
+
 [aliases]
 bl = ["bookmark", "list"]
 blr = ["bookmark", "list", "--revisions", "recent()"]
@@ -153,10 +159,24 @@ dp = ["describe", "@-"] # describe previous
 e = ["edit"]
 pull = ["git", "fetch"]
 push = ["git", "push"]
-gf = ["git", "fetch"] # git fetchq
-gi = ["util", "exec", "--", "sh", "-c", """
-jj git init --colocate && jj bookmark track $(jj config get 'revset-aliases."trunk()"') --remote origin
+
+# from skalnik
+ff = ["util", "exec", "--", "sh", "-c", """
+jj rebase -s "roots(trunk()..@)" -d "trunk()"
+if jj log -r megamerge --no-graph -T '' 2>/dev/null; then
+  jj rebase -s megamerge -d "trunk()" -d "megamerge- & ~::trunk()" --simplify-parents
+fi
 """]
+mm = ["rebase", "-s", "megamerge", "-A", "in_megamerge" ]
+
+gf = ["git", "fetch"] # git fetch
+gff = ["util", "exec", "--", "sh", "-c", """
+  jj gf && jj ff
+"""]
+# gi = ["util", "exec", "--", "sh", "-c", """
+# jj git init --colocate && jj bookmark track $(jj config get 'revset-aliases."trunk()"') --remote origin
+# """]
+gi = ["git", "init", "--colocate"]
 gp = ["git", "push"]
 i = ["git", "init", "--colocate"]
 l = ["log", "-r", "more()"]
@@ -199,6 +219,10 @@ else
   jj new @ "$1" -m "Merge branch '$1' into $target"
 fi
 """, ""]
+builds = ["util", "exec", "--", "sh", "-c", """
+target=$(jj log --no-graph --limit 1 -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}')
+gh pr checks $target --watch
+""", ""]
 watch = ["util", "exec", "--", "sh", "-c", """
 target=$(jj log --no-graph --limit 1 -r "closest_bookmark(@)" -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}')
 gh pr checks $target --watch --required
@@ -207,3 +231,6 @@ gh pr checks $target --watch --required
 [remotes.origin]
 auto-track-bookmarks = "main|master"
 auto-track-created-bookmarks = "*"
+
+[remotes.zerowidth]
+auto-track-bookmarks = "*"
