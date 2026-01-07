@@ -12,15 +12,15 @@ bookmark-list-sort-keys = ["committer-date-", "name"]
 
 [colors]
 # extra labels for the prompt
-mega = "red"
-wip = "yellow"
-todo = "blue"
-vibe = "cyan"
-private = "magenta"
+mega = {fg = "red", bold = true}
+wip = {fg = "yellow", bold = true}
+todo = {fg = "blue", bold = true}
+vibe = {fg = "cyan", bold = true}
+private = {fg = "magenta", bold = true}
 
 [git]
 write-change-id-header = true
-private-commits = "description(regex-i:'^(wip|todo|private).*')"
+private-commits = "description(regex-i:'^(wip|todo|private|vibe|mega).*')"
 
 [merge-tools.gitpatch]
 program = "sh"
@@ -61,10 +61,44 @@ concat(
 'format_short_commit_id(id)' = 'id.shortest(4)'
 'format_timestamp(timestamp)' = 'timestamp.ago()'
 
+'builtin_log_compact(commit)' = '''
+if(commit.root(),
+  format_root_commit(commit),
+  label(
+    separate(" ",
+      if(commit.current_working_copy(), "working_copy"),
+      if(commit.immutable(), "immutable", "mutable"),
+      if(commit.conflict(), "conflicted"),
+    ),
+    concat(
+      format_short_commit_header(commit) ++ "\n",
+      separate(" ",
+        if(commit.empty(), empty_commit_marker),
+        if(commit.description(),
+          if(commit.description().starts_with("wip"),
+            label("wip", "wip") ++ commit.description().first_line().remove_prefix("wip"),
+          if(commit.description().starts_with("todo"),
+            label("todo", "todo") ++ commit.description().first_line().remove_prefix("todo"),
+          if(commit.description().starts_with("vibe"),
+            label("vibe", "vibe") ++ commit.description().first_line().remove_prefix("vibe"),
+          if(commit.description().starts_with("private"),
+            label("private", "private") ++ commit.description().first_line().remove_prefix("private"),
+          if(commit.description().starts_with("mega"),
+            label("mega", "mega") ++ commit.description().first_line().remove_prefix("mega"),
+            commit.description().first_line()
+          ))))),
+          label(if(commit.empty(), "empty"), description_placeholder),
+        ),
+      ) ++ "\n",
+    ),
+  )
+)
+'''
+
 # see dot_p10k.zsh.tmpl for usage, this is a p10k prompt output
 prompt = '''
 separate(" ",
-  format_short_change_id_with_hidden_and_divergent_info(self),
+  format_short_change_id_with_change_offset(self),
   format_short_commit_id(commit_id),
   if(empty, label("empty", "(empty)"), ""),
   if(description == "", label("description placeholder", "(no description)"), ""),
@@ -120,8 +154,10 @@ e = ["edit"]
 pull = ["git", "fetch"]
 push = ["git", "push"]
 gf = ["git", "fetch"] # git fetchq
-gi = ["git", "init", "--colocate"]
-gp = ["git", "push"] # git push
+gi = ["util", "exec", "--", "sh", "-c", """
+jj git init --colocate && jj bookmark track $(jj config get 'revset-aliases."trunk()"') --remote origin
+"""]
+gp = ["git", "push"]
 i = ["git", "init", "--colocate"]
 l = ["log", "-r", "more()"]
 
@@ -170,3 +206,4 @@ gh pr checks $target --watch --required
 
 [remotes.origin]
 auto-track-bookmarks = "main|master"
+auto-track-created-bookmarks = "*"
