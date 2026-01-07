@@ -13,3 +13,4 @@ __pycache__
 mise.local.toml
 
 **/.claude/settings.local.json
+.claude/settings.local.json
