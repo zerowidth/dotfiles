@@ -17,6 +17,5 @@ export PATH=$HOME/.local/bin:$PATH
 
 [[ -d ~/.rbenv/bin ]] && export PATH=~/.rbenv/bin:${PATH}
 
-{{- if .codespaces }}
-export PATH=$PATH:./bin
-{{- end }}
+[[ -d /Applications/Obsidian.app ]] && \
+  export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
