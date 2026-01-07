@@ -1,35 +1,58 @@
 #!/usr/bin/env zsh
 
 if [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
-  echo "-c for clear"
+  echo "Usage: tdd [--go [args...]] | [ext cmd [args...]]"
+  echo "  --go        Watch .go files and run gotestsum (default if no args)"
+  echo "              Any extra args replace ./..."
+  echo "  ext cmd     Watch .ext files and run cmd with args"
   exit
 fi
 
-clear=0
-if [[ $1 == "-c" ]]; then
-    clear=1
-    shift
+if [[ $# == 0 ]] || [[ $1 == "--go" ]]; then
+  [[ $1 == "--go" ]] && shift
+  ext="go"
+  set -- gotestsum --format-hide-empty-pkg --hide-summary=skipped -- "${@:-./...}"
+else
+  ext=$1
+  shift
 fi
 
-ext=$1
-shift
 echo "tdd with .${ext} files: $@"
 
 running=false
 
+# Flexoki colors
+COLOR_GREEN="#879A39"
+COLOR_YELLOW="#D0A215"
+COLOR_RED="#D14D41"
+
+# iterm2 beta 3.7 added control sequences for status dot indicator in the tabs:
+function set_tab_status() {
+  local indicator="$1"
+  local label="$2"
+  printf "\033]21337;indicator=%s;status=%s;status-color=%s\007" "$indicator" "$label" "$indicator"
+}
+
+function clear_tab_status() {
+  printf "\033]21337;indicator=;status=;status-color=\007"
+}
+
 function run() {
-  if [[ $clear == 1 ]]; then
+  # if [[ $clear == 1 ]]; then
     echo "\033[2J\033[3J\033[1;1H"
-  else
-    echo
-  fi
+  # else
+  #   echo
+  # fi
   echo "$(date | colorize 5) $@"
   echo
   running=true
+  set_tab_status "$COLOR_YELLOW" "running"
   if "$@"; then
     echo "================================================================================" | colorize 2
+    set_tab_status "$COLOR_GREEN" "passing"
   else
     echo "================================================================================" | colorize 1
+    set_tab_status "$COLOR_RED" "failing"
   fi
   running=false
 }
@@ -39,11 +62,13 @@ function maybequit() {
   if [ "$running" = 'true' ]; then
     running=false
   else
+    clear_tab_status
     exit 1
   fi
 }
 
 trap 'maybequit' SIGINT
+trap 'clear_tab_status' EXIT
 run "$@"
 while true; do
   if [[ $(uname) == "LINUX" ]]; then
