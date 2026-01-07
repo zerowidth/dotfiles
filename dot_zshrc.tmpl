@@ -80,16 +80,9 @@ precmd_functions+=(set_window_title)
 zstyle :compinstall filename '/Users/nathan/.zshrc'
 # # case-insensitive if there's no match
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
-# Run compaudit security check only if dump file is >24hrs old
-# This caches completions for faster startup while still checking daily for security
-autoload -Uz compinit
-if [[ -n ${HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
 
-# plugins
+# plugins (load BEFORE compinit so antigen can register its completions, and so
+# antigen's compdef stub is replaced by the real one when we run compinit below)
 [[ -f /opt/homebrew/share/antigen/antigen.zsh ]] && source /opt/homebrew/share/antigen/antigen.zsh
 [[ -f ~/.local/bin/antigen.zsh ]] && source ~/.local/bin/antigen.zsh
 
@@ -102,14 +95,32 @@ else
   echo "antigen is broken, skipping"
 fi
 
+# Run compaudit security check only if dump file is >24hrs old
+# This caches completions for faster startup while still checking daily for security.
+# IMPORTANT: must run AFTER antigen so antigen's empty `compdef` stub is replaced
+# by the real one otherwise later `compdef` calls (e.g. jj dynamic completion)
+# silently no-op.
+autoload -Uz compinit
+if [[ -n ${HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
+# Antigen registers a precmd hook (`_antigen_compinit`) that re-runs `compinit`
+# on the first prompt. That re-run resets the `_comps` array and only replays
+# antigen's own captured `compdef` calls, wiping any compdefs we set later
+# (e.g. jj dynamic completion). Since we've already run compinit above, drop
+# antigen's hook so our compdefs survive.
+autoload -Uz add-zsh-hook
+add-zsh-hook -D precmd _antigen_compinit 2>/dev/null
+
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
 # set descriptions format to enable group support
 zstyle ':completion:*:descriptions' format '[%d]'
 # set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
